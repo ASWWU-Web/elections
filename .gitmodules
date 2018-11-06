@@ -4,3 +4,6 @@
 [submodule "src/app/shared-ng-services"]
 	path = src/app/shared-ng-services
 	url = git@github.com:ASWWU-Web/shared-ng-services.git
+[submodule "src/environments"]
+	path = src/environments
+	url = git@github.com:ASWWU-Web/shared-ng-environments.git
