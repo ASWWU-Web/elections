@@ -7,8 +7,8 @@ import { AppComponent } from './app.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 // Shared components
-import { FooterComponent, NavBarComponent, MobileNavComponent, UserBubbleComponent} from './shared-ng-components/shared-ng-components';
-import { RequestService } from './shared-ng-services/shared-ng-services';
+import { FooterComponent, NavBarComponent, MobileNavComponent, UserBubbleComponent} from '../shared-ng/components/components';
+import { RequestService } from '../shared-ng/services/services';
 
 @NgModule({
   declarations: [
