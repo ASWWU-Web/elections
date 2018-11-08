@@ -1,14 +1,22 @@
+// angular generated imports
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+// aswwu  non-component imports
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
-// Shared components
+
+// shared-ng components
 import { FooterComponent, NavBarComponent, MobileNavComponent, UserBubbleComponent} from '../shared-ng/components/components';
 import { RequestService } from '../shared-ng/services/services';
+
+
 
 @NgModule({
   declarations: [
@@ -21,7 +29,18 @@ import { RequestService } from '../shared-ng/services/services';
   imports: [
     NgbModule,
     BrowserModule,
-    AppRoutingModule
+    HttpModule,
+    HttpClientModule,
+    FormsModule,
+    NgbModule.forRoot(),
+    AppRoutingModule,
+    RouterModule.forRoot([
+      // {
+      //   'path': '',
+      //   component: HomeComponent
+      // }
+    ])
+
   ],
   providers: [
     RequestService
