@@ -20,11 +20,12 @@
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/shared-ng/favicon.ico"
             ],
             "styles": [
               "src/styles.css",
-              "src/app/shared-ng-component/aswwu-style.css"
+              "src/shared-ng/styles.css"
             ],
             "scripts": []
           },
