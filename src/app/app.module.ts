@@ -2,7 +2,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
 
 // aswwu  non-component imports
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -13,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 
 
 // shared-ng components
+import { AppComponent } from '../shared-ng/components/app/app.component';
 import { FooterComponent, NavBarComponent, MobileNavComponent, UserBubbleComponent} from '../shared-ng/components/components';
 import { RequestService } from '../shared-ng/services/services';
 
