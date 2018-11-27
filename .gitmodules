@@ -1,4 +1,4 @@
 [submodule "src/shared-ng"]
 	path = src/shared-ng
-	url = git@github.com:ASWWU-Web/shared-ng.git
+	url = https://github.com/ASWWU-Web/elections.git
 
