@@ -16,6 +16,8 @@ import { AppComponent } from '../shared-ng/components/app/app.component';
 import { FooterComponent, NavBarComponent, MobileNavComponent, UserBubbleComponent} from '../shared-ng/components/components';
 import { RequestService } from '../shared-ng/services/services';
 
+// project components
+import { HomeComponent } from './routes/routes';
 
 
 @NgModule({
@@ -24,7 +26,8 @@ import { RequestService } from '../shared-ng/services/services';
     NavBarComponent,
     UserBubbleComponent,
     MobileNavComponent,
-    FooterComponent
+    FooterComponent,
+    HomeComponent
   ],
   imports: [
     NgbModule,
@@ -35,10 +38,10 @@ import { RequestService } from '../shared-ng/services/services';
     NgbModule.forRoot(),
     AppRoutingModule,
     RouterModule.forRoot([
-      // {
-      //   'path': '',
-      //   component: HomeComponent
-      // }
+      {
+        'path': '',
+        component: HomeComponent
+      }
     ])
 
   ],
