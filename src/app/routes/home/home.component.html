@@ -1,3 +1,13 @@
-<p>
-  home works!
-</p>
+<div class="container">
+  <div>
+    <h1>Welcome to Elections!</h1>
+  </div>
+  <div *ngIf="status == 'none'">
+    <h2>No Elections</h2>
+  </div>
+  <div>
+    <h2>Starts: -----</h2>
+    <h2>Ends: -----</h2>
+  </div>
+  <div>Vote Now!</div>
+</div>
