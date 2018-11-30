@@ -1,13 +1,17 @@
-<div class="container">
-  <div>
-    <h1>Welcome to Elections!</h1>
+<div class="container-fluid">
+  <header></header>
+  <div class="container">
+    <div *ngIf="status == 'none'">
+      <h2>No Elections</h2>
+    </div>
+    <div *ngIf="status == 'upcoming'">
+      <h2>Starts: {{getDateTime(response.start)}}</h2>
+      <h2>Ends: {{getDateTime(response.end)}}</h2>
+      <countdown></countdown>
+    </div>
+    <div *ngIf="status == 'now'">
+      <button type="button" class="btn btn-primary">Vote Now!</button>
+      <countdown></countdown>
+    </div>
   </div>
-  <div *ngIf="status == 'none'">
-    <h2>No Elections</h2>
-  </div>
-  <div>
-    <h2>Starts: -----</h2>
-    <h2>Ends: -----</h2>
-  </div>
-  <div>Vote Now!</div>
 </div>

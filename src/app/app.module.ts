@@ -18,6 +18,7 @@ import { RequestService } from '../shared-ng/services/services';
 
 // project components
 import { HomeComponent } from './routes/routes';
+import { HeaderComponent, CountdownComponent } from './shared/shared';
 
 
 @NgModule({
@@ -27,7 +28,9 @@ import { HomeComponent } from './routes/routes';
     UserBubbleComponent,
     MobileNavComponent,
     FooterComponent,
-    HomeComponent
+    HomeComponent,
+    HeaderComponent,
+    CountdownComponent
   ],
   imports: [
     NgbModule,
