@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CountdownComponent implements OnInit {
   dateString: string = "2019-01-01 12:00:00"
-  status: string = "now"
+  status: string = "upcoming"
 
   constructor() { }
 

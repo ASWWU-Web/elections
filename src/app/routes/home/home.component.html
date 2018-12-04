@@ -2,15 +2,15 @@
   <header></header>
   <div class="container">
     <div *ngIf="status == 'none'">
-      <h2>No Elections</h2>
+      <h2 class="text-center text-uppercase">No Elections</h2>
     </div>
     <div *ngIf="status == 'upcoming'">
-      <h2>Starts: {{getDateTime(response.start)}}</h2>
-      <h2>Ends: {{getDateTime(response.end)}}</h2>
+      <h2 class="text-center text-uppercase">Starts: {{getDateTime(response.start)}}</h2>
+      <h2 class="text-center text-uppercase">Ends: {{getDateTime(response.end)}}</h2>
       <countdown></countdown>
     </div>
     <div *ngIf="status == 'now'">
-      <button type="button" class="btn btn-primary">Vote Now!</button>
+      <button type="button" class="btn btn-primary btn-block btn-lg">Vote Now!</button>
       <countdown></countdown>
     </div>
   </div>
