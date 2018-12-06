@@ -17,7 +17,7 @@ import { FooterComponent, NavBarComponent, MobileNavComponent, UserBubbleCompone
 import { RequestService } from '../shared-ng/services/services';
 
 // project components
-import { HomeComponent } from './routes/routes';
+import { HomeComponent, VoteComponent } from './routes/routes';
 import { HeaderComponent, CountdownComponent } from './shared/shared';
 
 
@@ -30,7 +30,8 @@ import { HeaderComponent, CountdownComponent } from './shared/shared';
     FooterComponent,
     HomeComponent,
     HeaderComponent,
-    CountdownComponent
+    CountdownComponent,
+    VoteComponent
   ],
   imports: [
     NgbModule,
@@ -41,6 +42,10 @@ import { HeaderComponent, CountdownComponent } from './shared/shared';
     NgbModule.forRoot(),
     AppRoutingModule,
     RouterModule.forRoot([
+      {
+        'path': 'vote',
+        component: VoteComponent
+      },
       {
         'path': '',
         component: HomeComponent
