@@ -6,13 +6,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  status: string = "none";
+  status: string;
   admin: Boolean;
 
   response = {
     "id": "e7c5c84f-0a58-4f3b-8490-14ee0737d96f",
-    "election_type": "aswwu",
-    "start": "2018-12-05 08:00:00.000000",
+    "election_type": "senate",
+    "start": "2018-12-07 08:00:00.000000",
     "end": "2018-12-07 20:00:00.000000"
   }
 

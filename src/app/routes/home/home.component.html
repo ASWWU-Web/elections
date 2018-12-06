@@ -6,8 +6,8 @@
     </div>
     <div *ngIf="status == 'upcoming'">
       <h1 class="text-center text-uppercase">{{getElectionType(response.election_type)}}</h1>
-      <h2 class="text-center text-uppercase">Starts: {{getDateTime(response.start)}}</h2>
-      <h2 class="text-center text-uppercase">Ends: {{getDateTime(response.end)}}</h2>
+      <h4 class="text-center text-uppercase">Starts: {{getDateTime(response.start)}}</h4>
+      <h4 class="text-center text-uppercase">Ends: {{getDateTime(response.end)}}</h4>
       <countdown [status]="status" [date]="response['start']"></countdown>
     </div>
     <div *ngIf="status == 'now'">
