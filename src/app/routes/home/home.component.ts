@@ -6,19 +6,49 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  status: string = "upcoming"
-  //currentDate: Date.now()
+  status: string = "none";
+  admin: Boolean;
 
   response = {
     "id": "e7c5c84f-0a58-4f3b-8490-14ee0737d96f",
     "election_type": "aswwu",
-    "start": "2018-11-05 08:00:00.000000",
-    "end": "2018-11-05 20:00:00.000000"
+    "start": "2018-12-05 08:00:00.000000",
+    "end": "2018-12-07 20:00:00.000000"
   }
+
+  // response = null;
+
+  roles = ["admin"];
 
   constructor() { }
 
   ngOnInit() {
+    if (this.roles.indexOf('admin') > -1) {
+      this.admin = true;
+    }
+
+    if (this.response == null) {
+      this.status = "none";
+      return null;
+    }
+
+    let election_start = new Date(this.response["start"]);
+
+    if (election_start.getTime() >= Date.now()) {
+      this.status = "upcoming";
+    } else {
+      this.status = "now";
+    }
+  }
+
+  getElectionType(election_type) {
+    if (election_type=="aswwu") {
+      return "ASWWU General Election";
+    } 
+
+    if (election_type=="senate") {
+      return "Senate Election";
+    }
   }
 
   getDateTime(datetime) {

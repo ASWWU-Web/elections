@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'countdown',
@@ -6,13 +6,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./countdown.component.css']
 })
 export class CountdownComponent implements OnInit {
-  dateString: string = "2019-01-01 12:00:00"
-  status: string = "upcoming"
+  @Input() date: string;
+  @Input() status: string;
 
   constructor() { }
 
   ngOnInit() {
-    var display = document.querySelector('#time'), date = new Date(this.dateString);
+    var display = document.querySelector('#time'), date = new Date(this.date);
     var difference = Math.abs((Date.now() - date.getTime())/1000);
     this.startTimer(difference, display);
   }

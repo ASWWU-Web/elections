@@ -1,17 +1,19 @@
 <div class="container-fluid">
-  <header></header>
+  <header [admin]="admin"></header>
   <div class="container">
     <div *ngIf="status == 'none'">
       <h2 class="text-center text-uppercase">No Elections</h2>
     </div>
     <div *ngIf="status == 'upcoming'">
+      <h1 class="text-center text-uppercase">{{getElectionType(response.election_type)}}</h1>
       <h2 class="text-center text-uppercase">Starts: {{getDateTime(response.start)}}</h2>
       <h2 class="text-center text-uppercase">Ends: {{getDateTime(response.end)}}</h2>
-      <countdown></countdown>
+      <countdown [status]="status" [date]="response['start']"></countdown>
     </div>
     <div *ngIf="status == 'now'">
-      <button type="button" class="btn btn-primary btn-block btn-lg">Vote Now!</button>
-      <countdown></countdown>
+      <h1 class="text-center text-uppercase">{{getElectionType(response.election_type)}}</h1>
+      <a href="#" class="btn btn-primary btn-block btn-lg" role="button">Vote Now!</a>
+      <countdown [status]="status" [date]="response['end']"></countdown>
     </div>
   </div>
 </div>
