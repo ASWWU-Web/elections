@@ -10,15 +10,20 @@ import {Router, Routes, ActivatedRoute } from '@angular/router'
 })
 export class AswwuElectionsComponent implements OnInit {
   election: string;
+  positions: string[];
 
   constructor(private requestService: RequestService, private route: ActivatedRoute, private router:Router) {
-    this.requestService.get('/elections/current').subscribe((data)=>{
-      this.election = data.results;
-      console.log(this.election);
-    },null)
-   }
+    // get current election
+    this.requestService.get('/elections/current').subscribe((data) => {
+      this.election = data;
+      // get all aswwu positions
+      this.requestService.get('/elections/position', {election_type: "aswwu", active: true}).subscribe((data) => {
+        this.positions = data.positions;
+        console.log(this.positions);
+      }, null);
+    }, null);
+    }
 
   ngOnInit() {
   }
-
 }
