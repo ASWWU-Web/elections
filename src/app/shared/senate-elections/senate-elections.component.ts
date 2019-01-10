@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RequestService } from '../../../shared-ng/services/request.service';
 import { CURRENT_YEAR, MEDIA_SM } from '../../../shared-ng/config';
+import { disconnect } from 'cluster';
 
 @Component({
   selector: 'senate-elections',
@@ -81,7 +82,7 @@ export class SenateElectionsComponent implements OnInit {
   positions: any[];
 
   // selectedDistrict: string = "";
-  districtModel: any;
+  districtModel: number = null;
   candidates: any[] = [];
   candidateModel: any = {};
   writeInModel = {
@@ -133,29 +134,40 @@ export class SenateElectionsComponent implements OnInit {
   }
 
   getCandidates() {
-    if (this.districtModel) {
+    if (!this.districtModel) {
       return;
     }
-
-    this.rs.get('elections/' + this.election.id + '/candidate', {position: this.districtModel.id}).subscribe((data) => {
+    
+    this.rs.get('elections/election/' + this.election.id + '/candidate', {position: this.positions[this.districtModel].id}).subscribe((data) => {
       this.candidates = data.candidates;
+      console.log("data", data);
       let i = 0;
       for (let candidate of this.candidates) {
         this.addCandidatePhoto(candidate.username, i);
         i = i + 1;
       }
       this.buildCandidateModel();
-    }, (data) => {})
+    }, (data) => {console.log("error", data)})
 
     // Page 1 is the candidates page
     this.pageNumber = 1;
     window.scrollTo(0,0);
   }
 
+  // idToPositionName() {
+  //   if (this.districtModel) {
+  //     return;
+  //   }
+  // }
+
   submit() {
-    let postURI = 'elections/vote/' + this.districtModel.id;
-    this.rs.post(postURI, this.buildJsonResponse(), (data)=>{this.submissionSuccess = true;}, (data)=>{this.submissionSuccess = false});
-    
+    let postURI = 'elections/vote/';
+    let response = this.buildJsonResponse();
+    this.rs.post(postURI, response[0]).subscribe((data)=>{
+      this.rs.post(postURI, response[1]).subscribe((data)=>{
+        this.submissionSuccess = true;}, (data)=>{this.submissionSuccess = false});
+      }, (data)=>{this.submissionSuccess = false});
+  
     // Page 2 is the submission page
     this.pageNumber = 2;
     window.scrollTo(0,0);
@@ -165,7 +177,7 @@ export class SenateElectionsComponent implements OnInit {
     // hide pages
     this.pageNumber=null;
     //reset models
-    this.districtModel = null;
+    this.districtModel = null
     this.candidateModel = {};
     this.writeInModel.writeIn1 = "";
     this.writeInModel.writeIn2 = "";
@@ -211,6 +223,8 @@ export class SenateElectionsComponent implements OnInit {
       write_in_1: null,
       write_in_2: null
     };
+    let tempResponse: string[];
+
     for (let candidate in this.candidateModel) {
       if (this.candidateModel[candidate] == true) {
         if (!response.vote_1) {
@@ -228,7 +242,11 @@ export class SenateElectionsComponent implements OnInit {
     if (this.writeInModel.writeIn2.length > 0) {
       response.write_in_2 = this.writeInModel.writeIn2;
     }
-    return response;
+    for (let vote in response) {
+      if (vote) {
+        tempResponse.push(vote);
+      }
+    }
+    return tempResponse;
   }
-
 }
