@@ -71,7 +71,32 @@ export class AswwuElectionsComponent implements OnInit {
     }, (data) => {})
   }
 
-  getCandidates(position_id) {
+  getCandidates(position_id) { 
+    // submite vote
+    let requestBody = {
+      election: this.election.id,
+      position: position_id,
+      vote: null
+    }
+    // determine who was voted for
+    for (let candidate in this.candidateModel) {
+      if (this.candidateModel[candidate] == true) {
+        requestBody.vote = candidate;
+        break;
+      }
+    }
+    // submit vote
+    let postURI = 'elections/vote';
+    this.requestService.post(postURI, requestBody).subscribe((data) => {
+      this.submissionSuccess = true;
+    }, (error) => {
+      this.submissionSuccess = false
+    });
+
+    // delete past candidates
+    this.candidateModel = {};
+
+    // get next set of candidates
     this.requestService.get(('elections/election/' + this.election.id) + '/candidate', {position: position_id}).subscribe((data) => {
       this.candidates = data.candidates;
       let i = 0;
@@ -88,8 +113,12 @@ export class AswwuElectionsComponent implements OnInit {
   }
 
   submit() {
-    let postURI = 'senate_election/vote/' + this.districtModel;
-    this.requestService.post(postURI, this.buildJsonResponse(), (data)=>{this.submissionSuccess = true;}, (data)=>{this.submissionSuccess = false});
+    let postURI = 'senate_election/vote/';
+    this.requestService.post(postURI, this.buildJsonResponse()).subscribe((data) => {
+      this.submissionSuccess = true;
+    }, (error) => {
+      this.submissionSuccess = false
+    });
     
     // Page 2 is the submission page
     this.pageNumber++;
