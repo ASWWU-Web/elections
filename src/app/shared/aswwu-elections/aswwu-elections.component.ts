@@ -71,7 +71,25 @@ export class AswwuElectionsComponent implements OnInit {
     }, (data) => {})
   }
 
-  getCandidates(position_id) { 
+  getCandidates(position_id) {
+    // delete past candidates
+    this.candidateModel = {};
+
+    // get next set of candidates
+    this.requestService.get(('elections/election/' + this.election.id) + '/candidate', {position: position_id}).subscribe((data) => {
+      this.candidates = data.candidates;
+      console.log("GET");
+      console.log(data.candidates);
+      let i = 0;
+      for (let candidate of this.candidates) {
+        this.addCandidatePhoto(candidate.username, i);
+        i = i + 1;
+      }
+      this.buildCandidateModel();
+    }, (data) => {})
+  }
+
+  submitVote(position_id) {
     // submite vote
     let requestBody = {
       election: this.election.id,
@@ -87,40 +105,16 @@ export class AswwuElectionsComponent implements OnInit {
     }
     // submit vote
     let postURI = 'elections/vote';
+    console.log("POST");
+    console.log(requestBody);
     this.requestService.post(postURI, requestBody).subscribe((data) => {
       this.submissionSuccess = true;
     }, (error) => {
       this.submissionSuccess = false
     });
-
-    // delete past candidates
-    this.candidateModel = {};
-
-    // get next set of candidates
-    this.requestService.get(('elections/election/' + this.election.id) + '/candidate', {position: position_id}).subscribe((data) => {
-      this.candidates = data.candidates;
-      let i = 0;
-      for (let candidate of this.candidates) {
-        this.addCandidatePhoto(candidate.username, i);
-        i = i + 1;
-      }
-      this.buildCandidateModel();
-    }, (data) => {})
-
-    // Page 1 is the candidates page
-    this.pageNumber++;
-    window.scrollTo(0,0);
   }
 
-  submit() {
-    let postURI = 'senate_election/vote/';
-    this.requestService.post(postURI, this.buildJsonResponse()).subscribe((data) => {
-      this.submissionSuccess = true;
-    }, (error) => {
-      this.submissionSuccess = false
-    });
-    
-    // Page 2 is the submission page
+  nextPage() {
     this.pageNumber++;
     window.scrollTo(0,0);
   }
@@ -166,32 +160,5 @@ export class AswwuElectionsComponent implements OnInit {
     } else {
       return true;
     }
-  }
-
-  buildJsonResponse() {
-    let response = {
-      vote_1: null,
-      vote_2: null,
-      write_in_1: null,
-      write_in_2: null
-    };
-    for (let candidate in this.candidateModel) {
-      if (this.candidateModel[candidate] == true) {
-        if (!response.vote_1) {
-          response.vote_1 = candidate;
-        } else if (!response.vote_2) {
-          response.vote_2 = candidate;
-        } else {
-          // something went wrong...
-        }
-      }
-    }
-    if (this.writeInModel.writeIn1.length > 0) {
-      response.write_in_1 = this.writeInModel.writeIn1;
-    }
-    if (this.writeInModel.writeIn2.length > 0) {
-      response.write_in_2 = this.writeInModel.writeIn2;
-    }
-    return response;
   }
 }
