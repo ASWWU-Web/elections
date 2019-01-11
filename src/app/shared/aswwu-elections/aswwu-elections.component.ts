@@ -11,7 +11,7 @@ import { CURRENT_YEAR, MEDIA_SM } from '../../../shared-ng/config';
 })
 export class AswwuElectionsComponent implements OnInit {
   election: any;
-  positions: any[];
+  positions: any[] = [];
   pageNumber: number = 0;
   districts: string[][] = [
     ["1",  "Sittner 1 & 2 Floor, Meske"],
