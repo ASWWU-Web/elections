@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RequestService } from '../../../shared-ng/services/request.service';
 import { CURRENT_YEAR, MEDIA_SM } from '../../../shared-ng/config';
-import { disconnect } from 'cluster';
+//import { disconnect } from 'cluster';
 
 @Component({
   selector: 'senate-elections',
@@ -154,19 +154,26 @@ export class SenateElectionsComponent implements OnInit {
     window.scrollTo(0,0);
   }
 
-  // idToPositionName() {
-  //   if (this.districtModel) {
-  //     return;
-  //   }
-  // }
-
   submit() {
-    let postURI = 'elections/vote/';
-    let response = this.buildJsonResponse();
-    this.rs.post(postURI, response[0]).subscribe((data)=>{
-      this.rs.post(postURI, response[1]).subscribe((data)=>{
-        this.submissionSuccess = true;}, (data)=>{this.submissionSuccess = false});
-      }, (data)=>{this.submissionSuccess = false});
+    let postURI = 'elections/vote';
+    let response = this.buildJsonResponse(this.election.id, this.positions[this.districtModel].id);
+    this.rs.post(postURI, response[0]).subscribe(
+      (data)=>{
+        console.log("First post", data);
+        this.rs.post(postURI, response[1]).subscribe(
+          (data)=>{
+            console.log("Second post", data);
+            this.submissionSuccess = true;
+          }, 
+          (data)=>{
+            console.log("Second post fail", data);
+            this.submissionSuccess = false
+          });
+      }, 
+      (data)=>{
+        console.log("First post fail", data);
+        this.submissionSuccess = false
+      });
   
     // Page 2 is the submission page
     this.pageNumber = 2;
@@ -216,15 +223,15 @@ export class SenateElectionsComponent implements OnInit {
     }
   }
 
-  buildJsonResponse() {
+  buildJsonResponse(election: string, position: string) {
     let response = {
       vote_1: null,
       vote_2: null,
       write_in_1: null,
       write_in_2: null
     };
-    let tempResponse: string[];
-
+    let tempResponse: any[] = [];
+    console.log("candidate model", this.candidateModel);
     for (let candidate in this.candidateModel) {
       if (this.candidateModel[candidate] == true) {
         if (!response.vote_1) {
@@ -243,10 +250,16 @@ export class SenateElectionsComponent implements OnInit {
       response.write_in_2 = this.writeInModel.writeIn2;
     }
     for (let vote in response) {
-      if (vote) {
-        tempResponse.push(vote);
+      if (response[vote]) {
+        let tempVote = {
+          election: election,
+          position: position, 
+          vote: response[vote]
+        }
+        tempResponse.push(tempVote);
       }
     }
+    console.log("temp response", tempResponse)
     return tempResponse;
   }
 }
