@@ -35,7 +35,7 @@ export class AswwuElectionsComponent implements OnInit {
     writeIn2: ""
   };
 
-  submissionSuccess = null;
+  submissionSuccess = true;
 
   constructor(private requestService: RequestService, private route: ActivatedRoute, private router:Router) {
     // get current election
@@ -107,9 +107,7 @@ export class AswwuElectionsComponent implements OnInit {
     let postURI = 'elections/vote';
     console.log("POST");
     console.log(requestBody);
-    this.requestService.post(postURI, requestBody).subscribe((data) => {
-      this.submissionSuccess = true;
-    }, (error) => {
+    this.requestService.post(postURI, requestBody).subscribe(null, (error) => {
       this.submissionSuccess = false
     });
   }
@@ -127,7 +125,7 @@ export class AswwuElectionsComponent implements OnInit {
     this.candidateModel = {};
     this.writeInModel.writeIn1 = "";
     this.writeInModel.writeIn2 = "";
-    this.submissionSuccess = null;
+    this.submissionSuccess = true;
     // go to first page (district selection)
     this.pageNumber = 0;
     window.scrollTo(0,0);
