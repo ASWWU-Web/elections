@@ -29,11 +29,6 @@ export class SenateElectionsComponent implements OnInit {
   
   constructor(private rs: RequestService) { }
   
-  
-  // showDistricts: boolean = true;
-  // showCandidates: boolean = false;
-  // showSubmissionStatus: boolean = false;
-
   // Page 0 is districts page
   pageNumber: number = 0;
   
@@ -78,17 +73,39 @@ export class SenateElectionsComponent implements OnInit {
   //   ["10", "Staff"]
   // ];
   
+  // current election object
+  // {
+  //   "id": "e7c5c84f-0a58-4f3b-8490-14ee0737d96f",
+  //   "election_type": "aswwu",
+  //   "start": "2018-11-05 08:00:00.000000",
+  //   "end": "2018-11-05 20:00:00.000000"
+  // }
   election: any;
-  positions: any[];
+  // Dictionary where the key is the position id and the value is a singular position object as returned from the server
+  positions: any;
 
-  // selectedDistrict: string = "";
-  districtModel: number = null;
+  // districtModel is the selected district
+  districtModel: string = null;
+  // candidates is an array of the candidates running for the position 
+  // [
+  //   {
+  //     "id": "0c3fa8c5-d580-4c47-8598-a4bfd7657711",
+  //     "election": "e7c5c84f-0a58-4f3b-8490-14ee0737d96f",
+  //     "position": "7c336bd7-7e21-4a81-a4c2-bc076852611c",
+  //     "username": "sheldon.woodward",
+  //     "display_name": "Sheldon Woodward",
+  //     "photo": "https://aswwu.com/media/img-md/profiles/1819/02523-2029909.jpg"
+  //   }
+  // ]
   candidates: any[] = [];
+  // candidateModel is a dictionary with the username of the candidate as the key, and a boolean indicating whether that candidate is selected as the value
   candidateModel: any = {};
+  // Handles write-in votes
   writeInModel = {
     writeIn1: "",
     writeIn2: ""
   };
+  objectKeys = Object.keys;
 
   submissionSuccess = null;
 
@@ -128,8 +145,11 @@ export class SenateElectionsComponent implements OnInit {
   }
 
   getPositions() {
+    this.positions = {};
     this.rs.get('elections/position', {election_type: "senate", active: true}).subscribe((data) => {
-      this.positions = data.positions;
+      for (let position in data.positions) {
+        this.positions[position['id']] = position;
+      }
     }, (data) => {})
   }
 
@@ -138,7 +158,7 @@ export class SenateElectionsComponent implements OnInit {
       return;
     }
     
-    this.rs.get('elections/election/' + this.election.id + '/candidate', {position: this.positions[this.districtModel].id}).subscribe((data) => {
+    this.rs.get('elections/election/' + this.election.id + '/candidate', {position: this.positions[this.districtModel]}).subscribe((data) => {
       this.candidates = data.candidates;
       console.log("data", data);
       let i = 0;
@@ -152,6 +172,23 @@ export class SenateElectionsComponent implements OnInit {
     // Page 1 is the candidates page
     this.pageNumber = 1;
     window.scrollTo(0,0);
+  }
+
+  getVote() {
+    this.rs.get('elections/vote').subscribe((data) => {
+      this.districtModel = data[0]['position'];
+      for (let vote in data) {
+        if (this.candidateModel.hasOwnProperty(vote['vote'])) {
+          this.candidateModel[vote['vote']] = true;
+        } else {
+          if (this.writeInModel.writeIn1 != "") {
+            this.writeInModel.writeIn1 = vote['vote'];
+          } else {
+            this.writeInModel.writeIn2 = vote['vote'];
+          }
+        }
+      }
+    }, (error)=>{});
   }
 
   submit() {
@@ -184,7 +221,7 @@ export class SenateElectionsComponent implements OnInit {
     // hide pages
     this.pageNumber=null;
     //reset models
-    this.districtModel = null
+    this.districtModel = null;
     this.candidateModel = {};
     this.writeInModel.writeIn1 = "";
     this.writeInModel.writeIn2 = "";
