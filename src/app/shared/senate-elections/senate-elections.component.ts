@@ -105,13 +105,13 @@ export class SenateElectionsComponent implements OnInit {
     writeIn1: "",
     writeIn2: ""
   };
-  objectKeys = Object.keys;
 
   submissionSuccess = null;
 
   ngOnInit() {
     this.getElection();
     this.getPositions();
+    this.getVote();
   }
 
   buildCandidateModel() {
@@ -147,7 +147,7 @@ export class SenateElectionsComponent implements OnInit {
   getPositions() {
     this.positions = {};
     this.rs.get('elections/position', {election_type: "senate", active: true}).subscribe((data) => {
-      for (let position in data.positions) {
+      for (let position of data.positions) {
         this.positions[position['id']] = position;
       }
     }, (data) => {})
@@ -158,9 +158,8 @@ export class SenateElectionsComponent implements OnInit {
       return;
     }
     
-    this.rs.get('elections/election/' + this.election.id + '/candidate', {position: this.positions[this.districtModel]}).subscribe((data) => {
+    this.rs.get('elections/election/' + this.election.id + '/candidate', {position: this.districtModel}).subscribe((data) => {
       this.candidates = data.candidates;
-      console.log("data", data);
       let i = 0;
       for (let candidate of this.candidates) {
         this.addCandidatePhoto(candidate.username, i);
@@ -176,6 +175,7 @@ export class SenateElectionsComponent implements OnInit {
 
   getVote() {
     this.rs.get('elections/vote').subscribe((data) => {
+      data = data['votes'];
       this.districtModel = data[0]['position'];
       for (let vote in data) {
         if (this.candidateModel.hasOwnProperty(vote['vote'])) {
