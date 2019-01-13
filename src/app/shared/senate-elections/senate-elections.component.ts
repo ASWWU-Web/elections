@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { RequestService } from '../../../shared-ng/services/request.service';
 import { CURRENT_YEAR, MEDIA_SM } from '../../../shared-ng/config';
+import { forkJoin } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
 //import { disconnect } from 'cluster';
 
 @Component({
@@ -80,9 +82,11 @@ export class SenateElectionsComponent implements OnInit {
   //   "start": "2018-11-05 08:00:00.000000",
   //   "end": "2018-11-05 20:00:00.000000"
   // }
-  election: any;
+  election: any = null;
   // Dictionary where the key is the position id and the value is a singular position object as returned from the server
-  positions: any;
+  positions: any = null;
+  // Array of vote objects
+  votes: any = null;
 
   // districtModel is the selected district
   districtModel: string = null;
@@ -99,22 +103,56 @@ export class SenateElectionsComponent implements OnInit {
   // ]
   candidates: any[] = [];
   // candidateModel is a dictionary with the username of the candidate as the key, and a boolean indicating whether that candidate is selected as the value
-  candidateModel: any = {};
+  candidateModel: any = null;
   // Handles write-in votes
   writeInModel = {
     writeIn1: "",
     writeIn2: ""
   };
 
+  pageReady = false;
   submissionSuccess = null;
 
   ngOnInit() {
-    this.getElection();
-    this.getPositions();
-    this.getVote();
+    let electionObservable = this.rs.get('elections/current');
+    let positionsObservable = this.rs.get('elections/position', {election_type: "senate", active: true});
+    let voteObservable = this.rs.get('elections/vote');
+
+    let initObservable = forkJoin([electionObservable, positionsObservable, voteObservable]);
+
+    initObservable.subscribe(data => {
+      let election = data[0];
+      let positions = data[1];
+      let votes = data[2];
+      console.log("Election", election);
+      console.log("Position", positions);
+      console.log("Votes", votes);
+
+      // Election
+      if (election.election_type == "senate") {
+        this.election = election;  
+      }
+      
+      // Positions
+      this.positions = {};
+      for (let position of positions.positions) {
+        this.positions[position['id']] = position;
+      }
+
+      // Votes
+      this.votes = votes['votes'];
+      if (this.votes[0]) {
+        this.districtModel = this.votes[0]['position'];
+        console.log("Election ID:", election['id']);
+        this.getCandidates(election['id'], this.votes[0]['position']);
+      }      
+
+      this.pageReady = true;
+    });
   }
 
   buildCandidateModel() {
+    this.candidateModel = {};
     for (let candidate of this.candidates) {
       this.candidateModel[candidate.username] = false;
     }
@@ -153,31 +191,15 @@ export class SenateElectionsComponent implements OnInit {
     }, (data) => {})
   }
 
-  getCandidates() {
+  goToCandidates() {
     if (!this.districtModel) {
       return;
     }
     
-    this.rs.get('elections/election/' + this.election.id + '/candidate', {position: this.districtModel}).subscribe((data) => {
-      this.candidates = data.candidates;
-      let i = 0;
-      for (let candidate of this.candidates) {
-        this.addCandidatePhoto(candidate.username, i);
-        i = i + 1;
-      }
-      this.buildCandidateModel();
-    }, (data) => {console.log("error", data)})
+    this.getCandidates(this.election.id, this.districtModel);
 
-    // Page 1 is the candidates page
-    this.pageNumber = 1;
-    window.scrollTo(0,0);
-  }
-
-  getVote() {
-    this.rs.get('elections/vote').subscribe((data) => {
-      data = data['votes'];
-      this.districtModel = data[0]['position'];
-      for (let vote in data) {
+    if (this.votes.length > 0) {
+      for (let vote in this.votes) {
         if (this.candidateModel.hasOwnProperty(vote['vote'])) {
           this.candidateModel[vote['vote']] = true;
         } else {
@@ -187,6 +209,30 @@ export class SenateElectionsComponent implements OnInit {
             this.writeInModel.writeIn2 = vote['vote'];
           }
         }
+      }
+    }
+    // Page 1 is the candidates page
+    this.pageNumber = 1;
+    window.scrollTo(0,0);
+  }
+
+  getCandidates(election: string, position: string) {
+    this.rs.get('elections/election/' + election + '/candidate', {position: position}).subscribe((data) => {
+      this.candidates = data.candidates;
+      let i = 0;
+      for (let candidate of this.candidates) {
+        this.addCandidatePhoto(candidate.username, i);
+        i = i + 1;
+      }
+      this.buildCandidateModel();
+    }, (data) => {console.log("error", data)});
+  }
+
+  getVotes() {
+    this.rs.get('elections/vote').subscribe((data) => {
+      this.votes = data['votes'];
+      if (this.votes[0]) {
+        this.districtModel = this.votes[0]['position'];
       }
     }, (error)=>{});
   }
@@ -222,7 +268,7 @@ export class SenateElectionsComponent implements OnInit {
     this.pageNumber=null;
     //reset models
     this.districtModel = null;
-    this.candidateModel = {};
+    this.candidateModel = null;
     this.writeInModel.writeIn1 = "";
     this.writeInModel.writeIn2 = "";
     this.submissionSuccess = null;

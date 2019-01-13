@@ -14,7 +14,10 @@
       </li>
     </ul>
   </div>
-<div *ngIf='pageNumber == 0'>
+  <div *ngIf='!pageReady'>
+    Loading...
+  </div>
+<div *ngIf='pageNumber == 0 && (pageReady)'>
   <div class="card-body">
 
   <!-- SELECT DISTRICT PAGE -->
@@ -27,7 +30,7 @@
 
   </div>
   <div class="card-footer">
-    <button type="button" (click)='getCandidates();' class="btn btn-primary mx-auto w-100 d-block" [ngClass]="{'active': districtModel, 'disabled': !districtModel}">Go!</button>
+    <button type="button" (click)='goToCandidates();' class="btn btn-primary mx-auto w-100 d-block" [ngClass]="{'active': districtModel, 'disabled': !districtModel}">Go!</button>
   </div>
 </div>
 
