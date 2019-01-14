@@ -31,49 +31,41 @@ export class SenateElectionsComponent implements OnInit {
   
   constructor(private rs: RequestService) { }
   
+
+  stringify(object: any) {
+    return JSON.stringify(object, null, 2);
+  }
+
   // Page 0 is districts page
   pageNumber: number = 0;
   
   //candidatesJSON = {};
-  candidatesJSON = [
-      {
-        "id": "0c3fa8c5-d580-4c47-8598-a4bfd7657711",
-        "election": "e7c5c84f-0a58-4f3b-8490-14ee0737d96f",
-        "position": "7c336bd7-7e21-4a81-a4c2-bc076852611c",
-        "username": "sheldon.woodward",
-        "display_name": "Sheldon Woodward",
-        "photo": "https://aswwu.com/media/img-md/profiles/1819/02523-2029909.jpg"
-      },
-      {
-        "id": "0c3fa8c5-d580-4c47-8598-a4bfd7657711",
-        "election": "e7c5c84f-0a58-4f3b-8490-14ee0737d96f",
-        "position": "7c336bd7-7e21-4a81-a4c2-bc076852611c",
-        "username": "sheldon.woodward",
-        "display_name": "Sheldon Woodward",
-        "photo": "https://aswwu.com/media/img-md/profiles/1819/02523-2029909.jpg"
-      },
-      {
-        "id": "0c3fa8c5-d580-4c47-8598-a4bfd7657711",
-        "election": "e7c5c84f-0a58-4f3b-8490-14ee0737d96f",
-        "position": "7c336bd7-7e21-4a81-a4c2-bc076852611c",
-        "username": "sheldon.woodward",
-        "display_name": "Sheldon Woodward",
-        "photo": "https://aswwu.com/media/img-md/profiles/1819/02523-2029909.jpg"
-      },
-    ];
-  
-  // districts: string[][] = [
-  //   ["1",  "Sittner 1 & 2 Floor, Meske"],
-  //   ["2",  "Sittner 3 & 4 Floor"], 
-  //   ["3",  "Conard"], 
-  //   ["4",  "Forman"],
-  //   ["5",  "Mountain View, Birch Apartments"],
-  //   ["6",  "Hallmark, Faculty, Univeristy-Owned Housing"],
-  //   ["7",  "Off-Campus"],
-  //   ["8",  "Portland"],
-  //   ["9",  "Faculty"],
-  //   ["10", "Staff"]
-  // ];
+  // candidatesJSON = [
+  //     {
+  //       "id": "0c3fa8c5-d580-4c47-8598-a4bfd7657711",
+  //       "election": "e7c5c84f-0a58-4f3b-8490-14ee0737d96f",
+  //       "position": "7c336bd7-7e21-4a81-a4c2-bc076852611c",
+  //       "username": "sheldon.woodward",
+  //       "display_name": "Sheldon Woodward",
+  //       "photo": "https://aswwu.com/media/img-md/profiles/1819/02523-2029909.jpg"
+  //     },
+  //     {
+  //       "id": "0c3fa8c5-d580-4c47-8598-a4bfd7657711",
+  //       "election": "e7c5c84f-0a58-4f3b-8490-14ee0737d96f",
+  //       "position": "7c336bd7-7e21-4a81-a4c2-bc076852611c",
+  //       "username": "sheldon.woodward",
+  //       "display_name": "Sheldon Woodward",
+  //       "photo": "https://aswwu.com/media/img-md/profiles/1819/02523-2029909.jpg"
+  //     },
+  //     {
+  //       "id": "0c3fa8c5-d580-4c47-8598-a4bfd7657711",
+  //       "election": "e7c5c84f-0a58-4f3b-8490-14ee0737d96f",
+  //       "position": "7c336bd7-7e21-4a81-a4c2-bc076852611c",
+  //       "username": "sheldon.woodward",
+  //       "display_name": "Sheldon Woodward",
+  //       "photo": "https://aswwu.com/media/img-md/profiles/1819/02523-2029909.jpg"
+  //     },
+  //   ];
   
   // current election object
   // {
@@ -86,7 +78,7 @@ export class SenateElectionsComponent implements OnInit {
   // Dictionary where the key is the position id and the value is a singular position object as returned from the server
   positions: any = null;
   // Array of vote objects
-  votes: any = null;
+  votes: any[] = null;
 
   // districtModel is the selected district
   districtModel: string = null;
@@ -114,6 +106,18 @@ export class SenateElectionsComponent implements OnInit {
   submissionSuccess = null;
 
   ngOnInit() {
+    // hide pages
+    this.pageNumber=null;
+    //reset models
+    this.districtModel = null;
+    this.candidateModel = null;
+    this.writeInModel.writeIn1 = "";
+    this.writeInModel.writeIn2 = "";
+    this.submissionSuccess = null;
+    // go to first page (district selection)
+    this.pageNumber = 0;
+    window.scrollTo(0,0);
+
     let electionObservable = this.rs.get('elections/current');
     let positionsObservable = this.rs.get('elections/position', {election_type: "senate", active: true});
     let voteObservable = this.rs.get('elections/vote');
@@ -124,9 +128,9 @@ export class SenateElectionsComponent implements OnInit {
       let election = data[0];
       let positions = data[1];
       let votes = data[2];
-      console.log("Election", election);
-      console.log("Position", positions);
-      console.log("Votes", votes);
+      // console.log("Election", election);
+      // console.log("Position", positions);
+      // console.log("Votes", votes);
 
       // Election
       if (election.election_type == "senate") {
@@ -143,8 +147,8 @@ export class SenateElectionsComponent implements OnInit {
       this.votes = votes['votes'];
       if (this.votes[0]) {
         this.districtModel = this.votes[0]['position'];
-        console.log("Election ID:", election['id']);
-        this.getCandidates(election['id'], this.votes[0]['position']);
+      //   console.log("Election ID:", election['id']);
+      //   this.getCandidates(election['id'], this.votes[0]['position']);
       }      
 
       this.pageReady = true;
@@ -158,74 +162,53 @@ export class SenateElectionsComponent implements OnInit {
     }
   }
 
-  addCandidatePhoto(username, i){
-    let uri = '/profile/' + CURRENT_YEAR + '/' + username;
-    this.rs.get(uri).subscribe((data) => {
-      let photoURI = MEDIA_SM + '/'
-      if (data.photo != "None") {
-        photoURI =  photoURI + data.photo;
-      }
-      else {
-        photoURI = photoURI + 'images/default_mask/default.jpg';
-      }
-      this.candidates[i].photo = photoURI;
-    }, (data) => {})
-  }
+  // ---- commenting out this block since we expect the server to return photos
+  // addCandidatePhoto(username, i){
+  //   let uri = '/profile/' + CURRENT_YEAR + '/' + username;
+  //   this.rs.get(uri).subscribe((data) => {
+  //     let photoURI = MEDIA_SM + '/'
+  //     if (data.photo != "None") {
+  //       photoURI =  photoURI + data.photo;
+  //     }
+  //     else {
+  //       photoURI = photoURI + 'images/default_mask/default.jpg';
+  //     }
+  //     this.candidates[i].photo = photoURI;
+  //   }, (data) => {})
+  // }
+  // ----
 
-  getElection() {
-    this.rs.get('elections/current').subscribe((data) => {
-      if (data.election_type != "senate") {
-        console.error("This election is not a Senate election")
-        return;
-      }
-      this.election = data;
-    }, (data) => {})
-  }
-
-  getPositions() {
-    this.positions = {};
-    this.rs.get('elections/position', {election_type: "senate", active: true}).subscribe((data) => {
-      for (let position of data.positions) {
-        this.positions[position['id']] = position;
-      }
-    }, (data) => {})
-  }
-
-  goToCandidates() {
-    if (!this.districtModel) {
-      return;
-    }
-    
-    this.getCandidates(this.election.id, this.districtModel);
-
-    if (this.votes.length > 0) {
-      for (let vote in this.votes) {
-        if (this.candidateModel.hasOwnProperty(vote['vote'])) {
-          this.candidateModel[vote['vote']] = true;
-        } else {
-          if (this.writeInModel.writeIn1 != "") {
-            this.writeInModel.writeIn1 = vote['vote'];
-          } else {
-            this.writeInModel.writeIn2 = vote['vote'];
+  getCandidates() {//(election: string, position: string) {
+    if (this.districtModel) {
+      // this.rs.get('elections/election/' + election + '/candidate', {"position": position}).subscribe((data) => {
+      this.rs.get('elections/election/' + this.election.id + '/candidate', {position: this.districtModel}).subscribe((data) => {
+        this.candidates = data.candidates;
+        // ---- Commenting out this section becuase we expect to get photo urls from the server ----
+        // let i = 0;
+        // for (let candidate of this.candidates) {
+        //   this.addCandidatePhoto(candidate.username, i);
+        //   i = i + 1;
+        // }
+        // ----
+        this.buildCandidateModel();
+        if (this.votes.length > 0) {
+          for (let vote in this.votes) {
+            if (this.candidateModel.hasOwnProperty(vote['vote'])) {
+              this.candidateModel[vote['vote']] = true;
+            } else {
+              if (this.writeInModel.writeIn1 != "") {
+                this.writeInModel.writeIn1 = vote['vote'] || "";
+              } else {
+                this.writeInModel.writeIn2 = vote['vote'] || "";
+              }
+            }
           }
         }
-      }
+      }, (data) => {console.log("error", data)});
+      // Page 1 is the candidates page
+      this.pageNumber = 1;
+      window.scrollTo(0,0);
     }
-    // Page 1 is the candidates page
-    this.pageNumber = 1;
-    window.scrollTo(0,0);
-  }
-
-  getCandidates(election: string, position: string) {
-    this.rs.get('elections/election/' + election + '/candidate', {position: position}).subscribe((data) => {
-      this.candidates = data.candidates;
-      let i = 0;
-      for (let candidate of this.candidates) {
-        this.addCandidatePhoto(candidate.username, i);
-        i = i + 1;
-      }
-      this.buildCandidateModel();
-    }, (data) => {console.log("error", data)});
   }
 
   getVotes() {
@@ -260,20 +243,6 @@ export class SenateElectionsComponent implements OnInit {
   
     // Page 2 is the submission page
     this.pageNumber = 2;
-    window.scrollTo(0,0);
-  }
-
-  startOver() {
-    // hide pages
-    this.pageNumber=null;
-    //reset models
-    this.districtModel = null;
-    this.candidateModel = null;
-    this.writeInModel.writeIn1 = "";
-    this.writeInModel.writeIn2 = "";
-    this.submissionSuccess = null;
-    // go to first page (district selection)
-    this.pageNumber = 0;
     window.scrollTo(0,0);
   }
 
@@ -314,7 +283,7 @@ export class SenateElectionsComponent implements OnInit {
       write_in_2: null
     };
     let tempResponse: any[] = [];
-    console.log("candidate model", this.candidateModel);
+    // console.log("candidate model", this.candidateModel);
     for (let candidate in this.candidateModel) {
       if (this.candidateModel[candidate] == true) {
         if (!response.vote_1) {
@@ -342,7 +311,7 @@ export class SenateElectionsComponent implements OnInit {
         tempResponse.push(tempVote);
       }
     }
-    console.log("temp response", tempResponse)
+    // console.log("temp response", tempResponse)
     return tempResponse;
   }
 }

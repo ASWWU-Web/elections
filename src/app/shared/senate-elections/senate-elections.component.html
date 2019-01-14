@@ -30,21 +30,21 @@
 
   </div>
   <div class="card-footer">
-    <button type="button" (click)='goToCandidates();' class="btn btn-primary mx-auto w-100 d-block" [ngClass]="{'active': districtModel, 'disabled': !districtModel}">Go!</button>
+    <button type="button" (click)='getCandidates();' class="btn btn-primary mx-auto w-100 d-block" [ngClass]="{'active': districtModel, 'disabled': !districtModel}">Go!</button>
   </div>
 </div>
 
 <!-- SELECT CANDIDATE PAGE -->
 
 <div *ngIf='pageNumber == 1'>
-  <div *ngIf='candidates.length > 0' class="card-body">
+  <div *ngIf='candidates.length > 0 && candidateModel' class="card-body">
     <h4>{{positions[districtModel].position}} Senators</h4>
     <p>Select two candidates or write in your own.</p>
 
     <div class="row no-gutters">
       <!-- CANDIDATE CARD -->
       <div *ngFor="let candidate of candidates" class="col-6 col-md-4"><div class="card">
-          <img class="card-img-top mx-auto d-block" src="{{candidate.photo}}" [ngClass]="{'disabled-photo': !enableVoting(candidate.username, true)}">
+          <img class="card-img-top mx-auto d-block" src="{{candidate.photo || 'https://aswwu.com/media/img-sm/images/default_mask/default.jpg'}}" [ngClass]="{'disabled-photo': !enableVoting(candidate.username, true)}">
         <div class="card-footer btn-group-toggle">
           <label ngbButtonLabel class="btn btn-outline-primary btn-nowrap mx-auto w-100 d-block">
             <input ngbButton type="checkbox" [ngModel]="candidateModel[candidate.username]" (ngModelChange)="valueChange($event, candidate.username)" [disabled]='!enableVoting(candidate.username, true)'> 
@@ -71,7 +71,7 @@
   <div class="card-footer">
     <div class="row">
       <div *ngIf='candidates.length > 0' class="col-md-9 order-md-2 p-1"><button type="button" (click)='submit();' class="btn btn-primary mx-auto w-100 d-block">Vote!</button></div>
-      <div class="col-md-3 order-md-1 p-1"><button type="button" (click)='startOver();' class="btn btn-danger mx-auto w-100 d-block">Start Over</button></div>
+      <div class="col-md-3 order-md-1 p-1"><button type="button" (click)='ngOnInit();' class="btn btn-danger mx-auto w-100 d-block">Start Over</button></div>
     </div>
   </div>
 </div>
@@ -88,9 +88,25 @@
   </div>
   <div class="card-footer">
     <div class="row">
-      <div class="col-md-3 order-md-1 p-1"><button type="button" (click)='startOver();' class="btn btn-danger mx-auto w-100 d-block">Start Over</button></div>
+      <div class="col-md-3 order-md-1 p-1"><button type="button" (click)='ngOnInit();' class="btn btn-danger mx-auto w-100 d-block">Start Over</button></div>
     </div>
   </div>
 </div>
 </div>
+</div>
+
+<div>
+  <pre>
+    {{'election: ' + stringify(election)}}
+    {{'pageNumber: ' + stringify(pageNumber)}}
+    {{'positions: ' + stringify(positions)}}
+    {{'votes: ' + stringify(votes)}}
+    {{'candidates: ' + stringify(candidates)}}
+    {{'candidateModel: ' + stringify(candidateModel)}}
+    {{'writeInModel: ' + stringify(writeInModel)}}
+    {{'pageReady: ' + stringify(pageReady)}}
+    {{'submissionSuccess: ' + stringify(submissionSuccess)}}
+    {{'districtModel: ' + stringify(districtModel)}}
+  </pre>
+
 </div>
