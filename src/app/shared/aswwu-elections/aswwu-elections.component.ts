@@ -31,10 +31,7 @@ export class AswwuElectionsComponent implements OnInit {
   districtModel: string = ""
   candidates: any[] = [];
   candidateModel: any = {};
-  writeInModel: any = {
-    writeIn1: "",
-    writeIn2: ""
-  };
+  writeInModel: string = ""; 
 
   submissionSuccess = true;
 
@@ -75,7 +72,7 @@ export class AswwuElectionsComponent implements OnInit {
   getCandidates(position_id) {
     // delete past candidates
     this.candidateModel = {};
-    this.writeInModel.writeIn1 = "";
+    this.writeInModel = "";
 
     // get next set of candidates
     this.requestService.get(('elections/election/' + this.election.id) + '/candidate', {position: position_id}).subscribe((data) => {
@@ -95,7 +92,7 @@ export class AswwuElectionsComponent implements OnInit {
               isCandidate = true; 
             }
           }
-          this.writeInModel.writeIn1 = vote.vote; 
+          this.writeInModel = vote.vote; 
         }
       },null);
     }, (error) => {})
@@ -116,11 +113,8 @@ export class AswwuElectionsComponent implements OnInit {
       }
     }
     //check for write in
-    for(let writeIn in this.writeInModel){
-      if(writeIn != ""){
-        requestBody.vote = this.writeInModel[writeIn];
-        break;
-      }
+    if(this.writeInModel != ""){
+      requestBody.vote = this.writeInModel;
     }
     // submit vote
     let postURI = 'elections/vote';
@@ -140,8 +134,7 @@ export class AswwuElectionsComponent implements OnInit {
     //reset models
     this.districtModel = "";
     this.candidateModel = {};
-    this.writeInModel.writeIn1 = "";
-    this.writeInModel.writeIn2 = "";
+    this.writeInModel = "";
     this.submissionSuccess = true;
     // go to first page (district selection)
     this.pageNumber = 0;
@@ -160,17 +153,14 @@ export class AswwuElectionsComponent implements OnInit {
         numSelected = numSelected + 1;
       }
     }
-    if (this.writeInModel.writeIn1.length > 0) {
-      numSelected = numSelected + 1;
-    }
-    if (this.writeInModel.writeIn2.length > 0) {
+    if (this.writeInModel != "") {
       numSelected = numSelected + 1;
     }
     if (numSelected >= 1) {
       if (isCandidate) {
         return this.candidateModel[name];
       } else {
-        return (name.length > 0);
+        return (name != "");
       }
     } else {
       return true;
