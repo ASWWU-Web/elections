@@ -11,6 +11,7 @@ import { CURRENT_YEAR, MEDIA_SM } from '../../../shared-ng/config';
 })
 export class AswwuElectionsComponent implements OnInit {
   election: any;
+  votes: false; 
   positions: any[] = [];
   pageNumber: number = 0;
   districts: string[][] = [
@@ -30,7 +31,7 @@ export class AswwuElectionsComponent implements OnInit {
   districtModel: string = ""
   candidates: any[] = [];
   candidateModel: any = {};
-  writeInModel = {
+  writeInModel: any = {
     writeIn1: "",
     writeIn2: ""
   };
@@ -74,19 +75,30 @@ export class AswwuElectionsComponent implements OnInit {
   getCandidates(position_id) {
     // delete past candidates
     this.candidateModel = {};
+    this.writeInModel.writeIn1 = "";
 
     // get next set of candidates
     this.requestService.get(('elections/election/' + this.election.id) + '/candidate', {position: position_id}).subscribe((data) => {
       this.candidates = data.candidates;
-      console.log("GET");
-      console.log(data.candidates);
       let i = 0;
       for (let candidate of this.candidates) {
         this.addCandidatePhoto(candidate.username, i);
         i = i + 1;
       }
       this.buildCandidateModel();
-    }, (data) => {})
+      this.requestService.get('/elections/vote', {position: position_id}).subscribe((data) => {
+        for(let vote of data.votes){
+          let isCandidate = false; 
+          for(let candidate of this.candidates) {
+            if(vote.vote == candidate.username) {
+              this.candidateModel[candidate.username] = true;
+              isCandidate = true; 
+            }
+          }
+          this.writeInModel.writeIn1 = vote.vote; 
+        }
+      },null);
+    }, (error) => {})
   }
 
   submitVote(position_id) {
@@ -103,10 +115,15 @@ export class AswwuElectionsComponent implements OnInit {
         break;
       }
     }
+    //check for write in
+    for(let writeIn in this.writeInModel){
+      if(writeIn != ""){
+        requestBody.vote = this.writeInModel[writeIn];
+        break;
+      }
+    }
     // submit vote
     let postURI = 'elections/vote';
-    console.log("POST");
-    console.log(requestBody);
     this.requestService.post(postURI, requestBody).subscribe(null, (error) => {
       this.submissionSuccess = false
     });
@@ -149,7 +166,7 @@ export class AswwuElectionsComponent implements OnInit {
     if (this.writeInModel.writeIn2.length > 0) {
       numSelected = numSelected + 1;
     }
-    if (numSelected >= 2) {
+    if (numSelected >= 1) {
       if (isCandidate) {
         return this.candidateModel[name];
       } else {
