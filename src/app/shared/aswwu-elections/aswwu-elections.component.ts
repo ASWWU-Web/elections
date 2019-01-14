@@ -11,7 +11,8 @@ import { CURRENT_YEAR, MEDIA_SM } from '../../../shared-ng/config';
 })
 export class AswwuElectionsComponent implements OnInit {
   election: any;
-  votes: false; 
+  votes: any;
+  hasVoted: boolean = false; 
   positions: any[] = [];
   pageNumber: number = 0;
   districts: string[][] = [
@@ -84,7 +85,8 @@ export class AswwuElectionsComponent implements OnInit {
       }
       this.buildCandidateModel();
       this.requestService.get('/elections/vote', {position: position_id}).subscribe((data) => {
-        for(let vote of data.votes){
+        this.votes = data.votes;
+        for(let vote of data.votes) {
           let isCandidate = false; 
           for(let candidate of this.candidates) {
             if(vote.vote == candidate.username) {
@@ -92,9 +94,14 @@ export class AswwuElectionsComponent implements OnInit {
               isCandidate = true; 
             }
           }
-          this.writeInModel = vote.vote; 
+          if (!isCandidate) {
+            this.writeInModel = vote.vote;
+          }
         }
-      },null);
+        if(data.votes.length != 0){
+          this.hasVoted = true;  
+        }
+      }, null);
     }, (error) => {})
   }
 
@@ -117,10 +124,26 @@ export class AswwuElectionsComponent implements OnInit {
       requestBody.vote = this.writeInModel;
     }
     // submit vote
-    let postURI = 'elections/vote';
-    this.requestService.post(postURI, requestBody).subscribe(null, (error) => {
-      this.submissionSuccess = false
-    });
+    if(this.hasVoted == false){
+      let postURI = 'elections/vote';
+      this.requestService.post(postURI, requestBody).subscribe(null, (error) => {
+        this.submissionSuccess = false
+      });
+    }
+     //changing vote
+    if(this.hasVoted == true){
+      let voteId = null
+      for (let vote of this.votes) {
+        if (vote.position == position_id) {
+          voteId = vote.id;
+          break;
+        }
+      }
+      let putURI = 'elections/vote/' + voteId;
+      this.requestService.put(putURI, requestBody).subscribe(null, (error) => {
+        this.submissionSuccess = false
+      });
+    }
   }
 
   nextPage() {
