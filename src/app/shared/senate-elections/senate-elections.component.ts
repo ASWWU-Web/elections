@@ -270,7 +270,11 @@ export class SenateElectionsComponent implements OnInit {
       requestArray.push(this.rs.post('elections/vote/', newVote));
     }
 
-    forkJoin(requestArray).subscribe((data)=>{console.log(data)}, (err)=>{console.log(err)});
+    forkJoin(requestArray).subscribe((data)=>{
+      this.submissionSuccess = true;
+    }, (err)=>{
+      this.submissionSuccess = false;
+    });
 
 
 
