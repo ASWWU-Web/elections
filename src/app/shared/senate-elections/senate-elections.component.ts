@@ -192,11 +192,11 @@ export class SenateElectionsComponent implements OnInit {
         // ----
         this.buildCandidateModel();
         if (this.votes.length > 0) {
-          for (let vote in this.votes) {
+          for (let vote of this.votes) {
             if (this.candidateModel.hasOwnProperty(vote['vote'])) {
               this.candidateModel[vote['vote']] = true;
             } else {
-              if (this.writeInModel.writeIn1 != "") {
+              if (this.writeInModel.writeIn1 == "") {
                 this.writeInModel.writeIn1 = vote['vote'] || "";
               } else {
                 this.writeInModel.writeIn2 = vote['vote'] || "";

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { RequestService } from '../../../shared-ng/services/request.service';
 
 @Component({
   selector: 'app-home',
@@ -9,36 +10,43 @@ export class HomeComponent implements OnInit {
   status: string;
   admin: Boolean;
 
-  response = {
-    "id": "e7c5c84f-0a58-4f3b-8490-14ee0737d96f",
-    "election_type": "senate",
-    "start": "2018-12-07 08:00:00.000000",
-    "end": "2018-12-07 20:00:00.000000"
-  }
-
-  // response = null;
+  // response = {
+  //   "id": "e7c5c84f-0a58-4f3b-8490-14ee0737d96f",
+  //   "election_type": "senate",
+  //   "start": "2018-12-07 08:00:00.000000",
+  //   "end": "2018-12-07 20:00:00.000000"
+  // }
 
   roles = ["admin"];
+  response = null;
 
-  constructor() { }
+  constructor(private rs: RequestService) { }
 
   ngOnInit() {
+    this.getResponse();
+
     if (this.roles.indexOf('admin') > -1) {
       this.admin = true;
     }
+  }
 
-    if (this.response == null) {
+  // Makes get request to elections/current to set up information for homepage
+  getResponse() {
+    this.rs.get('elections/current').subscribe((data) => {
+      this.response = data;
+
+      console.log(this.response);
+
+      let election_start = new Date(this.response['start']);
+
+      if (election_start.getTime() >= Date.now()) {
+        this.status = "upcoming";
+      } else {
+        this.status = "now";
+      }
+    }, (error)=> {
       this.status = "none";
-      return null;
-    }
-
-    let election_start = new Date(this.response["start"]);
-
-    if (election_start.getTime() >= Date.now()) {
-      this.status = "upcoming";
-    } else {
-      this.status = "now";
-    }
+    });
   }
 
   getElectionType(election_type) {
