@@ -16,21 +16,7 @@ export class AswwuElectionsComponent implements OnInit {
   hasVoted: boolean = false; 
   positions: any[] = [];
   pageNumber: number = 0;
-  districts: string[][] = [
-    ["1",  "Sittner 1 & 2 Floor, Meske"],
-    ["2",  "Sittner 3 & 4 Floor"], 
-    ["3",  "Conard"], 
-    ["4",  "Forman"],
-    ["5",  "Mountain View, Birch Apartments"],
-    ["6",  "Hallmark, Faculty, Univeristy-Owned Housing"],
-    ["7",  "Off-Campus"],
-    ["8",  "Portland"],
-    ["9",  "Faculty"],
-    ["10", "Staff"]
-  ];
 
-  // selectedDistrict: string = "";
-  districtModel: string = ""
   candidates: any[] = [];
   candidateModel: any = {};
   writeInModel: string = ""; 
@@ -45,15 +31,18 @@ export class AswwuElectionsComponent implements OnInit {
       this.requestService.get('/elections/position', {election_type: "aswwu", active: true}).subscribe((data) => {
         this.positions = data.positions;
       }, null);
-    }, null);                
-      this.requestService.get('/search/all').subscribe((data) => {
-        this.allUsers = data.results.map((user)=> {
-          user.value = user.username;
-          user.display = user.full_name;
-          return user;
-        });
-      }, null);
-    }
+    }, null); 
+      
+    // get a list of all users for auto complete
+    //TODO: speed up this process 
+    this.requestService.get('/search/all').subscribe((data) => {
+      this.allUsers = data.results.map((user)=> {
+        user.value = user.username;
+        user.display = user.full_name;
+        return user;
+      });
+    }, null);
+  }
 
   ngOnInit() {
   }
@@ -102,10 +91,12 @@ export class AswwuElectionsComponent implements OnInit {
               isCandidate = true; 
             }
           }
+          // assign vote to writeIn
           if (!isCandidate) {
             this.writeInModel = vote.vote;
           }
         }
+        // switches request to put
         if(data.votes.length != 0){
           this.hasVoted = true;  
         }
@@ -139,7 +130,9 @@ export class AswwuElectionsComponent implements OnInit {
       });
     }
      //changing vote
-    if(this.hasVoted == true){
+    if(this.hasVoted == true) {
+      requestBody['id'] = this.votes[0].id;
+      requestBody['username'] = this.votes[0].username;
       let voteId = null
       for (let vote of this.votes) {
         if (vote.position == position_id) {
@@ -152,6 +145,8 @@ export class AswwuElectionsComponent implements OnInit {
         this.submissionSuccess = false
       });
     }
+    console.log("HERE");
+    console.log(requestBody);
   }
 
   nextPage() {
@@ -163,11 +158,10 @@ export class AswwuElectionsComponent implements OnInit {
     // hide pages
     this.pageNumber=null;
     //reset models
-    this.districtModel = "";
     this.candidateModel = {};
     this.writeInModel = "";
     this.submissionSuccess = true;
-    // go to first page (district selection)
+    // go to first page
     this.pageNumber = 0;
     window.scrollTo(0,0);
   }
