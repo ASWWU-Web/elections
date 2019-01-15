@@ -211,14 +211,6 @@ export class SenateElectionsComponent implements OnInit {
     }
   }
 
-  getVotes() {
-    this.rs.get('elections/vote').subscribe((data) => {
-      this.votes = data['votes'];
-      if (this.votes[0]) {
-        this.districtModel = this.votes[0]['position'];
-      }
-    }, (error)=>{});
-  }
 
   submit() {
     // let postURI = 'elections/vote';
@@ -257,14 +249,16 @@ export class SenateElectionsComponent implements OnInit {
       voteList = voteList.slice(0,2);
     }
 
-    let updateVotes = this.votes.filter(vote => !voteList.includes(vote.vote));
+    // votes from the server that can be updated (overwritten) using their id
+    let updateVotes = this.votes.filter(vote => !voteList.includes(vote['vote']));
+    // votes on the client that don't exist already on the server
     let newVotes = voteList.filter(vote => !this.votesInclude(vote));
     let requestArray = [];
-    console.log("updateVotes: ", updateVotes, "newVotes: ", newVotes);
 
     for (let vote of updateVotes) {
-      vote.vote = newVotes.pop;
-      requestArray.push(this.rs.put('elections/vote'+vote.id, vote));
+      let newVote = Object.assign({}, vote);
+      newVote['vote'] = newVotes.pop();
+      requestArray.push(this.rs.put('elections/vote/'+newVote.id, newVote));
     }
 
     for (let vote of newVotes) {
@@ -273,7 +267,7 @@ export class SenateElectionsComponent implements OnInit {
         position: this.districtModel,
         vote: vote
       }
-      requestArray.push(this.rs.post('elections/vote', newVote));
+      requestArray.push(this.rs.post('elections/vote/', newVote));
     }
 
     forkJoin(requestArray).subscribe((data)=>{console.log(data)}, (err)=>{console.log(err)});
@@ -315,7 +309,7 @@ export class SenateElectionsComponent implements OnInit {
   }
 
   votesInclude(username: string) {
-    for (let vote in this.votes) {
+    for (let vote of this.votes) {
       if (vote['vote'] == username) {
         return true;
       }
