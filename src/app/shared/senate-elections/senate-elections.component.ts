@@ -181,7 +181,7 @@ export class SenateElectionsComponent implements OnInit {
         position: this.districtModel,
         vote: vote
       }
-      requestArray.push(this.rs.post('elections/vote/', newVote));
+      requestArray.push(this.rs.post('elections/vote', newVote));
     }
 
     forkJoin(requestArray).subscribe((data)=>{
