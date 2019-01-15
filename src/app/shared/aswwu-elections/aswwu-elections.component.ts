@@ -10,6 +10,7 @@ import { CURRENT_YEAR, MEDIA_SM } from '../../../shared-ng/config';
   styleUrls: ['./aswwu-elections.component.css']
 })
 export class AswwuElectionsComponent implements OnInit {
+  allUsers: any[] = [];
   election: any;
   votes: any;
   hasVoted: boolean = false; 
@@ -44,7 +45,14 @@ export class AswwuElectionsComponent implements OnInit {
       this.requestService.get('/elections/position', {election_type: "aswwu", active: true}).subscribe((data) => {
         this.positions = data.positions;
       }, null);
-    }, null);
+    }, null);                
+      this.requestService.get('/search/all').subscribe((data) => {
+        this.allUsers = data.results.map((user)=> {
+          user.value = user.username;
+          user.display = user.full_name;
+          return user;
+        });
+      }, null);
     }
 
   ngOnInit() {
