@@ -12,60 +12,10 @@ import { mergeMap } from 'rxjs/operators';
 })
 export class SenateElectionsComponent implements OnInit {
 
-  // TODO:
-  //    on initialization get list of candidates (alternatively wait until "Go" and have server only return candidates for one district)
-  //    Show the first page with district
-  //    bind variable to district choice
-  //    Go button that sets show candidates to true
-  //    Set districts html to show only when show-candidates is false
-  //    Set candidates html to show only when show-candidates is true and candidate list exists
-  //    on "Go" build district-candidate list based on selected district
-  //      fetch display names and images for district candidate list if we decide not to included
-  //        them in original candidate list
-  //    use ngfor on district-candidate list
-  //    use ngstyle to set unselected pictures to faded state when number of selected pictures + input boxes fillled >= 2
-  //    set empty write-in inputs to inactive (grayed out) state when number of selected pictures + input boxes fillled >=2
-  //
-  //    add a clear button to candidate selection page
-  //
-
   constructor(private rs: RequestService) { }
-
-
-  stringify(object: any) {
-    return JSON.stringify(object, null, 2);
-  }
 
   // Page 0 is districts page
   pageNumber: number = 0;
-
-  //candidatesJSON = {};
-  // candidatesJSON = [
-  //     {
-  //       "id": "0c3fa8c5-d580-4c47-8598-a4bfd7657711",
-  //       "election": "e7c5c84f-0a58-4f3b-8490-14ee0737d96f",
-  //       "position": "7c336bd7-7e21-4a81-a4c2-bc076852611c",
-  //       "username": "sheldon.woodward",
-  //       "display_name": "Sheldon Woodward",
-  //       "photo": "https://aswwu.com/media/img-md/profiles/1819/02523-2029909.jpg"
-  //     },
-  //     {
-  //       "id": "0c3fa8c5-d580-4c47-8598-a4bfd7657711",
-  //       "election": "e7c5c84f-0a58-4f3b-8490-14ee0737d96f",
-  //       "position": "7c336bd7-7e21-4a81-a4c2-bc076852611c",
-  //       "username": "sheldon.woodward",
-  //       "display_name": "Sheldon Woodward",
-  //       "photo": "https://aswwu.com/media/img-md/profiles/1819/02523-2029909.jpg"
-  //     },
-  //     {
-  //       "id": "0c3fa8c5-d580-4c47-8598-a4bfd7657711",
-  //       "election": "e7c5c84f-0a58-4f3b-8490-14ee0737d96f",
-  //       "position": "7c336bd7-7e21-4a81-a4c2-bc076852611c",
-  //       "username": "sheldon.woodward",
-  //       "display_name": "Sheldon Woodward",
-  //       "photo": "https://aswwu.com/media/img-md/profiles/1819/02523-2029909.jpg"
-  //     },
-  //   ];
 
   // current election object
   // {
@@ -107,6 +57,7 @@ export class SenateElectionsComponent implements OnInit {
   allUsers: any[] = [];
 
   ngOnInit() {
+    this.pageReady = false;
     this.rs.get('/search/all').subscribe((data) => {
       this.allUsers = data.results.map((user)=> {
         user.value = user.username;
@@ -114,7 +65,7 @@ export class SenateElectionsComponent implements OnInit {
         return user;
       });
     }, null);
-    
+
     // hide pages
     this.pageNumber=null;
     //reset models
@@ -137,9 +88,6 @@ export class SenateElectionsComponent implements OnInit {
       let election = data[0];
       let positions = data[1];
       let votes = data[2];
-      // console.log("Election", election);
-      // console.log("Position", positions);
-      // console.log("Votes", votes);
 
       // Election
       if (election.election_type == "senate") {
@@ -156,8 +104,6 @@ export class SenateElectionsComponent implements OnInit {
       this.votes = votes['votes'];
       if (this.votes[0]) {
         this.districtModel = this.votes[0]['position'];
-      //   console.log("Election ID:", election['id']);
-      //   this.getCandidates(election['id'], this.votes[0]['position']);
       }
 
       this.pageReady = true;
@@ -171,34 +117,11 @@ export class SenateElectionsComponent implements OnInit {
     }
   }
 
-  // ---- commenting out this block since we expect the server to return photos
-  // addCandidatePhoto(username, i){
-  //   let uri = '/profile/' + CURRENT_YEAR + '/' + username;
-  //   this.rs.get(uri).subscribe((data) => {
-  //     let photoURI = MEDIA_SM + '/'
-  //     if (data.photo != "None") {
-  //       photoURI =  photoURI + data.photo;
-  //     }
-  //     else {
-  //       photoURI = photoURI + 'images/default_mask/default.jpg';
-  //     }
-  //     this.candidates[i].photo = photoURI;
-  //   }, (data) => {})
-  // }
-  // ----
-
   getCandidates() {//(election: string, position: string) {
     if (this.districtModel) {
       // this.rs.get('elections/election/' + election + '/candidate', {"position": position}).subscribe((data) => {
       this.rs.get('elections/election/' + this.election.id + '/candidate', {position: this.districtModel}).subscribe((data) => {
         this.candidates = data.candidates;
-        // ---- Commenting out this section becuase we expect to get photo urls from the server ----
-        // let i = 0;
-        // for (let candidate of this.candidates) {
-        //   this.addCandidatePhoto(candidate.username, i);
-        //   i = i + 1;
-        // }
-        // ----
         this.buildCandidateModel();
         if (this.votes.length > 0) {
           for (let vote of this.votes) {
@@ -213,7 +136,9 @@ export class SenateElectionsComponent implements OnInit {
             }
           }
         }
-      }, (data) => {console.log("error", data)});
+      }, (data) => {
+        // console.log("error", data);
+      });
       // Page 1 is the candidates page
       this.pageNumber = 1;
       window.scrollTo(0,0);
@@ -222,26 +147,6 @@ export class SenateElectionsComponent implements OnInit {
 
 
   submit() {
-    // let postURI = 'elections/vote';
-    // let response = this.buildJsonResponse(this.election.id, this.positions[this.districtModel].id);
-    // this.rs.post(postURI, response[0]).subscribe(
-    //   (data)=>{
-    //     console.log("First post", data);
-    //     this.rs.post(postURI, response[1]).subscribe(
-    //       (data)=>{
-    //         console.log("Second post", data);
-    //         this.submissionSuccess = true;
-    //       },
-    //       (data)=>{
-    //         console.log("Second post fail", data);
-    //         this.submissionSuccess = false
-    //       });
-    //   },
-    //   (data)=>{
-    //     console.log("First post fail", data);
-    //     this.submissionSuccess = false
-    //   });
-
     let voteList: string[] = [];
 
     for (let candidate in this.candidateModel) {
@@ -285,8 +190,6 @@ export class SenateElectionsComponent implements OnInit {
       this.submissionSuccess = false;
     });
 
-
-
     // Page 2 is the submission page
     this.pageNumber = 2;
     window.scrollTo(0,0);
@@ -296,6 +199,7 @@ export class SenateElectionsComponent implements OnInit {
   valueChange($event, username){
     this.candidateModel[username] = $event;
   }
+
 
   enableVoting(name, isCandidate) {
     let numSelected = 0;
@@ -320,6 +224,7 @@ export class SenateElectionsComponent implements OnInit {
       return true;
     }
   }
+
 
   votesInclude(username: string) {
     for (let vote of this.votes) {
