@@ -104,8 +104,17 @@ export class SenateElectionsComponent implements OnInit {
 
   pageReady = false;
   submissionSuccess = null;
+  allUsers: any[] = [];
 
   ngOnInit() {
+    this.rs.get('/search/all').subscribe((data) => {
+      this.allUsers = data.results.map((user)=> {
+        user.value = user.username;
+        user.display = user.full_name;
+        return user;
+      });
+    }, null);
+    
     // hide pages
     this.pageNumber=null;
     //reset models
