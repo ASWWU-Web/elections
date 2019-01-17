@@ -30,8 +30,8 @@ export class SenateElectionsComponent implements OnInit {
   candidateModel: any = null;
   // Handles write-in votes
   writeInModel = {
-    writeIn1: "",
-    writeIn2: ""
+    writeIn1: null,
+    writeIn2: null
   };
 
   pageReady: boolean = false;
@@ -44,8 +44,8 @@ export class SenateElectionsComponent implements OnInit {
     //reset models
     this.districtModel = null;
     this.candidateModel = {};
-    this.writeInModel.writeIn1 = "";
-    this.writeInModel.writeIn2 = "";
+    this.writeInModel.writeIn1 = null
+    this.writeInModel.writeIn2 = null
     this.submissionSuccess = null;
     // go to first page (district selection)
     this.pageNumber = 0;
@@ -85,7 +85,7 @@ export class SenateElectionsComponent implements OnInit {
 
 
   getNames(query: string) {
-    if (query === '') {
+    if (query == '') {
       return of([]);
     }
     return this.rs.get("search/names", {'full_name': query});
@@ -122,10 +122,10 @@ export class SenateElectionsComponent implements OnInit {
             if (this.candidateModel.hasOwnProperty(vote['vote'])) {
               this.candidateModel[vote['vote']] = true;
             } else {
-              if (this.writeInModel.writeIn1 == "") {
-                this.writeInModel.writeIn1 = vote['vote'] || "";
+              if (!this.writeInModel.writeIn1) {
+                this.writeInModel.writeIn1 = vote['vote'] || null;
               } else {
-                this.writeInModel.writeIn2 = vote['vote'] || "";
+                this.writeInModel.writeIn2 = vote['vote'] || null;
               }
             }
           }
@@ -149,7 +149,7 @@ export class SenateElectionsComponent implements OnInit {
       }
     }
     for (let candidate in this.writeInModel) {
-      if (this.writeInModel[candidate].length > 0) {
+      if (this.writeInModel[candidate]) {
         voteList.push(this.writeInModel[candidate]);
       }
     }
@@ -209,17 +209,17 @@ export class SenateElectionsComponent implements OnInit {
         numSelected = numSelected + 1;
       }
     }
-    if (this.writeInModel.writeIn1.length > 0) {
+    if (this.writeInModel.writeIn1) {
       numSelected = numSelected + 1;
     }
-    if (this.writeInModel.writeIn2.length > 0) {
+    if (this.writeInModel.writeIn2) {
       numSelected = numSelected + 1;
     }
     if (numSelected >= 2) {
       if (isCandidate) {
         return this.candidateModel[name];
       } else {
-        return (name.length > 0);
+        return (Boolean(name));
       }
     } else {
       return true;
