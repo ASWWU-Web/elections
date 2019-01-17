@@ -43,22 +43,23 @@
 
     <div class="row no-gutters">
       <!-- CANDIDATE CARD -->
-      <div *ngFor="let candidate of candidates" class="col-6 col-md-4"><div class="card">
+      <div *ngFor="let candidate of candidates" class="col-6 col-md-4">
+        <div class="card">
           <img class="card-img-top mx-auto d-block" src="{{candidate.photo || 'https://aswwu.com/media/img-sm/images/default_mask/default.jpg'}}" [ngClass]="{'disabled-photo': !enableVoting(candidate.username, true)}">
-        <div class="card-footer btn-group-toggle">
-          <label ngbButtonLabel class="btn btn-outline-primary btn-nowrap mx-auto w-100 d-block">
-            <input ngbButton type="checkbox" [ngModel]="candidateModel[candidate.username]" (ngModelChange)="valueChange($event, candidate.username)" [disabled]='!enableVoting(candidate.username, true)'>
-            {{candidate.display_name}}
-          </label>
+          <div class="card-footer btn-group-toggle">
+            <label ngbButtonLabel class="btn btn-outline-primary btn-nowrap mx-auto w-100 d-block">
+              <input ngbButton type="checkbox" [ngModel]="candidateModel[candidate.username]" (ngModelChange)="valueChange($event, candidate.username)" [disabled]='!enableVoting(candidate.username, true)'>
+              {{candidate.display_name}}
+            </label>
+          </div>
         </div>
       </div>
-    </div>
     </div>
     <hr>
 
     <div class="input-group row mx-auto">
-      <div class="col-md-6 p-1"><input type="text" class="form-control" list="users" [(ngModel)]="writeInModel.writeIn1" [disabled]='!enableVoting(writeInModel.writeIn1, false)' [ngbTypeahead]="search" placeholder="Write In Candidate"/></div>
-      <div class="col-md-6 p-1"><input type="text" class="form-control" list="users" [(ngModel)]="writeInModel.writeIn2" [disabled]='!enableVoting(writeInModel.writeIn2, false)' [ngbTypeahead]="search" placeholder="Write In Candidate"/></div>
+      <div class="col-md-6 p-1"><input type="text" class="form-control" [(ngModel)]="writeInModel.writeIn1" [disabled]='!enableVoting(writeInModel.writeIn1, false)' [ngbTypeahead]="search" placeholder="Write In Candidate"/></div>
+      <div class="col-md-6 p-1"><input type="text" class="form-control" [(ngModel)]="writeInModel.writeIn2" [disabled]='!enableVoting(writeInModel.writeIn2, false)' [ngbTypeahead]="search" placeholder="Write In Candidate"/></div>
     </div>
     <hr>
   </div>
