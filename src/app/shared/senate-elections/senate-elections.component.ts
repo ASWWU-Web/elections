@@ -43,7 +43,7 @@ export class SenateElectionsComponent implements OnInit {
     this.pageNumber=null;
     //reset models
     this.districtModel = null;
-    this.candidateModel = null;
+    this.candidateModel = {};
     this.writeInModel.writeIn1 = "";
     this.writeInModel.writeIn2 = "";
     this.submissionSuccess = null;
