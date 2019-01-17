@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { RequestService } from '../../../shared-ng/services/request.service';
 import { CURRENT_YEAR, MEDIA_SM } from '../../../shared-ng/config';
 import { forkJoin, Observable, of } from 'rxjs';
-import { mergeMap, debounceTime, distinctUntilChanged, map, pluck, tap, switchMap } from 'rxjs/operators';
+import { mergeMap, debounceTime, distinctUntilChanged, map, pluck, tap, switchMap, retry } from 'rxjs/operators';
+import { strictEqual } from 'assert';
+import { stringify } from '@angular/core/src/render3/util';
 //import { disconnect } from 'cluster';
 
 @Component({
@@ -115,28 +117,19 @@ export class SenateElectionsComponent implements OnInit {
     if (query === '') {
       return of([]);
     }
-    let request = this.rs.get("search/names", {'full_name': query}).pipe(
-      pluck('results'),
-    );
-    return request;
+    return this.rs.get("search/names", {'full_name': query});
   }
 
 
-  search = (text$: Observable<string>) =>
-  text$.pipe(
-    debounceTime(300),
-    distinctUntilChanged(),
-    // tap(() => this.searching = true),
-    switchMap(term =>
-      {
-        return this.getNames(term);
-      }
-    ),
-    map((data)=>{
-      console.log(">",data);
-      return data.map(item=>item.username);
-    })
-  )
+  search = (text$: Observable<string>) => {
+    text$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap(this.getNames),
+      pluck('results'),
+      map((data: {username: string, full_name: string})=>data.username)
+      )
+  }
 
 
   buildCandidateModel() {
