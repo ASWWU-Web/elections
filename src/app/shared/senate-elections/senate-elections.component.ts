@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RequestService } from '../../../shared-ng/services/request.service';
-import { CURRENT_YEAR, MEDIA_SM } from '../../../shared-ng/config';
 import { forkJoin, Observable, of } from 'rxjs';
-import { mergeMap, debounceTime, distinctUntilChanged, map, pluck, tap, switchMap, retry } from 'rxjs/operators';
-import { strictEqual } from 'assert';
-import { stringify } from '@angular/core/src/render3/util';
-//import { disconnect } from 'cluster';
+import { debounceTime, distinctUntilChanged, map, pluck, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'senate-elections',
@@ -20,32 +16,16 @@ export class SenateElectionsComponent implements OnInit {
   pageNumber: number = 0;
 
   // current election object
-  // {
-  //   "id": "e7c5c84f-0a58-4f3b-8490-14ee0737d96f",
-  //   "election_type": "aswwu",
-  //   "start": "2018-11-05 08:00:00.000000",
-  //   "end": "2018-11-05 20:00:00.000000"
-  // }
-  election: any = null;
+  election: {id: string, election_type: string, start: string, end: string} = null;
   // Dictionary where the key is the position id and the value is a singular position object as returned from the server
   positions: any = null;
   // Array of vote objects
-  votes: any[] = null;
+  votes: {id: string, election: string, position: string, vote: string, username: string}[] = null;
 
   // districtModel is the selected district
   districtModel: string = null;
   // candidates is an array of the candidates running for the position
-  // [
-  //   {
-  //     "id": "0c3fa8c5-d580-4c47-8598-a4bfd7657711",
-  //     "election": "e7c5c84f-0a58-4f3b-8490-14ee0737d96f",
-  //     "position": "7c336bd7-7e21-4a81-a4c2-bc076852611c",
-  //     "username": "sheldon.woodward",
-  //     "display_name": "Sheldon Woodward",
-  //     "photo": "https://aswwu.com/media/img-md/profiles/1819/02523-2029909.jpg"
-  //   }
-  // ]
-  candidates: any[] = [];
+  candidates: {id: string, election: string, position: string, username: string, display_name:string, photo: string}[] = [];
   // candidateModel is a dictionary with the username of the candidate as the key, and a boolean indicating whether that candidate is selected as the value
   candidateModel: any = null;
   // Handles write-in votes
@@ -54,19 +34,10 @@ export class SenateElectionsComponent implements OnInit {
     writeIn2: ""
   };
 
-  pageReady = false;
-  submissionSuccess = null;
-  allUsers: any[] = [];
+  pageReady: boolean = false;
+  submissionSuccess: boolean = null;
 
   ngOnInit() {
-    // this.pageReady = false;
-    // this.rs.get('/search/all').subscribe((data) => {
-    //   this.allUsers = data.results.map((user)=> {
-    //     user.value = user.username;
-    //     user.display = user.full_name;
-    //     return user;
-    //   });
-    // }, null);
 
     // hide pages
     this.pageNumber=null;
@@ -194,7 +165,10 @@ export class SenateElectionsComponent implements OnInit {
     for (let vote of updateVotes) {
       let newVote = Object.assign({}, vote);
       newVote['vote'] = newVotes.pop();
-      requestArray.push(this.rs.put('elections/vote/'+newVote.id, newVote));
+      if (newVote.vote) {
+        console.log(newVote.vote);
+        requestArray.push(this.rs.put('elections/vote/'+newVote.id, newVote));
+      }
     }
 
     for (let vote of newVotes) {
@@ -210,6 +184,11 @@ export class SenateElectionsComponent implements OnInit {
       this.submissionSuccess = true;
     }, (err)=>{
       this.submissionSuccess = false;
+    }, ()=>{
+      this.submissionSuccess = true;
+      // TODO: Note: this callback runs when the subscription is complete
+      // and error free, so if the user doesn't submit any new votes this callback is
+      // needed in order to make sure we show the success message.
     });
 
     // Page 2 is the submission page
