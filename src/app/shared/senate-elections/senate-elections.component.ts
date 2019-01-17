@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RequestService } from '../../../shared-ng/services/request.service';
 import { forkJoin, Observable, of } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, pluck, switchMap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, pluck, switchMap, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'senate-elections',
@@ -93,13 +93,14 @@ export class SenateElectionsComponent implements OnInit {
 
 
   search = (text$: Observable<string>) => {
-    text$.pipe(
+    return text$.pipe(
       debounceTime(300),
       distinctUntilChanged(),
-      switchMap(this.getNames),
-      pluck('results'),
-      map((data: {username: string, full_name: string})=>data.username)
-      )
+      switchMap((data)=>{return this.getNames(data)}),
+      map((data: {results: {username: string, full_name: string}[]})=>{
+        return data.results.map((item)=>item.username);
+      })
+    )
   }
 
 
@@ -166,7 +167,6 @@ export class SenateElectionsComponent implements OnInit {
       let newVote = Object.assign({}, vote);
       newVote['vote'] = newVotes.pop();
       if (newVote.vote) {
-        console.log(newVote.vote);
         requestArray.push(this.rs.put('elections/vote/'+newVote.id, newVote));
       }
     }
