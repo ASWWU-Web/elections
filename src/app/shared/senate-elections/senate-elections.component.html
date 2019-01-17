@@ -37,9 +37,8 @@
 <!-- SELECT CANDIDATE PAGE -->
 
 <div *ngIf='pageNumber == 1'>
-  <div *ngIf='candidates.length > 0 && candidateModel' class="card-body">
+  <!--<div *ngIf='candidates.length > 0 && candidateModel' class="card-body">-->
     <h4>{{positions[districtModel].position}} Senators</h4>
-    <p>Select two candidates or write in your own.</p>
 
     <div class="row no-gutters">
       <!-- CANDIDATE CARD -->
@@ -59,26 +58,20 @@
     <div class="input-group row mx-auto">
       <div class="col-md-6 p-1"><input type="text" class="form-control" list="users" [(ngModel)]="writeInModel.writeIn1" [disabled]='!enableVoting(writeInModel.writeIn1, false)' [ngbTypeahead]="search" placeholder="Write In Candidate"/></div>
       <div class="col-md-6 p-1"><input type="text" class="form-control" list="users" [(ngModel)]="writeInModel.writeIn2" [disabled]='!enableVoting(writeInModel.writeIn2, false)' [ngbTypeahead]="search" placeholder="Write In Candidate"/></div>
-      <!-- <datalist id="users">
-        <option *ngFor="let user of allUsers" [value]="user.username" >
-          {{user.full_name}}
-        </option>
-      </datalist> -->
-
-      <!--- <div class="col-md-6 p-1"><input type="text" class="form-control" [(ngModel)]="writeInModel.writeIn1" [disabled]='!enableVoting(writeInModel.writeIn1, false)' placeholder="Write In Candidate"/></div> -->
-      <!-- <div class="col-md-6 p-1"><input type="text" class="form-control" [(ngModel)]="writeInModel.writeIn2" [disabled]='!enableVoting(writeInModel.writeIn2, false)' placeholder="Write In Candidate"/></div> -->
     </div>
     <hr>
   </div>
 
+  <!--
   <div *ngIf='candidates.length == 0' class="card-body">
     <h4>The {{positions[districtModel].position}} Senators are missing! 😱 </h4>
     <p>It looks like there are no senators for this district. If this is incorrect please contact an ASWWU representative.</p>
   </div>
-
+  -->
   <div class="card-footer">
     <div class="row">
-      <div *ngIf='candidates.length > 0' class="col-md-9 order-md-2 p-1"><button type="button" (click)='submit();' class="btn btn-primary mx-auto w-100 d-block">Vote!</button></div>
+        <!--<div *ngIf='candidates.length > 0' class="col-md-9 order-md-2 p-1"><button type="button" (click)='submit();' class="btn btn-primary mx-auto w-100 d-block">Vote!</button></div>-->
+      <div class="col-md-9 order-md-2 p-1"><button type="button" (click)='submit();' class="btn btn-primary mx-auto w-100 d-block">Vote!</button></div>
       <div class="col-md-3 order-md-1 p-1"><button type="button" (click)='ngOnInit();' class="btn btn-danger mx-auto w-100 d-block">Start Over</button></div>
     </div>
   </div>
