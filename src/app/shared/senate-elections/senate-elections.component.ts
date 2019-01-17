@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { RequestService } from '../../../shared-ng/services/request.service';
 import { CURRENT_YEAR, MEDIA_SM } from '../../../shared-ng/config';
-import { forkJoin } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { forkJoin, Observable, of } from 'rxjs';
+import { mergeMap, debounceTime, distinctUntilChanged, map, pluck, tap, switchMap } from 'rxjs/operators';
 //import { disconnect } from 'cluster';
 
 @Component({
@@ -57,14 +57,14 @@ export class SenateElectionsComponent implements OnInit {
   allUsers: any[] = [];
 
   ngOnInit() {
-    this.pageReady = false;
-    this.rs.get('/search/all').subscribe((data) => {
-      this.allUsers = data.results.map((user)=> {
-        user.value = user.username;
-        user.display = user.full_name;
-        return user;
-      });
-    }, null);
+    // this.pageReady = false;
+    // this.rs.get('/search/all').subscribe((data) => {
+    //   this.allUsers = data.results.map((user)=> {
+    //     user.value = user.username;
+    //     user.display = user.full_name;
+    //     return user;
+    //   });
+    // }, null);
 
     // hide pages
     this.pageNumber=null;
@@ -109,6 +109,35 @@ export class SenateElectionsComponent implements OnInit {
       this.pageReady = true;
     });
   }
+
+
+  getNames(query: string) {
+    if (query === '') {
+      return of([]);
+    }
+    let request = this.rs.get("search/names", {'full_name': query}).pipe(
+      pluck('results'),
+    );
+    return request;
+  }
+
+
+  search = (text$: Observable<string>) =>
+  text$.pipe(
+    debounceTime(300),
+    distinctUntilChanged(),
+    // tap(() => this.searching = true),
+    switchMap(term =>
+      {
+        return this.getNames(term);
+      }
+    ),
+    map((data)=>{
+      console.log(">",data);
+      return data.map(item=>item.username);
+    })
+  )
+
 
   buildCandidateModel() {
     this.candidateModel = {};
@@ -181,7 +210,7 @@ export class SenateElectionsComponent implements OnInit {
         position: this.districtModel,
         vote: vote
       }
-      requestArray.push(this.rs.post('elections/vote/', newVote));
+      requestArray.push(this.rs.post('elections/vote', newVote));
     }
 
     forkJoin(requestArray).subscribe((data)=>{
