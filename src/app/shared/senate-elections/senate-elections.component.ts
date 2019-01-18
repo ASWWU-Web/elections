@@ -90,7 +90,7 @@ export class SenateElectionsComponent implements OnInit {
 
   getNames(query: string) {
     if (query == '') {
-      return of([]);
+      return of({results: []});
     }
     return this.rs.get("search/names", {'full_name': query});
   }
