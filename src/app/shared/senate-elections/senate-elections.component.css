@@ -15,3 +15,8 @@
 .disabled-photo {
     filter: opacity(.5);
 }
+
+.submissionStatus {
+    font-family: var(--font-1);
+    font-size: 2rem;
+}

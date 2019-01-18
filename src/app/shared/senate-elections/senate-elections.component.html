@@ -83,11 +83,9 @@
 
 <div *ngIf='pageNumber == 2'>
   <div class="card-body">
-      submission status:
-      <br>
-      <span *ngIf="submissionSuccess == null"> LOADING...</span>
-      <span *ngIf="submissionSuccess"> SUCCESS</span>
-      <span *ngIf="(submissionSuccess != null) && !submissionSuccess">FAILED! Please contact an ASWWU representative.</span>
+      <span *ngIf="submissionSuccess == null" class="submissionStatus"> Waiting... 🤔 </span>
+      <span *ngIf="submissionSuccess" class="submissionStatus"> Thanks for participating in Democracy! 🤗 </span>
+      <span *ngIf="(submissionSuccess != null) && !submissionSuccess" class="submissionStatus">FAILED! 😭 <br>Please contact an ASWWU representative.</span>
   </div>
   <div class="card-footer">
     <div class="row">
