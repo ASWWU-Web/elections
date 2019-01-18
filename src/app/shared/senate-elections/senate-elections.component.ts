@@ -20,6 +20,8 @@ export class SenateElectionsComponent implements OnInit {
   election: {id: string, election_type: string, start: string, end: string} = null;
   // Dictionary where the key is the position id and the value is a singular position object as returned from the server
   positions: any = null;
+  // List of tuples containing the id and position name
+  positionsList: any = [];
   // Array of vote objects
   votes: {id: string, election: string, position: string, vote: string, username: string}[] = null;
 
@@ -70,8 +72,10 @@ export class SenateElectionsComponent implements OnInit {
 
       // Positions
       this.positions = {};
+      this.positionsList = [];
       for (let position of positions.positions) {
         this.positions[position['id']] = position;
+        this.positionsList.push([position.id, position.position])
       }
 
       // Votes
