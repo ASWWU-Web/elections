@@ -98,7 +98,6 @@ export class SenateElectionsComponent implements OnInit {
       distinctUntilChanged(),
       switchMap((data)=>{return this.getNames(data)}),
       map((data: {results: {username: string, full_name: string}[]})=>{
-        console.log(data);
         return data.results.map((item)=>item.username);
       })
     )
