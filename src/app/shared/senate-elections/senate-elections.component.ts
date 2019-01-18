@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RequestService } from '../../../shared-ng/services/request.service';
 import { forkJoin, Observable, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, pluck, switchMap, tap } from 'rxjs/operators';
+import { MEDIA_SM, CURRENT_YEAR } from 'src/shared-ng/config';
 
 @Component({
   selector: 'senate-elections',
@@ -111,11 +112,32 @@ export class SenateElectionsComponent implements OnInit {
     }
   }
 
+
+  addCandidatePhoto(username, i){
+    let uri = '/profile/' + CURRENT_YEAR + '/' + username;
+    this.rs.get(uri).subscribe((data) => {
+      let photoURI = MEDIA_SM + '/'
+      if (data.photo != "None") {
+        photoURI =  photoURI + data.photo;
+      }
+      else {
+        photoURI = photoURI + 'images/default_mask/default.jpg';
+      }
+      this.candidates[i].photo = photoURI;
+    }, (data) => {})
+  }
+
+
   getCandidates() {//(election: string, position: string) {
     if (this.districtModel) {
       // this.rs.get('elections/election/' + election + '/candidate', {"position": position}).subscribe((data) => {
       this.rs.get('elections/election/' + this.election.id + '/candidate', {position: this.districtModel}).subscribe((data) => {
         this.candidates = data.candidates;
+        let i = 0;
+        for (let candidate of this.candidates) {
+          this.addCandidatePhoto(candidate.username, i);
+          i = i + 1;
+        }
         this.buildCandidateModel();
         if (this.votes.length > 0) {
           for (let vote of this.votes) {
