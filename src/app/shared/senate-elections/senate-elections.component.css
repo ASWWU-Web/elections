@@ -1,0 +1,22 @@
+.scrollable {
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.btn-nowrap {
+    white-space: normal;
+}
+
+.disabled {
+    background-color: gray;
+    color: white;
+}
+
+.disabled-photo {
+    filter: opacity(.5);
+}
+
+.submissionStatus {
+    font-family: var(--font-1);
+    font-size: 2rem;
+}
