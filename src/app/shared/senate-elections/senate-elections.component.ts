@@ -86,7 +86,7 @@ export class SenateElectionsComponent implements OnInit {
 
   getNames(query: string) {
     if (query == '') {
-      return of([]);
+      return of({results: []});
     }
     return this.rs.get("search/names", {'full_name': query});
   }
@@ -98,6 +98,7 @@ export class SenateElectionsComponent implements OnInit {
       distinctUntilChanged(),
       switchMap((data)=>{return this.getNames(data)}),
       map((data: {results: {username: string, full_name: string}[]})=>{
+        console.log(data);
         return data.results.map((item)=>item.username);
       })
     )
