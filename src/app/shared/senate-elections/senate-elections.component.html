@@ -22,9 +22,9 @@
 
   <!-- SELECT DISTRICT PAGE -->
 
-  <div *ngFor="let district of positions | keyvalue" class="btn-group-vertical btn-group-toggle col col-md-6 p-1" ngbRadioGroup name="district_input" [(ngModel)]="districtModel">
+  <div *ngFor="let district of positionsList" class="btn-group-vertical btn-group-toggle col col-md-6 p-1" ngbRadioGroup name="district_input" [(ngModel)]="districtModel">
     <label ngbButtonLabel class="btn-outline-primary btn-nowrap text-left">
-      <input ngbButton type="radio" value="{{district.key}}">{{district.value.position}}
+      <input ngbButton type="radio" value="{{district[0]}}">{{district[1]}}
     </label>
   </div>
 
