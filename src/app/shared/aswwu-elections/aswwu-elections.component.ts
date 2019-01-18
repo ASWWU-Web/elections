@@ -3,7 +3,6 @@ import { RequestService } from "../../../shared-ng/services/services"
 import {Router, Routes, ActivatedRoute } from '@angular/router'
 import { CURRENT_YEAR, MEDIA_SM } from '../../../shared-ng/config';
 
-
 @Component({
   selector: 'aswwu-elections',
   templateUrl: './aswwu-elections.component.html',
@@ -145,8 +144,6 @@ export class AswwuElectionsComponent implements OnInit {
         this.submissionSuccess = false
       });
     }
-    console.log("HERE");
-    console.log(requestBody);
   }
 
   nextPage() {
