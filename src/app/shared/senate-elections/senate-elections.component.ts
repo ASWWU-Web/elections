@@ -184,14 +184,20 @@ export class SenateElectionsComponent implements OnInit {
     }
 
     // votes from the server that can be updated (overwritten) using their id
-    let updateVotes = this.votes.filter(vote => !voteList.includes(vote['vote']));
+    let updateVotes = this.votes
+    let newVotes = voteList
+    // update all votes if not voting in the same district
+    if(this.votes.length > 0 && this.districtModel == this.votes[0].position) {
+      updateVotes.filter(vote => !voteList.includes(vote['vote']));
+      newVotes.filter(vote => !this.votesInclude(vote));
+    }
     // votes on the client that don't exist already on the server
-    let newVotes = voteList.filter(vote => !this.votesInclude(vote));
     let requestArray = [];
 
     for (let vote of updateVotes) {
       let newVote = Object.assign({}, vote);
       newVote['vote'] = newVotes.pop();
+      newVote['position'] = this.districtModel
       if (newVote.vote) {
         requestArray.push(this.rs.put('elections/vote/'+newVote.id, newVote));
       }
