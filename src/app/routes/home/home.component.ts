@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit {
   //   "end": "2018-12-07 20:00:00.000000"
   // }
 
-  roles = ["admin"];
+  roles = [""];
   response = null;
 
   constructor(private rs: RequestService) { }
