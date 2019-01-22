@@ -1,0 +1,18 @@
+<p>
+  admin works!
+</p>
+
+<div class="container">
+  <ngb-tabset>
+    <ngb-tab *ngFor="let tab of tabs" title="{{tab}}">
+      <ng-template ngbTabContent>
+        <app-admin-table [viewMode]="{{tab}}"></app-admin-table>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab title="Votes">
+      <ng-template ngbTabContent>
+          <app-admin-votes></app-admin-votes>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+</div>
