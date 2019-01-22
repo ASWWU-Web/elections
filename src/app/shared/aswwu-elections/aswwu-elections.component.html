@@ -52,12 +52,7 @@
 
       <div class="input-group row mx-auto">
         <div class="col-md-6 p-1">
-          <input type="text" class="form-control" list="users" [(ngModel)]="writeInModel" [disabled]='!enableVoting(writeInModel, false)' placeholder="Write In Candidate"/>
-          <datalist id="users">
-              <option *ngFor="let user of allUsers" [value]="user.username" >
-                {{user.full_name}}
-              </option>
-            </datalist>
+          <input type="text" class="form-control" [(ngModel)]="writeInModel.writeIn1" [disabled]='!enableVoting(writeInModel.writeIn1, false)' [ngbTypeahead]="search" editable placeholder="Write In Candidate"/>
         </div>
       </div>
       <hr>

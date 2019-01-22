@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { RequestService } from "../../../shared-ng/services/services"
-import {Router, Routes, ActivatedRoute } from '@angular/router'
+import {Router,ActivatedRoute } from '@angular/router'
 import { CURRENT_YEAR, MEDIA_SM } from '../../../shared-ng/config';
+import { debounceTime, distinctUntilChanged, map, pluck, switchMap, tap } from 'rxjs/operators';
+import {Observable, of } from 'rxjs';
 
 @Component({
   selector: 'aswwu-elections',
@@ -18,7 +20,9 @@ export class AswwuElectionsComponent implements OnInit {
 
   candidates: any[] = [];
   candidateModel: any = {};
-  writeInModel: string = ""; 
+  writeInModel = {
+    writeIn1: null 
+  };
 
   submissionSuccess = true;
 
@@ -31,19 +35,28 @@ export class AswwuElectionsComponent implements OnInit {
         this.positions = data.positions;
       }, null);
     }, null); 
-      
-    // get a list of all users for auto complete
-    //TODO: speed up this process 
-    this.requestService.get('/search/all').subscribe((data) => {
-      this.allUsers = data.results.map((user)=> {
-        user.value = user.username;
-        user.display = user.full_name;
-        return user;
-      });
-    }, null);
   }
 
   ngOnInit() {
+  }
+
+  getNames(query: string) {
+    if (query == '') {
+      return of({results: []});
+    }
+    return this.requestService.get("search/names", {'full_name': query});
+  }
+
+
+  search = (text$: Observable<string>) => {
+    return text$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap((data)=>{return this.getNames(data)}),
+      map((data: {results: {username: string, full_name: string}[]})=>{
+        return data.results.map((item)=>item.username);
+      })
+    )
   }
 
   buildCandidateModel() {
@@ -69,7 +82,7 @@ export class AswwuElectionsComponent implements OnInit {
   getCandidates(position_id) {
     // delete past candidates
     this.candidateModel = {};
-    this.writeInModel = "";
+    this.writeInModel.writeIn1 = null;
 
     // get next set of candidates
     this.requestService.get(('elections/election/' + this.election.id) + '/candidate', {position: position_id}).subscribe((data) => {
@@ -92,7 +105,7 @@ export class AswwuElectionsComponent implements OnInit {
           }
           // assign vote to writeIn
           if (!isCandidate) {
-            this.writeInModel = vote.vote;
+            this.writeInModel.writeIn1 = vote.vote;
           }
         }
         // switches request to put
@@ -118,8 +131,8 @@ export class AswwuElectionsComponent implements OnInit {
       }
     }
     //check for write in
-    if(this.writeInModel != ""){
-      requestBody.vote = this.writeInModel;
+    if(this.writeInModel.writeIn1 != null){
+      requestBody.vote = this.writeInModel.writeIn1;
     }
     // submit vote
     if(this.hasVoted == false){
@@ -156,7 +169,7 @@ export class AswwuElectionsComponent implements OnInit {
     this.pageNumber=null;
     //reset models
     this.candidateModel = {};
-    this.writeInModel = "";
+    this.writeInModel.writeIn1 = null;
     this.submissionSuccess = true;
     // go to first page
     this.pageNumber = 0;
@@ -168,6 +181,7 @@ export class AswwuElectionsComponent implements OnInit {
     this.candidateModel[username] = $event;
   }
 
+  // Function that allows only one writeIn or candidate to be selected at a time
   enableVoting(name, isCandidate) {
     let numSelected = 0;
     for (let candidate in this.candidateModel) {
@@ -175,14 +189,14 @@ export class AswwuElectionsComponent implements OnInit {
         numSelected = numSelected + 1;
       }
     }
-    if (this.writeInModel != "") {
+    if (this.writeInModel.writeIn1) {
       numSelected = numSelected + 1;
     }
     if (numSelected >= 1) {
       if (isCandidate) {
         return this.candidateModel[name];
       } else {
-        return (name != "");
+        return (Boolean(name));
       }
     } else {
       return true;
