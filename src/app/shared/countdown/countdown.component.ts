@@ -17,11 +17,12 @@ export class CountdownComponent implements OnInit {
     var arr = this.date.split(/[- :]/).map(Number), date = new Date(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]);
 
     var display = document.querySelector('#time');
-    var difference = Math.abs(Date.now() - date.getTime());
+    var difference = Date.now() - date.getTime();
 
     // Source: https://stackoverflow.com/questions/1217929/how-to-automatically-reload-a-web-page-at-a-certain-time 
-    setTimeout(function() { window.location.reload(true); }, difference);
-    this.startTimer(difference, display);
+    if (difference > 0)
+      setTimeout(function() { window.location.reload(true); }, difference);
+      this.startTimer(difference, display);
   }
 
   // Returns string depending on whether the election will be opening or closing in X time
