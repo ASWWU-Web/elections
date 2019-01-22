@@ -18,8 +18,7 @@ import { RequestService } from '../shared-ng/services/services';
 
 // project components
 import { HomeComponent, VoteComponent } from './routes/routes';
-import { HeaderComponent, CountdownComponent, SenateElectionsComponent } from './shared/shared';
-
+import { HeaderComponent, CountdownComponent, AswwuElectionsComponent, SenateElectionsComponent } from './shared/shared';
 
 @NgModule({
   declarations: [
@@ -32,6 +31,7 @@ import { HeaderComponent, CountdownComponent, SenateElectionsComponent } from '.
     HeaderComponent,
     CountdownComponent,
     VoteComponent,
+    AswwuElectionsComponent,
     SenateElectionsComponent
   ],
   imports: [

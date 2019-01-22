@@ -1,0 +1,94 @@
+<div class="container pb-5 pt-3">
+  <h3>Senate Election</h3>
+<div class="">
+  <div class="card-header navbar-nav-scroll scrollable">
+    <ul class="nav nav-tabs card-header-tabs flex-nowrap">
+      <li class="nav-item">
+        <a class="nav-link" [ngClass]="{'active': pageNumber==0, 'disabled': pageNumber!=0}">Start</a>
+      </li>
+      <li *ngFor="let position of positions; let i = index" class="nav-item">
+        <a class="nav-link" [ngClass]="{'active': pageNumber==i+1, 'disabled': pageNumber!=i+1}">{{position.position}}</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [ngClass]="{'active': pageNumber==positions.length + 1, 'disabled': pageNumber!=positions.length + 1}">Submit</a>
+      </li>
+
+    </ul>
+  </div>
+
+  <!-- Start PAGE -->
+<div *ngIf='pageNumber == 0'>
+  <div class="card-body">
+    <p>
+      Start Page
+    </p>
+  </div>
+  <div class="card-footer">
+    <button type="button" (click)='getCandidates(positions[0].id); nextPage();' class="btn btn-primary mx-auto w-100 d-block">Go!</button>
+  </div>
+</div>
+
+<!-- SELECT CANDIDATE PAGE -->
+<div *ngFor="let position of positions; let pos_index = index">
+  <div *ngIf='pageNumber == pos_index + 1'>
+    <div *ngIf='candidates.length > 0' class="card-body">
+      <h4>District {{districtModel}} Senators</h4>
+      <p>Select two candidates or write in your own.</p>
+
+      <div class="row no-gutters">
+        <!-- CANDIDATE CARD -->
+        <div *ngFor="let candidate of candidates" class="col-6 col-md-4"><div class="card">
+            <img class="card-img-top mx-auto d-block" src="{{candidate.photo}}" [ngClass]="{'disabled-photo': !enableVoting(candidate.username, true)}">
+          <div class="card-footer btn-group-toggle">
+            <label ngbButtonLabel class="btn btn-outline-primary btn-nowrap mx-auto w-100 d-block">
+              <input ngbButton type="checkbox" [ngModel]="candidateModel[candidate.username]" (ngModelChange)="valueChange($event, candidate.username)" [disabled]='!enableVoting(candidate.username, true)'> 
+              {{candidate.display_name}}
+            </label>
+          </div>
+        </div>
+      </div>
+      </div>
+      <hr>
+
+      <div class="input-group row mx-auto">
+        <div class="col-md-6 p-1">
+          <input type="text" class="form-control" [(ngModel)]="writeInModel.writeIn1" [disabled]='!enableVoting(writeInModel.writeIn1, false)' [ngbTypeahead]="search" editable placeholder="Write In Candidate"/>
+        </div>
+      </div>
+      <hr>
+    </div>
+
+    <div *ngIf='candidates.length == 0' class="card-body">
+      <h4>The District {{districtModel}} Senators are missing! 😱 </h4>
+      <p>It looks like there are no senators for this district. If this is incorrect please contact an ASWWU representative.</p>
+    </div>
+
+    <div class="card-footer">
+      <div class="row">
+          <div *ngIf='candidates.length > 0' class="col-md-9 order-md-2 p-1">
+            <button *ngIf="this.positions.length != pos_index + 1" type="button" (click)='submitVote(positions[pos_index].id); getCandidates(positions[pos_index + 1].id); nextPage();' class="btn btn-primary mx-auto w-100 d-block">Vote!</button>
+            <button *ngIf="this.positions.length == pos_index + 1" type="button" (click)='submitVote(positions[pos_index].id); nextPage();' class="btn btn-primary mx-auto w-100 d-block">Vote!</button>
+          </div>
+        <div class="col-md-3 order-md-1 p-1"><button type="button" (click)='startOver();' class="btn btn-danger mx-auto w-100 d-block">Start Over</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SUBMISSION PAGE -->
+<div *ngIf='pageNumber == positions.length + 1'>
+  <div class="card-body">
+      submission status: 
+      <br>
+      <span *ngIf="submissionSuccess == null"> LOADING...</span>
+      <span *ngIf="submissionSuccess"> SUCCESS</span>
+      <span *ngIf="(submissionSuccess != null) && !submissionSuccess">FAILED! Please contact an ASWWU representative.</span>
+  </div>
+  <div class="card-footer">
+    <div class="row">
+      <div class="col-md-3 order-md-1 p-1"><button type="button" (click)='startOver();' class="btn btn-danger mx-auto w-100 d-block">Start Over</button></div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
