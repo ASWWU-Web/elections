@@ -17,7 +17,10 @@ export class CountdownComponent implements OnInit {
     var arr = this.date.split(/[- :]/).map(Number), date = new Date(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]);
 
     var display = document.querySelector('#time');
-    var difference = Math.abs((Date.now() - date.getTime())/1000);
+    var difference = Math.abs(Date.now() - date.getTime());
+
+    // Source: https://stackoverflow.com/questions/1217929/how-to-automatically-reload-a-web-page-at-a-certain-time 
+    setTimeout(function() { window.location.reload(true); }, difference);
     this.startTimer(difference, display);
   }
 
@@ -32,7 +35,9 @@ export class CountdownComponent implements OnInit {
   }
 
   // duration = time in seconds, display = id to display to 
+  // Source: https://stackoverflow.com/questions/20618355/the-simplest-possible-javascript-countdown-timer 
   startTimer(duration, display) {
+    duration = duration / 1000;
     var timer = duration, days, hours, minutes, seconds;
     setInterval(function () {
         days = Math.floor(timer / 86400);
