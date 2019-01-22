@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RequestService } from '../../../shared-ng/services/request.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -9,21 +10,25 @@ import { RequestService } from '../../../shared-ng/services/request.service';
 export class HomeComponent implements OnInit {
   status: string;
   admin: Boolean;
-
+  // User roles
+  roles = [""];
+  response = null;
   // response = {
   //   "id": "e7c5c84f-0a58-4f3b-8490-14ee0737d96f",
   //   "election_type": "senate",
   //   "start": "2018-12-07 08:00:00.000000",
   //   "end": "2018-12-07 20:00:00.000000"
   // }
+  isLoggedIn: Boolean = false;
+  router: any;
 
-  roles = [""];
-  response = null;
 
-  constructor(private rs: RequestService) { }
+  constructor(private rs: RequestService, private _router: Router) {
+    this.router = _router;
+  }
 
   ngOnInit() {
-    this.getResponse();
+    this.getResponse(); 
 
     if (this.roles.indexOf('admin') > -1) {
       this.admin = true;
@@ -44,9 +49,13 @@ export class HomeComponent implements OnInit {
       } else {
         this.status = "now";
       }
+
+      // Checks to see if user is logged in; changes "vote" button to "log in" in html if user not logged in
+      this.isLoggedIn = this.rs.isLoggedOn();
     }, (error)=> {
       this.status = "none";
     });
+
   }
 
   getElectionType(election_type) {

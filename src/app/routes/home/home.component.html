@@ -12,7 +12,8 @@
     </div>
     <div *ngIf="status == 'now'">
       <h1 class="text-center text-uppercase">{{getElectionType(response.election_type)}}</h1>
-      <a href="vote" class="btn btn-primary btn-block btn-lg" role="button">Vote Now!</a>
+      <a *ngIf="isLoggedIn" href="vote" class="btn btn-primary btn-block btn-lg" role="button">Vote Now!</a>
+      <a *ngIf="!isLoggedIn" class="btn btn-primary btn-block btn-lg" [href]="'https://saml.aswwu.com/?redirectURI=/elections'+ router.url">Log in</a>
       <countdown [status]="status" [date]="response['end']"></countdown>
     </div>
   </div>
