@@ -1,4 +1,4 @@
 export * from './header/header.component';
 export * from './countdown/countdown.component';
 export * from './senate-elections/senate-elections.component';
-export * from './admin-table/admin-table.component';
+export * from './admin/admin';

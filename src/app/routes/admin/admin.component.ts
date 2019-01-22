@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { AdminTableComponent } from 'src/app/shared/admin/admin';
+
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',

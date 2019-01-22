@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-admin-table',
@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./admin-table.component.css']
 })
 export class AdminTableComponent implements OnInit {
+
+  @Input() viewMode: string;
 
   constructor() { }
 

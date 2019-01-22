@@ -6,7 +6,7 @@
   <ngb-tabset>
     <ngb-tab *ngFor="let tab of tabs" title="{{tab}}">
       <ng-template ngbTabContent>
-        <app-admin-table [viewMode]="{{tab}}"></app-admin-table>
+        <app-admin-table [viewMode]="tab"></app-admin-table>
       </ng-template>
     </ngb-tab>
     <ngb-tab title="Votes">
