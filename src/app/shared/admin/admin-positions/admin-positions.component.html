@@ -1,0 +1,22 @@
+<p>
+  admin-positions works!
+</p>
+
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+        <th scope="col">Title</th>
+        <th scope="col">Active</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody *ngIf="data">
+      <tr *ngFor="let row of data">
+        <td>{{row.election_type}}</td>
+        <td>{{row.position}}</td>
+        <td>{{row.active}}</td>
+        <td><button class="btn btn-primary">Edit</button></td>
+      </tr>
+    </tbody>
+  </table>

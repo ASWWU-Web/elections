@@ -1,0 +1,23 @@
+<p>
+  admin-elections works!
+</p>
+
+
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+        <th scope="col">Start</th>
+        <th scope="col">End</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody *ngIf="data">
+      <tr *ngFor="let row of data">
+        <td>{{row.election_type}}</td>
+        <td>{{row.start}}</td>
+        <td>{{row.end}}</td>
+        <td><button #somebutton class="btn btn-primary" (click)="editModal(content)">Edit</button></td>
+      </tr>
+    </tbody>
+  </table>

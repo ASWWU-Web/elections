@@ -4,14 +4,14 @@
 
 <div class="container">
   <ngb-tabset>
-    <ngb-tab *ngFor="let tab of tabs" title="{{tab}}">
+    <ngb-tab title="Elections">
       <ng-template ngbTabContent>
-        <app-admin-table [viewMode]="tab"></app-admin-table>
+        <app-admin-elections [data]="electionsData"></app-admin-elections>
       </ng-template>
     </ngb-tab>
-    <ngb-tab title="Votes">
+    <ngb-tab title="Positions">
       <ng-template ngbTabContent>
-          <app-admin-votes></app-admin-votes>
+        <app-admin-positions [data]="positionsData"></app-admin-positions>
       </ng-template>
     </ngb-tab>
   </ngb-tabset>

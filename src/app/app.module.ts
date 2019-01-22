@@ -17,9 +17,20 @@ import { FooterComponent, NavBarComponent, MobileNavComponent, UserBubbleCompone
 import { RequestService } from '../shared-ng/services/services';
 
 // project components
-import { HomeComponent, VoteComponent, AdminComponent } from './routes/routes';
-import { HeaderComponent, CountdownComponent, SenateElectionsComponent, AdminTableComponent } from './shared/shared';
-import { AdminVotesComponent } from './shared/admin/admin-votes/admin-votes.component';
+import {
+  HomeComponent,
+  VoteComponent,
+  AdminComponent
+} from './routes/routes';
+import {
+  HeaderComponent,
+  CountdownComponent,
+  SenateElectionsComponent,
+  AdminElectionsComponent,
+  AdminElectionsModalComponent,
+  AdminPositionsComponent,
+  AdminPositionsModalComponent
+} from './shared/shared';
 
 
 @NgModule({
@@ -35,8 +46,10 @@ import { AdminVotesComponent } from './shared/admin/admin-votes/admin-votes.comp
     VoteComponent,
     SenateElectionsComponent,
     AdminComponent,
-    AdminTableComponent,
-    AdminVotesComponent
+    AdminElectionsComponent,
+    AdminPositionsComponent,
+    AdminElectionsModalComponent,
+    AdminPositionsModalComponent
   ],
   imports: [
     NgbModule,
@@ -65,6 +78,10 @@ import { AdminVotesComponent } from './shared/admin/admin-votes/admin-votes.comp
   providers: [
     RequestService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [
+    AdminElectionsModalComponent,
+    AdminPositionsModalComponent
+  ]
 })
 export class AppModule { }
