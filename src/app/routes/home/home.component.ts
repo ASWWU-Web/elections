@@ -9,14 +9,6 @@ import { RequestService } from '../../../shared-ng/services/request.service';
 export class HomeComponent implements OnInit {
   status: string;
   admin: Boolean;
-
-  // response = {
-  //   "id": "e7c5c84f-0a58-4f3b-8490-14ee0737d96f",
-  //   "election_type": "senate",
-  //   "start": "2018-12-07 08:00:00.000000",
-  //   "end": "2018-12-07 20:00:00.000000"
-  // }
-
   roles = [""];
   response = null;
 
@@ -35,8 +27,6 @@ export class HomeComponent implements OnInit {
     this.rs.get('elections/current').subscribe((data) => {
       this.response = data;
 
-      console.log(this.response);
-
       let election_start = new Date(this.response['start']);
 
       if (election_start.getTime() >= Date.now()) {
@@ -51,7 +41,7 @@ export class HomeComponent implements OnInit {
 
   getElectionType(election_type) {
     if (election_type=="aswwu") {
-      return "ASWWU General Election";
+      return "General Election";
     } 
 
     if (election_type=="senate") {

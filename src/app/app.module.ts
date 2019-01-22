@@ -25,6 +25,7 @@ import {
 import {
   HeaderComponent,
   CountdownComponent,
+  AswwuElectionsComponent,
   SenateElectionsComponent,
   AdminElectionsComponent,
   AdminElectionsModalComponent,
@@ -49,7 +50,9 @@ import {
     AdminElectionsComponent,
     AdminPositionsComponent,
     AdminElectionsModalComponent,
-    AdminPositionsModalComponent
+    AdminPositionsModalComponent,
+    AswwuElectionsComponent,
+    SenateElectionsComponent
   ],
   imports: [
     NgbModule,
