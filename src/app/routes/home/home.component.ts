@@ -27,8 +27,6 @@ export class HomeComponent implements OnInit {
     this.rs.get('elections/current').subscribe((data) => {
       this.response = data;
 
-      console.log(this.response);
-
       let election_start = new Date(this.response['start']);
 
       if (election_start.getTime() >= Date.now()) {
