@@ -12,7 +12,11 @@ export class CountdownComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    var display = document.querySelector('#time'), date = new Date(this.date);
+
+    // Converts date string into an array of numbers, as different browsers support different formats for dates
+    var arr = this.date.split(/[- :]/).map(Number), date = new Date(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]);
+
+    var display = document.querySelector('#time');
     var difference = Math.abs((Date.now() - date.getTime())/1000);
     this.startTimer(difference, display);
   }
