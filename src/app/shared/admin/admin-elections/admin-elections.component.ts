@@ -11,14 +11,6 @@ interface Election {
   end: string;
 }
 
-interface ElectionTableItem {
-  id: string;
-  election_type: string;
-  startDate: NgbDate;
-  startTime: NgbTimeStruct;
-  endDate: NgbDate;
-  endTime: NgbTimeStruct;
-}
 
 interface Candidate {
   id: string;
@@ -74,7 +66,6 @@ export class AdminElectionsRowComponent implements OnInit {
 export class AdminElectionsComponent implements OnInit {
 
   @Input() data: Election[];
-  tableModel: ElectionTableItem[];
 
   constructor(private rs: RequestService, private modalService: NgbModal) { }
 
