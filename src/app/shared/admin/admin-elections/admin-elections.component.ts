@@ -22,16 +22,12 @@ interface Candidate {
 
 
 @Component({
-  selector: 'app-admin-elections-modal',
-  templateUrl: './admin-elections-modal.component.html',
+  selector: 'app-admin-elections-candidate-modal',
+  templateUrl: './admin-elections-candidate-modal.component.html',
   styleUrls: ['./admin-elections.component.css']
 })
-export class AdminElectionsModalComponent implements OnInit {
-  data: Election;
-  radioModel: string;
-  hoveredDate: NgbDate;
-  startDate: NgbDate;
-  endDate: NgbDate;
+export class AdminElectionsCandidateModalComponent implements OnInit {
+  electionID: string;
 
   constructor(public activeModal: NgbActiveModal) {
   }
@@ -49,10 +45,25 @@ export class AdminElectionsModalComponent implements OnInit {
 export class AdminElectionsRowComponent implements OnInit {
 
   @Input() rowData: Election;
+  candidates: Candidate[];
 
-  constructor() { }
+  constructor(private modalService: NgbModal, private rs: RequestService) { }
 
   ngOnInit() {
+    this.candidates = [];
+    const candidatesObservable = this.rs.get('elections/election/' + this.rowData.id + '/candidate');
+    candidatesObservable.subscribe(
+      (data: {candidates: Candidate[]}) => {
+        this.candidates = data.candidates;
+      },
+      (err) => {
+        console.log('unable to get candidates');
+      });
+  }
+
+  openCandidatesModal(electionID: string) {
+    const modalRef = this.modalService.open(AdminElectionsCandidateModalComponent);
+    modalRef.componentInstance.electionID = electionID;
   }
 }
 

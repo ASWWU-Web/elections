@@ -28,7 +28,7 @@ import {
   AswwuElectionsComponent,
   SenateElectionsComponent,
   AdminElectionsComponent,
-  AdminElectionsModalComponent,
+  AdminElectionsCandidateModalComponent,
   AdminElectionsRowComponent,
   AdminPositionsComponent,
   AdminPositionsModalComponent
@@ -49,7 +49,7 @@ import {
     SenateElectionsComponent,
     AdminComponent,
     AdminElectionsComponent,
-    AdminElectionsModalComponent,
+    AdminElectionsCandidateModalComponent,
     AdminElectionsRowComponent,
     AdminPositionsComponent,
     AdminPositionsModalComponent,
@@ -85,7 +85,7 @@ import {
   ],
   bootstrap: [AppComponent],
   entryComponents: [
-    AdminElectionsModalComponent,
+    AdminElectionsCandidateModalComponent,
     AdminElectionsRowComponent,
     AdminPositionsModalComponent
   ]

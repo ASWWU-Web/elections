@@ -1,4 +1,8 @@
 <td>
+  {{rowData.id | slice:0:8 }}
+</td>
+
+<td>
     <div id="ElectionType" class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="rowData.election_type">
       <label ngbButtonLabel class="btn btn-outline-primary">
         <input ngbButton type="radio" value="aswwu"> ASWWU
@@ -25,7 +29,8 @@
 </td>
 <td>
 
-  <button class="btn btn-primary">Candidates (0)</button>
+  <button class="btn btn-primary" (click)="openCandidatesModal(rowData.id)">Candidates ({{candidates.length}})</button>
+  <button class="btn btn-success">Save</button>
   <button class="btn btn-danger">Delete</button>
 
 </td>
