@@ -71,7 +71,41 @@
         </div>
       </div>
     </div>
+
+    <hr>
+
+    <h3>Candidates</h3>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Position</th>
+          <th scope="col">Username</th>
+          <th scope="col">Display Name</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody *ngIf="data">
+        <tr *ngFor="let row of data">
+          <td>{{row.election_type}}</td>
+          <td>{{row.start}}</td>
+          <td>{{row.end}}</td>
+          <td><button #somebutton class="btn btn-primary" (click)="editModal(row)">Edit</button></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <button class="btn btn-primary">Add New Candidate</button>
+
+    <hr>
+
+
+
+
+
+
     <button type="submit" class="btn btn-primary">Submit</button>
+    <button class="btn btn-danger">Delete this Election</button>
 
 
 </div>

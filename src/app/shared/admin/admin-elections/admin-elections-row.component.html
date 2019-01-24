@@ -1,0 +1,76 @@
+<td>
+    <div id="ElectionType" class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="rowData.election_type">
+      <label ngbButtonLabel class="btn btn-outline-primary">
+        <input ngbButton type="radio" value="aswwu"> ASWWU
+      </label>
+      <label ngbButtonLabel class="btn btn-outline-primary">
+        <input ngbButton type="radio" value="senate"> Senate
+      </label>
+    </div>
+</td>
+
+<td>
+
+  <!-- ng-template is hidden, defines template for date pickers -->
+  <ng-template #t let-date let-focused="focused">
+      <span class="custom-day"
+            [class.focused]="focused"
+            [class.range]="isRange(date)"
+            [class.faded]="isHovered(date) || isInside(date)"
+            (mouseenter)="hoveredDate = date"
+            (mouseleave)="hoveredDate = null">
+        {{ date.day }}
+      </span>
+    </ng-template>
+
+    <div class="form-group">
+      <div class="input-group">
+        <input
+                id="ElectionStart"
+                class="form-control"
+                placeholder="yyyy-mm-dd"
+                name="dpEnd"
+                [(ngModel)]="startDate"
+                ngbDatepicker
+                #dStart="ngbDatepicker"
+                [dayTemplate]="t"
+              >
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary calendar" (click)="dStart.toggle()" type="button"><i class="fas fa-calendar-alt">+</i></button>
+        </div>
+      </div>
+    </div>
+
+
+
+</td>
+<td>
+
+
+    <div class="form-group">
+        <div class="input-group">
+          <input
+                  id="ElectionEnd"
+                  class="form-control"
+                  placeholder="yyyy-mm-dd"
+                  name="dpEnd"
+                  [(ngModel)]="endDate"
+                  ngbDatepicker
+                  #dEnd="ngbDatepicker"
+                  [dayTemplate]="t"
+                >
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary calendar" (click)="dEnd.toggle()" type="button"><i class="fas fa-calendar-alt">+</i></button>
+          </div>
+        </div>
+      </div>
+
+
+
+</td>
+<td>
+
+  <button class="btn btn-primary">Candidates (0)</button>
+  <button class="btn btn-danger">Delete</button>
+
+</td>

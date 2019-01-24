@@ -29,6 +29,7 @@ import {
   SenateElectionsComponent,
   AdminElectionsComponent,
   AdminElectionsModalComponent,
+  AdminElectionsRowComponent,
   AdminPositionsComponent,
   AdminPositionsModalComponent
 } from './shared/shared';
@@ -48,8 +49,9 @@ import {
     SenateElectionsComponent,
     AdminComponent,
     AdminElectionsComponent,
-    AdminPositionsComponent,
     AdminElectionsModalComponent,
+    AdminElectionsRowComponent,
+    AdminPositionsComponent,
     AdminPositionsModalComponent,
     AswwuElectionsComponent,
     SenateElectionsComponent
@@ -84,6 +86,7 @@ import {
   bootstrap: [AppComponent],
   entryComponents: [
     AdminElectionsModalComponent,
+    AdminElectionsRowComponent,
     AdminPositionsModalComponent
   ]
 })
