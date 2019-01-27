@@ -19,8 +19,6 @@ export class CountdownComponent implements OnInit {
     var display = document.querySelector('#time');
     var difference = Math.abs(Date.now() - date.getTime());
 
-    // Source: https://stackoverflow.com/questions/1217929/how-to-automatically-reload-a-web-page-at-a-certain-time 
-    setTimeout(function() { window.location.reload(true); }, difference);
     this.startTimer(difference, display);
   }
 
@@ -53,7 +51,7 @@ export class CountdownComponent implements OnInit {
         display.textContent = days + "d " + hours + "h " + minutes + "m " + seconds + "s";
 
         if (--timer < 0) {
-            timer = duration;
+            window.location.reload(true);
         }
     }, 1000);
 }

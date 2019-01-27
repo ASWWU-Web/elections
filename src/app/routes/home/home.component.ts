@@ -15,6 +15,9 @@ export class HomeComponent implements OnInit {
   response = null;
   isLoggedIn: Boolean = false;
   router: any;
+  now = Date.now();
+  startTime = null;
+
 
 
   constructor(private rs: RequestService, private _router: Router) {
@@ -33,10 +36,9 @@ export class HomeComponent implements OnInit {
   getResponse() {
     this.rs.get('elections/current').subscribe((data) => {
       this.response = data;
+      this.startTime = new Date(this.response['start']).getTime();
 
-      let election_start = new Date(this.response['start']);
-
-      if (election_start.getTime() >= Date.now()) {
+      if (this.startTime >= Date.now()) {
         this.status = "upcoming";
       } else {
         this.status = "now";
@@ -44,10 +46,10 @@ export class HomeComponent implements OnInit {
 
       // Checks to see if user is logged in; changes "vote" button to "log in" in html if user not logged in
       this.isLoggedIn = this.rs.isLoggedOn();
+      console.log("Response", this.response);
     }, (error)=> {
       this.status = "none";
     });
-
   }
 
   getElectionType(election_type) {
