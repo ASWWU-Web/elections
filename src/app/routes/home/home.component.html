@@ -7,9 +7,9 @@
     <div *ngIf="response">
       <div *ngIf="startTime > now">
       <h1 class="text-center text-uppercase">{{getElectionType(response.election_type)}}</h1>
-          <h4 class="text-center text-uppercase">Starts: {{getDateTime(response.start)}}</h4>
-          <h4 class="text-center text-uppercase">Ends: {{getDateTime(response.end)}}</h4>
-          <countdown [status]="status" [date]="response['start']"></countdown>
+          <h4 class="text-center text-uppercase">Starts: {{getDateTime(dateStart)}}</h4>
+          <h4 class="text-center text-uppercase">Ends: {{getDateTime(dateEnd)}}</h4>
+          <countdown [status]="status" [date]="dateStart"></countdown>
       </div>
     </div>
     <div *ngIf="response">
@@ -17,7 +17,7 @@
         <h1 class="text-center text-uppercase">{{getElectionType(response.election_type)}}</h1>
         <a *ngIf="isLoggedIn" href="vote" class="btn btn-primary btn-block btn-lg" role="button">Vote Now!</a>
         <a *ngIf="!isLoggedIn" class="btn btn-primary btn-block btn-lg" [href]="'https://saml.aswwu.com/?redirectURI=/elections'+ router.url">Log in</a>
-        <countdown [status]="status" [date]="response['end']"></countdown>
+        <countdown [status]="status" [date]="dateEnd"></countdown>
       </div>
     </div>
   </div>

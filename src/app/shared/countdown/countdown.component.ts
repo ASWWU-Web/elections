@@ -6,18 +6,15 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./countdown.component.css']
 })
 export class CountdownComponent implements OnInit {
-  @Input() date: string;
+  @Input() date: Date;
   @Input() status: string;
 
   constructor() { }
 
   ngOnInit() {
 
-    // Converts date string into an array of numbers, as different browsers support different formats for dates
-    var arr = this.date.split(/[- :]/).map(Number), date = new Date(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]);
-
     var display = document.querySelector('#time');
-    var difference = Math.abs(Date.now() - date.getTime());
+    var difference = Math.abs(Date.now() - this.date.getTime());
 
     this.startTimer(difference, display);
   }
@@ -28,7 +25,7 @@ export class CountdownComponent implements OnInit {
       return "opens";
     }
     if (this.status == "now") {
-      return "closes"
+      return "closes";
     }
   }
 
