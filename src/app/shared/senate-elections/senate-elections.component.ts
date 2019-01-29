@@ -17,7 +17,7 @@ export class SenateElectionsComponent implements OnInit {
   pageNumber: number = 0;
 
   // current election object
-  election: {id: string, election_type: string, start: string, end: string} = null;
+  election: {id: string, election_type: string, start: string, end: string, show_results: string} = null;
   // Dictionary where the key is the position id and the value is a singular position object as returned from the server
   positions: any = null;
   // List of tuples containing the id and position name
