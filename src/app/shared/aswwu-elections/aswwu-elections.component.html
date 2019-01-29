@@ -19,8 +19,9 @@
   <!-- Start PAGE -->
 <div *ngIf='pageNumber == 0'>
   <div class="card-body">
+    <h4>Welcome to the ASWWU General Elections!</h4>
     <p>
-      Start Page
+      Press <strong>Go!</strong> to begin voting for next school year's ASWWU representatives.
     </p>
   </div>
   <div class="card-footer">
@@ -77,13 +78,11 @@
 
 <!-- SUBMISSION PAGE -->
 <div *ngIf='pageNumber == positions.length + 1'>
-  <div class="card-body">
-      submission status: 
-      <br>
-      <span *ngIf="submissionSuccess == null"> LOADING...</span>
-      <span *ngIf="submissionSuccess"> SUCCESS</span>
-      <span *ngIf="(submissionSuccess != null) && !submissionSuccess">FAILED! Please contact an ASWWU representative.</span>
-  </div>
+    <div class="card-body">
+        <span *ngIf="submissionSuccess == null" class="submissionStatus"> Waiting... 🤔 </span>
+        <span *ngIf="submissionSuccess" class="submissionStatus"> Thanks for participating in Democracy! 🤗 </span>
+        <span *ngIf="(submissionSuccess != null) && !submissionSuccess" class="submissionStatus">FAILED! 😭 <br>Please contact an ASWWU representative.</span>
+    </div>
   <div class="card-footer">
     <div class="row">
       <div class="col-md-3 order-md-1 p-1"><button type="button" (click)='startOver();' class="btn btn-danger mx-auto w-100 d-block">Start Over</button></div>
