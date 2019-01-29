@@ -1,16 +1,16 @@
 <div class="container pb-5 pt-3">
-  <h3>Senate Election</h3>
+  <h3>ASWWU Election</h3>
 <div class="">
   <div class="card-header navbar-nav-scroll scrollable">
-    <ul class="nav nav-tabs card-header-tabs flex-nowrap">
+    <ul class="nav nav-tabs no_change card-header-tabs flex-nowrap">
       <li class="nav-item">
-        <a class="nav-link" [ngClass]="{'active': pageNumber==0, 'disabled': pageNumber!=0}">Start</a>
+        <a class="nav-link no_change" [ngClass]="{'active': pageNumber==0, 'disabled': pageNumber!=0}">Start</a>
       </li>
       <li *ngFor="let position of positions; let i = index" class="nav-item">
-        <a class="nav-link" [ngClass]="{'active': pageNumber==i+1, 'disabled': pageNumber!=i+1}">{{position.position}}</a>
+        <a class="nav-link no_change" [ngClass]="{'active': pageNumber==i+1, 'disabled': pageNumber!=i+1}">{{(i + 1) + ": "}}{{position.position}}</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" [ngClass]="{'active': pageNumber==positions.length + 1, 'disabled': pageNumber!=positions.length + 1}">Submit</a>
+        <a class="nav-link no_change" [ngClass]="{'active': pageNumber==positions.length + 1, 'disabled': pageNumber!=positions.length + 1}">Submit</a>
       </li>
 
     </ul>

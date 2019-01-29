@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { RequestService } from '../../../shared-ng/services/request.service';
 import { forkJoin, Observable, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, pluck, switchMap, tap } from 'rxjs/operators';
@@ -7,7 +7,7 @@ import { MEDIA_SM, CURRENT_YEAR } from 'src/shared-ng/config';
 @Component({
   selector: 'senate-elections',
   templateUrl: './senate-elections.component.html',
-  styleUrls: ['./senate-elections.component.css']
+  styleUrls: ['./senate-elections.component.css'],
 })
 export class SenateElectionsComponent implements OnInit {
 
