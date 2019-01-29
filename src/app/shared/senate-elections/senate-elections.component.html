@@ -2,15 +2,15 @@
   <h3>Senate Election</h3>
 <div class="">
   <div class="card-header navbar-nav-scroll scrollable">
-    <ul class="nav nav-tabs card-header-tabs flex-nowrap">
-      <li class="nav-item">
-        <a class="nav-link" [ngClass]="{'active': pageNumber==0, 'disabled': pageNumber!=0}">Districts</a>
+    <ul class="nav nav-tabs no_change card-header-tabs flex-nowrap">
+      <li class="nav-item" role="tablist">
+        <a class="nav-link no_change" [ngClass]="{'active': pageNumber==0, 'disabled': pageNumber!=0}">1: Districts</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" [ngClass]="{'active': pageNumber==1, 'disabled': pageNumber!=1}">Senators</a>
+        <a class="nav-link no_change" [ngClass]="{'active': pageNumber==1, 'disabled': pageNumber!=1}">2: Senators</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" [ngClass]="{'active': pageNumber==2, 'disabled': pageNumber!=2}">Submit</a>
+        <a class="nav-link no_change" [ngClass]="{'active': pageNumber==2, 'disabled': pageNumber!=2}">3: Submit</a>
       </li>
     </ul>
   </div>
@@ -90,6 +90,7 @@
   <div class="card-footer">
     <div class="row">
       <div class="col-md-3 order-md-1 p-1"><button type="button" (click)='ngOnInit();' class="btn btn-danger mx-auto w-100 d-block">Start Over</button></div>
+      <div class="col-md-3 order-md-1 p-1"><button type="button" onclick="window.location.href = 'https://aswwu.com';" class="btn btn-primary mx-auto w-100 d-block">Return to aswwu.com</button></div>
     </div>
   </div>
 </div>
