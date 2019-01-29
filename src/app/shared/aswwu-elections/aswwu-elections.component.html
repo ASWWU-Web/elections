@@ -32,8 +32,8 @@
 <div *ngFor="let position of positions; let pos_index = index">
   <div *ngIf='pageNumber == pos_index + 1'>
     <div *ngIf='candidates.length > 0' class="card-body">
-      <h4>District {{districtModel}} Senators</h4>
-      <p>Select two candidates or write in your own.</p>
+      <h4>ASWWU {{position.position}}</h4>
+      <p>Select a candidate or write in your own.</p>
 
       <div class="row no-gutters">
         <!-- CANDIDATE CARD -->
@@ -51,7 +51,7 @@
     </div>
 
     <div *ngIf='candidates.length == 0' class="card-body">
-      <h4>There is no one running for this position! 😱 </h4>
+      <h4>There is no one running for ASWWU {{position.position}}! 😱 </h4>
       <p>Feel free to write someone in. If this is incorrect please contact an ASWWU representative.</p>
     </div>
 

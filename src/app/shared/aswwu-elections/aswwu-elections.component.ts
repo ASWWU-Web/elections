@@ -111,6 +111,8 @@ export class AswwuElectionsComponent implements OnInit {
         // switches request to put
         if(data.votes.length != 0){
           this.hasVoted = true;  
+        } else {
+          this.hasVoted = false;
         }
       }, null);
     }, (error) => {})
