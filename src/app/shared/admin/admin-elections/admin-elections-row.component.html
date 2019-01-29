@@ -5,10 +5,10 @@
 <td>
     <div id="ElectionType" class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="newRowData.election_type">
       <label ngbButtonLabel class="btn btn-outline-primary">
-        <input ngbButton type="radio" value="aswwu"> ASWWU
+        <input ngbButton type="radio" value="aswwu" (click)="compareElections()"> ASWWU
       </label>
       <label ngbButtonLabel class="btn btn-outline-primary">
-        <input ngbButton type="radio" value="senate"> Senate
+        <input ngbButton type="radio" value="senate" (click)="compareElections()"> Senate
       </label>
     </div>
 </td>
@@ -16,20 +16,29 @@
 <td>
     <div class="form-group">
       <div class="input-group">
-        <input id="ElectionStart" class="form-control" placeholder="yyyy-mm-dd hh:mm:ss" [(ngModel)]="newRowData.start">
+        <input id="ElectionStart" class="form-control" placeholder="yyyy-mm-dd hh:mm:ss.ms" [(ngModel)]="newRowData.start" (input)="compareElections()">
       </div>
     </div>
 </td>
 <td>
     <div class="form-group">
         <div class="input-group">
-          <input id="ElectionEnd" class="form-control" placeholder="yyyy-mm-dd hh:mm:ss" [(ngModel)]="newRowData.end">
+          <input id="ElectionEnd" class="form-control" placeholder="yyyy-mm-dd hh:mm:ss.ms" [(ngModel)]="newRowData.end" (input)="compareElections()">
         </div>
       </div>
 </td>
 <td>
 
   <button class="btn btn-primary" (click)="openCandidatesModal(newRowData.id)">Candidates ({{candidates.length}})</button>
-  <button class="btn btn-success" [ngClass]="{'disabled': electionsEqual(rowData, newRowData)}">Save</button>
+  <button class="btn btn-success" (click)="saveRow()" [disabled]="electionsEqual" [ngClass]="{'btn-danger': !electionSaved && !electionsEqual}">Save</button>
 
 </td>
+
+<div style="position: absolute; bottom:0px; left:0px; background-color: white; z-index: 1000;">
+  <pre>
+    rowData:        {{rowData | json}}
+    newRowData:     {{newRowData | json}}
+    electionSaved:  {{electionSaved | json}}
+    electionsEqual: {{electionsEqual | json}}
+  </pre>
+</div>

@@ -10,19 +10,5 @@
     </thead>
     <tbody *ngIf="data">
         <tr elections-row *ngFor="let row of data" [rowData]="row"></tr>
-        <!--
-        <td>
-          {{row.election_type}}
-        </td>
-        <td>
-          {{row.start}}
-        </td>
-        <td>
-          {{row.end}}
-        </td>
-        <td>
-          <button #somebutton class="btn btn-primary" (click)="editModal(row)">Edit</button>
-          <button class="btn btn-primary">Save Changes</button>
-        </td> -->
     </tbody>
   </table>

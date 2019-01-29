@@ -3,6 +3,7 @@ import { NgbModal, ModalDismissReasons, NgbActiveModal, NgbDate, NgbCalendar, Ng
 import { RequestService } from 'src/shared-ng/services/services';
 import { NgbTimeStructAdapter } from '@ng-bootstrap/ng-bootstrap/timepicker/ngb-time-adapter';
 import { NgbTime } from '@ng-bootstrap/ng-bootstrap/timepicker/ngb-time';
+import { timestamp } from 'rxjs/operators';
 
 interface Election {
   id: string;
@@ -47,12 +48,18 @@ export class AdminElectionsRowComponent implements OnInit {
   @Input() rowData: Election;
   newRowData: Election;
   candidates: Candidate[];
+  electionSaved: boolean;
+  electionsEqual: boolean;
 
   constructor(private modalService: NgbModal, private rs: RequestService) { }
 
   ngOnInit() {
+    // initialize class members
+    this.electionSaved = true;
+    this.electionsEqual = true;
     this.newRowData = Object.assign({}, this.rowData);
     this.candidates = [];
+    // get candidates for this row
     const candidatesObservable = this.rs.get('elections/election/' + this.rowData.id + '/candidate');
     candidatesObservable.subscribe(
       (data: {candidates: Candidate[]}) => {
@@ -64,11 +71,35 @@ export class AdminElectionsRowComponent implements OnInit {
   }
 
 
-  electionsEqual(e1: Election, e2: Election) {
-    return e1.id === e2.id
-            && e1.election_type === e2.election_type
-            && e1.start === e2.start
-            && e1.end === e2.end;
+  saveRow() {
+    const saveObservable = this.rs.put('elections/election/' + this.newRowData.id, this.newRowData);
+    saveObservable.subscribe(
+      (data) => {
+        this.electionSaved = true;
+        this.rowData = Object.assign({}, this.newRowData);
+        this.electionsEqual = this.compareElections();
+      }, (err) => {
+        this.electionSaved = false;
+      });
+  }
+
+
+  compareElectionsDelayed() {
+
+
+
+    const e1 = this.rowData;
+    const e2 = this.newRowData;
+    const electionsEqual = e1.id === e2.id
+                            && e1.election_type === e2.election_type
+                            && e1.start === e2.start
+                            && e1.end === e2.end;
+    console.log(Date.now(), 'e1:', e1, 'e2:', e2);
+    this.electionsEqual = electionsEqual;
+    if (!electionsEqual) {
+      this.electionSaved = false;
+    }
+    return electionsEqual;
   }
 
 
