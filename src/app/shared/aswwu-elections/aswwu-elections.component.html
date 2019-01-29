@@ -7,7 +7,7 @@
         <a class="nav-link no_change" [ngClass]="{'active': pageNumber==0, 'disabled': pageNumber!=0}">Start</a>
       </li>
       <li *ngFor="let position of positions; let i = index" class="nav-item">
-        <a class="nav-link no_change" [ngClass]="{'active': pageNumber==i+1, 'disabled': pageNumber!=i+1}">{{position.order + ": "}}{{position.position}}</a>
+        <a class="nav-link no_change" [ngClass]="{'active': pageNumber==i+1, 'disabled': pageNumber!=i+1}">{{(i + 1) + ": "}}{{position.position}}</a>
       </li>
       <li class="nav-item">
         <a class="nav-link no_change" [ngClass]="{'active': pageNumber==positions.length + 1, 'disabled': pageNumber!=positions.length + 1}">Submit</a>
