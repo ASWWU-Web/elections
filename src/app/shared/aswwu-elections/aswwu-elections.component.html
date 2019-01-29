@@ -66,8 +66,8 @@
     <div class="card-footer">
       <div class="row">
           <div class="col-md-9 order-md-2 p-1">
-            <button *ngIf="this.positions.length != pos_index + 1" type="button" (click)='submitVote(positions[pos_index].id); getCandidates(positions[pos_index + 1].id); nextPage();' class="btn btn-primary mx-auto w-100 d-block">Continue</button>
-            <button *ngIf="this.positions.length == pos_index + 1" type="button" (click)='submitVote(positions[pos_index].id); nextPage();' class="btn btn-primary mx-auto w-100 d-block">Continue</button>
+            <button *ngIf="this.positions.length != pos_index + 1" type="button" (click)='submitVote(positions[pos_index].id); getCandidates(positions[pos_index + 1].id); nextPage();' class="btn btn-primary mx-auto w-100 d-block">Vote!</button>
+            <button *ngIf="this.positions.length == pos_index + 1" type="button" (click)='submitVote(positions[pos_index].id); nextPage();' class="btn btn-primary mx-auto w-100 d-block">Vote!</button>
           </div>
         <div class="col-md-3 order-md-1 p-1"><button type="button" (click)='startOver();' class="btn btn-danger mx-auto w-100 d-block">Start Over</button></div>
       </div>
