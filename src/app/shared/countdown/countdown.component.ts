@@ -6,15 +6,31 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./countdown.component.css']
 })
 export class CountdownComponent implements OnInit {
-  @Input() date: Date;
+  @Input() dates;
   @Input() status: string;
 
   constructor() { }
 
   ngOnInit() {
+    this.timerInit(this.dates['start']);
+    console.log("FIRST STATUS", this.status);
+  }
 
+  updateTimer() {
+    if (this.status == "upcoming") {
+      this.status = "now";
+      this.timerInit(this.dates['end']);
+    } else if (this.status == "now") {
+      this.status = "none";
+    } 
+
+    console.log("STATUS", this.status);
+  }
+
+  timerInit(date: Date) {
+    console.log("DATE: ", date);
     var display = document.querySelector('#time');
-    var difference = Math.abs(Date.now() - this.date.getTime());
+    var difference = Math.abs(Date.now() - date.getTime());
 
     this.startTimer(difference, display);
   }
@@ -48,9 +64,9 @@ export class CountdownComponent implements OnInit {
         display.textContent = days + "d " + hours + "h " + minutes + "m " + seconds + "s";
 
         if (--timer < 0) {
-            window.location.reload(true);
+          this.updateTimer();
+          //window.location.reload(true);
         }
     }, 1000);
-}
-
+  }
 }
