@@ -1,9 +1,9 @@
 <td>
-  {{rowData.id | slice:0:8 }}
+  {{newRowData.id | slice:0:8 }}
 </td>
 
 <td>
-    <div id="ElectionType" class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="rowData.election_type">
+    <div id="ElectionType" class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="newRowData.election_type">
       <label ngbButtonLabel class="btn btn-outline-primary">
         <input ngbButton type="radio" value="aswwu"> ASWWU
       </label>
@@ -16,21 +16,20 @@
 <td>
     <div class="form-group">
       <div class="input-group">
-        <input id="ElectionStart" class="form-control" placeholder="yyyy-mm-dd hh:mm:ss" [(ngModel)]="rowData.start">
+        <input id="ElectionStart" class="form-control" placeholder="yyyy-mm-dd hh:mm:ss" [(ngModel)]="newRowData.start">
       </div>
     </div>
 </td>
 <td>
     <div class="form-group">
         <div class="input-group">
-          <input id="ElectionEnd" class="form-control" placeholder="yyyy-mm-dd hh:mm:ss" [(ngModel)]="rowData.end">
+          <input id="ElectionEnd" class="form-control" placeholder="yyyy-mm-dd hh:mm:ss" [(ngModel)]="newRowData.end">
         </div>
       </div>
 </td>
 <td>
 
-  <button class="btn btn-primary" (click)="openCandidatesModal(rowData.id)">Candidates ({{candidates.length}})</button>
-  <button class="btn btn-success">Save</button>
-  <button class="btn btn-danger">Delete</button>
+  <button class="btn btn-primary" (click)="openCandidatesModal(newRowData.id)">Candidates ({{candidates.length}})</button>
+  <button class="btn btn-success" [ngClass]="{'disabled': electionsEqual(rowData, newRowData)}">Save</button>
 
 </td>

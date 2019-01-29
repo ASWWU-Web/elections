@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { NgbModal, ModalDismissReasons, NgbActiveModal, NgbDate, NgbCalendar, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { RequestService } from 'src/shared-ng/services/services';
 import { NgbTimeStructAdapter } from '@ng-bootstrap/ng-bootstrap/timepicker/ngb-time-adapter';
@@ -45,11 +45,13 @@ export class AdminElectionsCandidateModalComponent implements OnInit {
 export class AdminElectionsRowComponent implements OnInit {
 
   @Input() rowData: Election;
+  newRowData: Election;
   candidates: Candidate[];
 
   constructor(private modalService: NgbModal, private rs: RequestService) { }
 
   ngOnInit() {
+    this.newRowData = Object.assign({}, this.rowData);
     this.candidates = [];
     const candidatesObservable = this.rs.get('elections/election/' + this.rowData.id + '/candidate');
     candidatesObservable.subscribe(
@@ -60,6 +62,15 @@ export class AdminElectionsRowComponent implements OnInit {
         console.log('unable to get candidates');
       });
   }
+
+
+  electionsEqual(e1: Election, e2: Election) {
+    return e1.id === e2.id
+            && e1.election_type === e2.election_type
+            && e1.start === e2.start
+            && e1.end === e2.end;
+  }
+
 
   openCandidatesModal(electionID: string) {
     const modalRef = this.modalService.open(AdminElectionsCandidateModalComponent);
