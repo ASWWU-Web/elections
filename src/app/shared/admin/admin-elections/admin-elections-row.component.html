@@ -1,37 +1,43 @@
 <td>
-  {{newRowData.id | slice:0:8 }}
+  {{rowData.id | slice:0:8 }}
 </td>
 
 <td>
-    <div id="ElectionType" class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="newRowData.election_type">
-      <label ngbButtonLabel class="btn btn-outline-primary">
-        <input ngbButton type="radio" value="aswwu" (click)="compareElections()"> ASWWU
+  <form [formGroup]="rowFormGroup">
+    <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" formControlName="election_type">
+      <label ngbButtonLabel class="btn-outline-primary" [ngClass]="{'btn-outline-danger': rowFormGroup.controls.election_type.invalid}">
+        <input ngbButton type="radio" value="aswwu"> ASWWU
       </label>
-      <label ngbButtonLabel class="btn btn-outline-primary">
-        <input ngbButton type="radio" value="senate" (click)="compareElections()"> Senate
+      <label ngbButtonLabel class="btn-outline-primary" [ngClass]="{'btn-outline-danger': rowFormGroup.controls.election_type.invalid}">
+        <input ngbButton type="radio" value="senate"> Senate
       </label>
     </div>
+  </form>
 </td>
 
 <td>
+  <form [formGroup]="rowFormGroup">
     <div class="form-group">
       <div class="input-group">
-        <input id="ElectionStart" class="form-control" placeholder="yyyy-mm-dd hh:mm:ss.ms" [(ngModel)]="newRowData.start" (input)="compareElections()">
+        <input id="ElectionStart" class="form-control" placeholder="yyyy-mm-dd hh:mm:ss.ms" formControlName="start" [ngClass]="{'is-invalid': rowFormGroup.controls.start.invalid}">
       </div>
     </div>
+  </form>
 </td>
 <td>
-    <div class="form-group">
+  <form [formGroup]="rowFormGroup">
+      <div class="form-group">
         <div class="input-group">
-          <input id="ElectionEnd" class="form-control" placeholder="yyyy-mm-dd hh:mm:ss.ms" [(ngModel)]="newRowData.end" (input)="compareElections()">
+          <input id="ElectionEnd" class="form-control" placeholder="yyyy-mm-dd hh:mm:ss.ms" formControlName="end" [ngClass]="{'is-invalid': rowFormGroup.controls.end.invalid}">
         </div>
       </div>
+  </form>
 </td>
 <td>
-
-  <button class="btn btn-primary" (click)="openCandidatesModal(newRowData.id)">Candidates ({{candidates.length}})</button>
-  <button class="btn btn-success" (click)="saveRow()" [disabled]="electionsEqual" [ngClass]="{'btn-danger': !electionSaved && !electionsEqual}">Save</button>
-
+  <form [formGroup]="rowFormGroup" (ngSubmit)="saveRow()">
+      <button type="button" class="btn btn-primary" (click)="openCandidatesModal()">Candidates ({{candidates.length}})</button>
+      <button type="submit" class="btn btn-success" [disabled]="rowFormGroup.invalid" [ngClass]="{'btn-danger': rowFormGroup.dirty}">Save</button>
+  </form>
 </td>
 
 <div style="position: absolute; bottom:0px; left:0px; background-color: white; z-index: 1000;">
@@ -40,5 +46,7 @@
     newRowData:     {{newRowData | json}}
     electionSaved:  {{electionSaved | json}}
     electionsEqual: {{electionsEqual | json}}
+    rowFormGroup:   {{rowFormGroup.value | json}}, {{rowFormGroup.invalid}}
+
   </pre>
 </div>

@@ -4,6 +4,10 @@ import { RequestService } from 'src/shared-ng/services/services';
 import { NgbTimeStructAdapter } from '@ng-bootstrap/ng-bootstrap/timepicker/ngb-time-adapter';
 import { NgbTime } from '@ng-bootstrap/ng-bootstrap/timepicker/ngb-time';
 import { timestamp } from 'rxjs/operators';
+// import { FormGroup, FormControl } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, AbstractControl, ValidatorFn } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { Observable } from 'rxjs/internal/Observable';
 
 interface Election {
   id: string;
@@ -37,7 +41,6 @@ export class AdminElectionsCandidateModalComponent implements OnInit {
 }
 
 
-
 @Component({
   selector: '[elections-row]',
   templateUrl: './admin-elections-row.component.html',
@@ -46,19 +49,20 @@ export class AdminElectionsCandidateModalComponent implements OnInit {
 export class AdminElectionsRowComponent implements OnInit {
 
   @Input() rowData: Election;
-  newRowData: Election;
+  rowFormGroup: FormGroup;
   candidates: Candidate[];
-  electionSaved: boolean;
-  electionsEqual: boolean;
 
   constructor(private modalService: NgbModal, private rs: RequestService) { }
 
   ngOnInit() {
     // initialize class members
-    this.electionSaved = true;
-    this.electionsEqual = true;
-    this.newRowData = Object.assign({}, this.rowData);
+    // this.newRowData = Object.assign({}, this.rowData);
     this.candidates = [];
+    this.rowFormGroup = new FormGroup({
+      election_type: new FormControl(this.rowData.election_type, [Validators.required]),
+      start: new FormControl(this.rowData.start, [Validators.required, this.dateValidator]),
+      end: new FormControl(this.rowData.end, [Validators.required, this.dateValidator])
+    });
     // get candidates for this row
     const candidatesObservable = this.rs.get('elections/election/' + this.rowData.id + '/candidate');
     candidatesObservable.subscribe(
@@ -70,40 +74,49 @@ export class AdminElectionsRowComponent implements OnInit {
       });
   }
 
+  dateValidator(control: AbstractControl): {[key: string]: any} | null {
+    const validRegex = /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})\.(\d{1,6})$/;
+    // const validRegex = /^.?$/;
+    const groups: RegExpExecArray = validRegex.exec(control.value);
+    let groupsArray: string[] = [];
+    for (const key in groups) {
+      if (groups.hasOwnProperty(key)) {
+        const element = groups[key];
+        groupsArray.push(element);
+      }
+    }
+    const fullValid = validRegex.test(control.value);
+    const rangeValid = Number(groupsArray[2]) <= 12
+                      && Number(groupsArray[3]) <= 31
+                      && Number(groupsArray[4]) <= 24
+                      && Number(groupsArray[5]) <= 60
+                      && Number(groupsArray[6]) <= 60;
+    return rangeValid && fullValid ? null : {'invalidDate': {value: control.value}};
+  }
 
   saveRow() {
-    const saveObservable = this.rs.put('elections/election/' + this.newRowData.id, this.newRowData);
+    // Note: formData is in the same shape as what the server expects for a POST request (essentially an elections object without the id member)
+    // this is not type safe, but we are doing it becuase the server will complain if an id is included in a post request
+    let formData = Object.assign({}, this.rowFormGroup.value);
+    const newElection: boolean = this.rowData.id.length === 0;
+    let saveObservable: Observable<any>;
+
+    if (newElection) {
+      saveObservable = this.rs.post('elections/election/', formData);
+    } else {
+      formData['id'] = this.rowData.id;
+      saveObservable = this.rs.put('elections/election/' + this.rowData.id, formData)
+    }
     saveObservable.subscribe(
       (data) => {
-        this.electionSaved = true;
-        this.rowData = Object.assign({}, this.newRowData);
-        this.electionsEqual = this.compareElections();
+        this.rowData = Object.assign({}, data);
+        this.rowFormGroup.markAsPristine();
       }, (err) => {
-        this.electionSaved = false;
       });
   }
 
-
-  compareElectionsDelayed() {
-
-
-
-    const e1 = this.rowData;
-    const e2 = this.newRowData;
-    const electionsEqual = e1.id === e2.id
-                            && e1.election_type === e2.election_type
-                            && e1.start === e2.start
-                            && e1.end === e2.end;
-    console.log(Date.now(), 'e1:', e1, 'e2:', e2);
-    this.electionsEqual = electionsEqual;
-    if (!electionsEqual) {
-      this.electionSaved = false;
-    }
-    return electionsEqual;
-  }
-
-
-  openCandidatesModal(electionID: string) {
+  openCandidatesModal() {
+    const electionID = this.rowData.id;
     const modalRef = this.modalService.open(AdminElectionsCandidateModalComponent);
     modalRef.componentInstance.electionID = electionID;
   }
