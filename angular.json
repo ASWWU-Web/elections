@@ -24,8 +24,8 @@
               "src/shared-ng/favicon.ico"
             ],
             "styles": [
-              "src/shared-ng/bootstrap-overrides.css",
-              "src/shared-ng/styles.css",
+              "src/shared-ng/bootstrap-overrides.scss",
+              "src/shared-ng/styles.scss",
               "src/styles.css"
             ],
             "scripts": []
