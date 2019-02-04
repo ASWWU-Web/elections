@@ -1,0 +1,14 @@
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Type</th>
+        <th scope="col">Start</th>
+        <th scope="col">End</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody *ngIf="data">
+        <tr elections-row *ngFor="let row of data" [rowData]="row"></tr>
+    </tbody>
+  </table>

@@ -8,7 +8,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 // shared-ng components
@@ -17,8 +17,23 @@ import { FooterComponent, NavBarComponent, MobileNavComponent, UserBubbleCompone
 import { RequestService } from '../shared-ng/services/services';
 
 // project components
-import { HomeComponent, VoteComponent } from './routes/routes';
-import { HeaderComponent, CountdownComponent, AswwuElectionsComponent, SenateElectionsComponent } from './shared/shared';
+import {
+  HomeComponent,
+  VoteComponent,
+  AdminComponent
+} from './routes/routes';
+import {
+  HeaderComponent,
+  CountdownComponent,
+  AswwuElectionsComponent,
+  SenateElectionsComponent,
+  AdminElectionsComponent,
+  AdminElectionsCandidateModalComponent,
+  AdminElectionsRowComponent,
+  AdminPositionsComponent,
+  AdminPositionsModalComponent
+} from './shared/shared';
+
 
 @NgModule({
   declarations: [
@@ -31,6 +46,13 @@ import { HeaderComponent, CountdownComponent, AswwuElectionsComponent, SenateEle
     HeaderComponent,
     CountdownComponent,
     VoteComponent,
+    SenateElectionsComponent,
+    AdminComponent,
+    AdminElectionsComponent,
+    AdminElectionsCandidateModalComponent,
+    AdminElectionsRowComponent,
+    AdminPositionsComponent,
+    AdminPositionsModalComponent,
     AswwuElectionsComponent,
     SenateElectionsComponent
   ],
@@ -40,12 +62,17 @@ import { HeaderComponent, CountdownComponent, AswwuElectionsComponent, SenateEle
     HttpModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     NgbModule.forRoot(),
     AppRoutingModule,
     RouterModule.forRoot([
       {
         'path': 'vote',
         component: VoteComponent
+      },
+      {
+        'path': 'admin',
+        component: AdminComponent
       },
       {
         'path': '',
@@ -57,6 +84,11 @@ import { HeaderComponent, CountdownComponent, AswwuElectionsComponent, SenateEle
   providers: [
     RequestService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [
+    AdminElectionsCandidateModalComponent,
+    AdminElectionsRowComponent,
+    AdminPositionsModalComponent
+  ]
 })
 export class AppModule { }
