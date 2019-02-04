@@ -1,16 +1,16 @@
 <div class="container pb-5 pt-3">
-  <h3>Senate Election</h3>
+  <h3>ASWWU Election</h3>
 <div class="">
   <div class="card-header navbar-nav-scroll scrollable">
-    <ul class="nav nav-tabs card-header-tabs flex-nowrap">
+    <ul class="nav nav-tabs no_change card-header-tabs flex-nowrap">
       <li class="nav-item">
-        <a class="nav-link" [ngClass]="{'active': pageNumber==0, 'disabled': pageNumber!=0}">Start</a>
+        <a class="nav-link no_change" [ngClass]="{'active': pageNumber==0, 'disabled': pageNumber!=0}">Start</a>
       </li>
       <li *ngFor="let position of positions; let i = index" class="nav-item">
-        <a class="nav-link" [ngClass]="{'active': pageNumber==i+1, 'disabled': pageNumber!=i+1}">{{position.position}}</a>
+        <a class="nav-link no_change" [ngClass]="{'active': pageNumber==i+1, 'disabled': pageNumber!=i+1}">{{(i + 1) + ": "}}{{position.position}}</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" [ngClass]="{'active': pageNumber==positions.length + 1, 'disabled': pageNumber!=positions.length + 1}">Submit</a>
+        <a class="nav-link no_change" [ngClass]="{'active': pageNumber==positions.length + 1, 'disabled': pageNumber!=positions.length + 1}">Submit</a>
       </li>
 
     </ul>
@@ -19,8 +19,9 @@
   <!-- Start PAGE -->
 <div *ngIf='pageNumber == 0'>
   <div class="card-body">
+    <h4>Welcome to the ASWWU General Elections!</h4>
     <p>
-      Start Page
+      Press <strong>Go!</strong> to begin voting for next school year's ASWWU representatives.
     </p>
   </div>
   <div class="card-footer">
@@ -32,8 +33,8 @@
 <div *ngFor="let position of positions; let pos_index = index">
   <div *ngIf='pageNumber == pos_index + 1'>
     <div *ngIf='candidates.length > 0' class="card-body">
-      <h4>District {{districtModel}} Senators</h4>
-      <p>Select two candidates or write in your own.</p>
+      <h4>ASWWU {{position.position}}</h4>
+      <p>Select a candidate or write in your own.</p>
 
       <div class="row no-gutters">
         <!-- CANDIDATE CARD -->
@@ -48,24 +49,24 @@
         </div>
       </div>
       </div>
-      <hr>
-
-      <div class="input-group row mx-auto">
-        <div class="col-md-6 p-1">
-          <input type="text" class="form-control" [(ngModel)]="writeInModel.writeIn1" [disabled]='!enableVoting(writeInModel.writeIn1, false)' [ngbTypeahead]="search" editable placeholder="Write In Candidate"/>
-        </div>
-      </div>
-      <hr>
     </div>
 
     <div *ngIf='candidates.length == 0' class="card-body">
-      <h4>The District {{districtModel}} Senators are missing! 😱 </h4>
-      <p>It looks like there are no senators for this district. If this is incorrect please contact an ASWWU representative.</p>
+      <h4>There is no one running for ASWWU {{position.position}}! 😱 </h4>
+      <p>Feel free to write someone in. If this is incorrect please contact an ASWWU representative.</p>
     </div>
+
+    <hr>
+    <div class="input-group row mx-auto">
+      <div class="col-md-6 p-1">
+        <input type="text" class="form-control" [(ngModel)]="writeInModel.writeIn1" [disabled]='!enableVoting(writeInModel.writeIn1, false)' [ngbTypeahead]="search" editable placeholder="Write In Candidate"/>
+      </div>
+    </div>
+    <hr>
 
     <div class="card-footer">
       <div class="row">
-          <div *ngIf='candidates.length > 0' class="col-md-9 order-md-2 p-1">
+          <div class="col-md-9 order-md-2 p-1">
             <button *ngIf="this.positions.length != pos_index + 1" type="button" (click)='submitVote(positions[pos_index].id); getCandidates(positions[pos_index + 1].id); nextPage();' class="btn btn-primary mx-auto w-100 d-block">Vote!</button>
             <button *ngIf="this.positions.length == pos_index + 1" type="button" (click)='submitVote(positions[pos_index].id); nextPage();' class="btn btn-primary mx-auto w-100 d-block">Vote!</button>
           </div>
@@ -77,16 +78,15 @@
 
 <!-- SUBMISSION PAGE -->
 <div *ngIf='pageNumber == positions.length + 1'>
-  <div class="card-body">
-      submission status: 
-      <br>
-      <span *ngIf="submissionSuccess == null"> LOADING...</span>
-      <span *ngIf="submissionSuccess"> SUCCESS</span>
-      <span *ngIf="(submissionSuccess != null) && !submissionSuccess">FAILED! Please contact an ASWWU representative.</span>
-  </div>
+    <div class="card-body">
+        <span *ngIf="submissionSuccess == null" class="submissionStatus"> Waiting... 🤔 </span>
+        <span *ngIf="submissionSuccess" class="submissionStatus"> Thanks for participating in Democracy! 🤗 </span>
+        <span *ngIf="(submissionSuccess != null) && !submissionSuccess" class="submissionStatus">FAILED! 😭 <br>Please contact an ASWWU representative.</span>
+    </div>
   <div class="card-footer">
     <div class="row">
       <div class="col-md-3 order-md-1 p-1"><button type="button" (click)='startOver();' class="btn btn-danger mx-auto w-100 d-block">Start Over</button></div>
+      <div class="col-md-3 order-md-1 p-1"><button type="button" onclick="window.location.href = 'https://aswwu.com';" class="btn btn-primary mx-auto w-100 d-block">Return to aswwu.com</button></div>
     </div>
   </div>
 </div>

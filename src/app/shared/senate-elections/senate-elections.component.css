@@ -20,3 +20,8 @@
     font-family: var(--font-1);
     font-size: 2rem;
 }
+
+/* specifisity is needed here in order to keep tab color from changing  */
+div.card-header ul.no_change li.nav-item a.nav-link.no_change {
+    color: black;
+}

@@ -111,6 +111,8 @@ export class AswwuElectionsComponent implements OnInit {
         // switches request to put
         if(data.votes.length != 0){
           this.hasVoted = true;  
+        } else {
+          this.hasVoted = false;
         }
       }, null);
     }, (error) => {})
@@ -134,8 +136,12 @@ export class AswwuElectionsComponent implements OnInit {
     if(this.writeInModel.writeIn1 != null){
       requestBody.vote = this.writeInModel.writeIn1;
     }
+    // dont make request if there was no one voted for
+    if(requestBody.vote == null) {
+      return;
+    }
     // submit vote
-    if(this.hasVoted == false){
+    if(this.hasVoted == false) {
       let postURI = 'elections/vote';
       this.requestService.post(postURI, requestBody).subscribe(null, (error) => {
         this.submissionSuccess = false

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { RequestService } from '../../../shared-ng/services/request.service';
 import { forkJoin, Observable, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, pluck, switchMap, tap } from 'rxjs/operators';
@@ -7,7 +7,7 @@ import { MEDIA_SM, CURRENT_YEAR } from 'src/shared-ng/config';
 @Component({
   selector: 'senate-elections',
   templateUrl: './senate-elections.component.html',
-  styleUrls: ['./senate-elections.component.css']
+  styleUrls: ['./senate-elections.component.css'],
 })
 export class SenateElectionsComponent implements OnInit {
 
@@ -17,7 +17,7 @@ export class SenateElectionsComponent implements OnInit {
   pageNumber: number = 0;
 
   // current election object
-  election: {id: string, election_type: string, start: string, end: string} = null;
+  election: {id: string, election_type: string, start: string, end: string, show_results: string} = null;
   // Dictionary where the key is the position id and the value is a singular position object as returned from the server
   positions: any = null;
   // List of tuples containing the id and position name
