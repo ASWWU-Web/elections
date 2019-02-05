@@ -23,8 +23,8 @@ export class AswwuElectionsComponent implements OnInit {
   writeInModel = {
     writeIn1: null 
   };
-
-  submissionSuccess = true;
+  // flag for indicating whether or not there was a valid vote. 
+  submissionSuccess = null;
 
   constructor(private requestService: RequestService, private route: ActivatedRoute, private router:Router) {
     // get current election
@@ -52,7 +52,9 @@ export class AswwuElectionsComponent implements OnInit {
     return text$.pipe(
       debounceTime(300),
       distinctUntilChanged(),
-      switchMap((data)=>{return this.getNames(data)}),
+      switchMap((data)=>{
+        return this.getNames(data);
+      }),
       map((data: {results: {username: string, full_name: string}[]})=>{
         return data.results.map((item)=>item.username);
       })
@@ -123,6 +125,7 @@ export class AswwuElectionsComponent implements OnInit {
       position: position_id,
       vote: null
     }
+
     // determine who was voted for
     for (let candidate in this.candidateModel) {
       if (this.candidateModel[candidate] == true) {
@@ -130,15 +133,20 @@ export class AswwuElectionsComponent implements OnInit {
         break;
       }
     }
-    //check for write in
+
+    // check for write in
     if(this.writeInModel.writeIn1 != null){
       requestBody.vote = this.writeInModel.writeIn1;
     }
     // submit vote
     if(this.hasVoted == false){
       let postURI = 'elections/vote';
-      this.requestService.post(postURI, requestBody).subscribe(null, (error) => {
+      this.requestService.post(postURI, requestBody).subscribe((data) => {
+        this.submissionSuccess = true;
+        this.nextPage();
+      }, (error) => {
         this.submissionSuccess = false
+        window.alert("Not Valid Write-in");
       });
     }
      //changing vote
@@ -153,8 +161,12 @@ export class AswwuElectionsComponent implements OnInit {
         }
       }
       let putURI = 'elections/vote/' + voteId;
-      this.requestService.put(putURI, requestBody).subscribe(null, (error) => {
+      this.requestService.put(putURI, requestBody).subscribe((data) => {
+        this.submissionSuccess = true;
+        this.nextPage();
+      }, (error) => {
         this.submissionSuccess = false
+        window.alert("Not Valid Write-in");
       });
     }
   }
