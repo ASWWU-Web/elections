@@ -31,7 +31,7 @@ import {
   AdminElectionsCandidateModalComponent,
   AdminElectionsRowComponent,
   AdminPositionsComponent,
-  AdminPositionsModalComponent
+  AdminPositionsRowComponent
 } from './shared/shared';
 
 
@@ -52,7 +52,7 @@ import {
     AdminElectionsCandidateModalComponent,
     AdminElectionsRowComponent,
     AdminPositionsComponent,
-    AdminPositionsModalComponent,
+    AdminPositionsRowComponent,
     AswwuElectionsComponent,
     SenateElectionsComponent
   ],
@@ -88,7 +88,7 @@ import {
   entryComponents: [
     AdminElectionsCandidateModalComponent,
     AdminElectionsRowComponent,
-    AdminPositionsModalComponent
+    AdminPositionsRowComponent,
   ]
 })
 export class AppModule { }
