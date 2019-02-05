@@ -7,6 +7,7 @@ interface Election {
   election_type: string;
   start: string;
   end: string;
+  show_results: string;
 }
 
 interface Position {

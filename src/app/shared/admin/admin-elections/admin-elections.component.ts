@@ -14,6 +14,7 @@ interface Election {
   election_type: string;
   start: string;
   end: string;
+  show_results: string;
 }
 
 
@@ -97,15 +98,18 @@ export class AdminElectionsRowComponent implements OnInit {
   saveRow() {
     // Note: formData is in the same shape as what the server expects for a POST request (essentially an elections object without the id member)
     // this is not type safe, but we are doing it becuase the server will complain if an id is included in a post request
-    let formData = Object.assign({}, this.rowFormGroup.value);
+    const formData = Object.assign({}, this.rowFormGroup.value);
     const newElection: boolean = this.rowData.id.length === 0;
     let saveObservable: Observable<any>;
 
     if (newElection) {
-      saveObservable = this.rs.post('elections/election/', formData);
+      formData['show_results'] = null;
+      console.log(formData);
+      saveObservable = this.rs.post('elections/election', formData);
     } else {
       formData['id'] = this.rowData.id;
-      saveObservable = this.rs.put('elections/election/' + this.rowData.id, formData)
+      formData['show_results'] = null;
+      saveObservable = this.rs.put('elections/election/' + this.rowData.id, formData);
     }
     saveObservable.subscribe(
       (data) => {
@@ -136,5 +140,16 @@ export class AdminElectionsComponent implements OnInit {
   constructor(private rs: RequestService, private modalService: NgbModal) { }
 
   ngOnInit() {
+  }
+
+  addElection() {
+    const newElection: Election = {
+      id: '',
+      election_type: '',
+      start: '',
+      end: '',
+      show_results: null,
+    };
+    this.data.push(newElection);
   }
 }
