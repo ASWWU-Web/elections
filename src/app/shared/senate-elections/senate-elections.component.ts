@@ -159,6 +159,7 @@ export class SenateElectionsComponent implements OnInit {
       }, (data) => {
         // console.log("error", data);
       });
+      this.nextPage();
     }
   }
 
