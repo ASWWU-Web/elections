@@ -9,8 +9,8 @@ interface Position {
   id: string;
   position: string;
   election_type: string;
-  active: boolean; // this may need to be a string
-  order: string;
+  active: boolean;
+  order: number;
 }
 
 @Component({
@@ -46,12 +46,10 @@ export class AdminPositionsRowComponent implements OnInit {
     let saveObservable: Observable<any>;
 
     if (newPosition) {
-      formData['show_results'] = null;
       console.log(formData);
       saveObservable = this.rs.post('elections/position', formData);
     } else {
       formData['id'] = this.rowData.id;
-      formData['show_results'] = null;
       saveObservable = this.rs.put('elections/position/' + this.rowData.id, formData);
     }
     saveObservable.subscribe(
@@ -81,7 +79,7 @@ export class AdminPositionsComponent implements OnInit {
       election_type: '',
       position: '',
       active: true,
-      order: '',
+      order: 0,
     };
     this.data.push(newElection);
   }
