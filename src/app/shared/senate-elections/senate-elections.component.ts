@@ -160,7 +160,7 @@ export class SenateElectionsComponent implements OnInit {
         // console.log("error", data);
       });
       // Page 1 is the candidates page
-      this.pageNumber = 1;
+      this.pageNumber = 2;
       window.scrollTo(0,0);
     }
   }
@@ -224,7 +224,7 @@ export class SenateElectionsComponent implements OnInit {
     });
 
     // Page 2 is the submission page
-    this.pageNumber = 2;
+    this.pageNumber = 3;
     window.scrollTo(0,0);
   }
 
@@ -266,5 +266,9 @@ export class SenateElectionsComponent implements OnInit {
       }
     }
     return false;
+  }
+
+  nextPage() {
+    this.pageNumber++;
   }
 }
