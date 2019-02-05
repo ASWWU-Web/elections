@@ -159,9 +159,6 @@ export class SenateElectionsComponent implements OnInit {
       }, (data) => {
         // console.log("error", data);
       });
-      // Page 1 is the candidates page
-      this.pageNumber = 2;
-      window.scrollTo(0,0);
     }
   }
 
@@ -222,10 +219,6 @@ export class SenateElectionsComponent implements OnInit {
       // and error free, so if the user doesn't submit any new votes this callback is
       // needed in order to make sure we show the success message.
     });
-
-    // Page 2 is the submission page
-    this.pageNumber = 3;
-    window.scrollTo(0,0);
   }
 
 
@@ -270,5 +263,6 @@ export class SenateElectionsComponent implements OnInit {
 
   nextPage() {
     this.pageNumber++;
+    window.scrollTo(0,0);
   }
 }

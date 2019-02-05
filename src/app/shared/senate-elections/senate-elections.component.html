@@ -25,7 +25,7 @@
     <!-- START PAGE -->
     <div *ngIf='pageNumber == 0 && (pageReady)'>
       <div class="card-body">
-        <h4>Welcome to the ASWWU Senate Elections!</h4>
+        <h4>Welcome to the ASWWU Senate Election!</h4>
         <p>
           Press <strong>Go!</strong> to begin voting for your district's senators.
         </p>
@@ -46,7 +46,7 @@
 
       </div>
       <div class="card-footer">
-        <button type="button" (click)='getCandidates();' class="btn btn-primary mx-auto w-100 d-block" [ngClass]="{'active': districtModel, 'disabled': !districtModel}">Go!</button>
+        <button type="button" (click)='getCandidates(); nextPage();' class="btn btn-primary mx-auto w-100 d-block" [ngClass]="{'active': districtModel, 'disabled': !districtModel}">Go!</button>
       </div>
     </div>
 
@@ -79,7 +79,7 @@
 
       <div class="card-footer">
         <div class="row">
-          <div class="col-md-9 order-md-2 p-1"><button type="button" (click)='submit();' class="btn btn-primary mx-auto w-100 d-block">Vote!</button></div>
+          <div class="col-md-9 order-md-2 p-1"><button type="button" (click)='submit(); nextPage();' class="btn btn-primary mx-auto w-100 d-block">Vote!</button></div>
           <div class="col-md-3 order-md-1 p-1"><button type="button" (click)='ngOnInit();' class="btn btn-danger mx-auto w-100 d-block">Start Over</button></div>
         </div>
       </div>
