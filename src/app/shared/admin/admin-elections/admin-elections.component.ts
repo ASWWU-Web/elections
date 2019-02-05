@@ -104,7 +104,8 @@ export class AdminElectionsRowComponent implements OnInit {
 
     if (newElection) {
       formData['show_results'] = null;
-      saveObservable = this.rs.post('elections/election/', formData);
+      console.log(formData);
+      saveObservable = this.rs.post('elections/election', formData);
     } else {
       formData['id'] = this.rowData.id;
       formData['show_results'] = null;
@@ -139,5 +140,16 @@ export class AdminElectionsComponent implements OnInit {
   constructor(private rs: RequestService, private modalService: NgbModal) { }
 
   ngOnInit() {
+  }
+
+  addElection() {
+    const newElection: Election = {
+      id: '',
+      election_type: '',
+      start: '',
+      end: '',
+      show_results: null,
+    };
+    this.data.push(newElection);
   }
 }
