@@ -40,6 +40,7 @@ export class AdminComponent implements OnInit {
       (data: [{elections: Election[]}, {positions: Position[]}]) => {
         this.electionsData = data[0].elections;
         this.positionsData = data[1].positions;
+        console.log(this.positionsData);
       }, (err) => {
         console.error('Unable to fetch data for elections and/or positions');
       }

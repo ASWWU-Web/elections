@@ -30,28 +30,28 @@
 <!-- ACTIVE -->
 <td>
   <form [formGroup]="rowFormGroup">
-      <div class="form-group">
-        <div class="input-group">
-          <input id="active" class="form-control" placeholder="Make me a checkbox" formControlName="active" [ngClass]="{'is-invalid': rowFormGroup.controls.active.invalid}">
-        </div>
-      </div>
+    <div class="btn-group btn-group-toggle">
+      <label ngbButtonLabel class="btn-outline-primary">
+        <input ngbButton type="checkbox" formControlName="active">Active
+      </label>
+    </div>
   </form>
 </td>
 
 <!-- ORDER -->
 <td>
-    <form [formGroup]="rowFormGroup">
-      <div class="form-group">
-        <div class="input-group">
-          <input id="order" class="form-control" placeholder="Number" formControlName="order" [ngClass]="{'is-invalid': rowFormGroup.controls.order.invalid}">
-        </div>
+  <form [formGroup]="rowFormGroup">
+    <div class="form-group">
+      <div class="input-group">
+        <input id="order" class="form-control" type="number" placeholder="Number" formControlName="order" [ngClass]="{'is-invalid': rowFormGroup.controls.order.invalid}">
       </div>
-    </form>
-  </td>
+    </div>
+  </form>
+</td>
 
 <!-- SAVE -->
 <td>
   <form [formGroup]="rowFormGroup" (ngSubmit)="saveRow()">
-      <button type="submit" class="btn btn-success" [disabled]="rowFormGroup.invalid" [ngClass]="{'btn-danger': rowFormGroup.dirty}">Save</button>
+    <button type="submit" class="btn btn-success" [disabled]="rowFormGroup.invalid" [ngClass]="{'btn-danger': rowFormGroup.dirty}">Save</button>
   </form>
 </td>
