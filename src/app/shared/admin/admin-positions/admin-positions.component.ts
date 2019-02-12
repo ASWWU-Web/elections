@@ -57,6 +57,7 @@ export class AdminPositionsRowComponent implements OnInit {
         this.rowData = Object.assign({}, data);
         this.rowFormGroup.markAsPristine();
       }, (err) => {
+        window.alert('Unable to save\n' + err.status);
       });
   }
 }
