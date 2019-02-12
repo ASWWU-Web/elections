@@ -41,7 +41,7 @@ export class AdminComponent implements OnInit {
         this.electionsData = data[0].elections;
         this.positionsData = data[1].positions;
       }, (err) => {
-        window.alert('Unable to fetch data for elections and/or positions\n' + err.status);
+        window.alert('Unable to fetch data for elections and/or positions\n' + err.error.status);
       }
     );
   }

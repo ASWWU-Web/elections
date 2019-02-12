@@ -71,8 +71,8 @@ export class AdminElectionsRowComponent implements OnInit {
         this.candidates = data.candidates;
       },
       (err) => {
-        window.alert('Unable to get candidates\n' + err.status);
-        // console.log('unable to get candidates');
+        // window.alert('Unable to get candidates\n' + err.error.status);
+        console.log('unable to get candidates');
       });
   }
 
@@ -117,7 +117,7 @@ export class AdminElectionsRowComponent implements OnInit {
         this.rowData = Object.assign({}, data);
         this.rowFormGroup.markAsPristine();
       }, (err) => {
-        window.alert('Unable to save.\n' + err.status);
+        window.alert('Unable to save.\n' + err.error.status);
       });
   }
 
