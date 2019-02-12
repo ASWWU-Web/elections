@@ -191,10 +191,10 @@ export class SenateElectionsComponent implements OnInit {
     }
     // votes on the client that don't exist already on the server
     let requestArray = [];
-
+    console.log(updateVotes);
     for (let vote of updateVotes) {
       let newVote = Object.assign({}, vote);
-      newVote['vote'] = newVotes.pop();
+      newVote['vote'] = newVotes.shift();
       newVote['position'] = this.districtModel
       if (newVote.vote) {
         requestArray.push(this.rs.put('elections/vote/'+newVote.id, newVote));
