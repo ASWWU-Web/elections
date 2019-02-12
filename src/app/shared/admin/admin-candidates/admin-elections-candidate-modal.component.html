@@ -15,16 +15,12 @@
           <th scope="col"></th>
         </tr>
       </thead>
-      <tbody *ngIf="data">
-        <tr *ngFor="let row of candidates">
-          <td>{{row.position}}</td>
-          <td>{{row.username}}</td>
-          <td>{{row.display_name}}</td>
-        </tr>
+      <tbody *ngIf="candidates">
+        <tr admin-candidates-row *ngFor="let row of candidates" [rowData]="row" [positions]="positions"></tr>
       </tbody>
     </table>
 
-    <button class="btn btn-primary">Add New Candidate</button>
+    <button class="btn btn-primary" (click)="addCandidate()">Add New Candidate</button>
     <button class="btn btn-success">Save</button>
 
 </div>

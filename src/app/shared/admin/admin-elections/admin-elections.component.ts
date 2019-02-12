@@ -8,6 +8,7 @@ import { timestamp } from 'rxjs/operators';
 import { FormsModule, ReactiveFormsModule, AbstractControl, ValidatorFn } from '@angular/forms';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { Observable } from 'rxjs/internal/Observable';
+import { AdminElectionsCandidateModalComponent } from '../admin';
 
 interface Election {
   id: string;
@@ -26,19 +27,12 @@ interface Candidate {
   display_name: string;
 }
 
-
-@Component({
-  selector: 'app-admin-elections-candidate-modal',
-  templateUrl: './admin-elections-candidate-modal.component.html',
-  styleUrls: ['./admin-elections.component.css']
-})
-export class AdminElectionsCandidateModalComponent implements OnInit {
-  electionID: string;
-
-  constructor(public activeModal: NgbActiveModal) {
-  }
-
-  ngOnInit() {}
+interface Position {
+  id: string;
+  position: string;
+  election_type: string;
+  active: boolean; // this may need to be a string
+  order: number; // this may need to be a string
 }
 
 
@@ -50,6 +44,7 @@ export class AdminElectionsCandidateModalComponent implements OnInit {
 export class AdminElectionsRowComponent implements OnInit {
 
   @Input() rowData: Election;
+  @Input() positions: Position[];
   rowFormGroup: FormGroup;
   candidates: Candidate[];
 
@@ -121,8 +116,12 @@ export class AdminElectionsRowComponent implements OnInit {
 
   openCandidatesModal() {
     const electionID = this.rowData.id;
+    const candidateData = this.candidates;
+    const positionData = this.positions;
     const modalRef = this.modalService.open(AdminElectionsCandidateModalComponent);
     modalRef.componentInstance.electionID = electionID;
+    modalRef.componentInstance.candidates = candidateData;
+    modalRef.componentInstance.positions = positionData;
   }
 }
 
@@ -136,6 +135,7 @@ export class AdminElectionsRowComponent implements OnInit {
 export class AdminElectionsComponent implements OnInit {
 
   @Input() data: Election[];
+  @Input() positions: Position[];
 
   constructor(private rs: RequestService, private modalService: NgbModal) { }
 

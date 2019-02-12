@@ -29,6 +29,7 @@ import {
   SenateElectionsComponent,
   AdminElectionsComponent,
   AdminElectionsCandidateModalComponent,
+  AdminCandidatesRowComponent,
   AdminElectionsRowComponent,
   AdminPositionsComponent,
   AdminPositionsModalComponent
@@ -50,6 +51,7 @@ import {
     AdminComponent,
     AdminElectionsComponent,
     AdminElectionsCandidateModalComponent,
+    AdminCandidatesRowComponent,
     AdminElectionsRowComponent,
     AdminPositionsComponent,
     AdminPositionsModalComponent,

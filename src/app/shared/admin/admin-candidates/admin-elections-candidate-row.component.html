@@ -1,0 +1,18 @@
+<td>
+    {{rowData.id | slice:0:8 }}
+  </td>
+
+  <td>
+    <form [formGroup]="rowFormGroup">
+      <div ngbDropdown class="d-inline-block">
+        <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Position</button>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+          <div *ngFor="let position of positions">
+            <input ngbButton class="dropdown-item" value="{{position.id}}" formControlName="position">{{position.position}}
+          </div>
+        </div>
+      </div>      
+    </form>
+  </td>
+  
+  <pre>{{rowFormGroup.value | json}}</pre>
