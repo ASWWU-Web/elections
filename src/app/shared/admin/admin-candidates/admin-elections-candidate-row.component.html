@@ -3,16 +3,18 @@
   </td>
 
   <td>
-    <form [formGroup]="rowFormGroup">
-      <div ngbDropdown class="d-inline-block">
-        <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Position</button>
-        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-          <div *ngFor="let position of positions">
-            <input ngbButton class="dropdown-item" value="{{position.id}}" formControlName="position">{{position.position}}
+    <div ngbDropdown class="d-inline-block">
+      <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Position</button>
+      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+        <form [formGroup]="rowFormGroup">
+          <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" formControlName="position">
+            <label *ngFor="let position of positions" ngbButtonLabel class="btn-primary">
+              <input ngbButton class="dropdown-item" type="radio" value="{{position.id}}">{{position.position}}
+            </label>
           </div>
-        </div>
-      </div>      
-    </form>
+        </form>
+      </div>
+    </div>
   </td>
-  
+
   <pre>{{rowFormGroup.value | json}}</pre>
