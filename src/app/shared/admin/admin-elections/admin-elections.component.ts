@@ -34,6 +34,7 @@ interface Candidate {
 })
 export class AdminElectionsCandidateModalComponent implements OnInit {
   electionID: string;
+  data: boolean = true;
 
   constructor(public activeModal: NgbActiveModal) {
   }

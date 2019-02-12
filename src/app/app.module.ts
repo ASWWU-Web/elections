@@ -65,21 +65,6 @@ import {
     ReactiveFormsModule,
     NgbModule.forRoot(),
     AppRoutingModule,
-    RouterModule.forRoot([
-      {
-        'path': 'vote',
-        component: VoteComponent
-      },
-      {
-        'path': 'admin',
-        component: AdminComponent
-      },
-      {
-        'path': '',
-        component: HomeComponent
-      }
-    ])
-
   ],
   providers: [
     RequestService
