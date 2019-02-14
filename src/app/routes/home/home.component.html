@@ -2,19 +2,19 @@
   <header title="Elections" [admin]="admin"></header>
   <div class="container">
     <div *ngIf="!response">
-      <h2 class="text-center text-uppercase">No Elections</h2>
+      <h2 class="text-center">No Elections</h2>
     </div>
     <div *ngIf="response">
       <div *ngIf="startTime > now">
-      <h1 class="text-center text-uppercase">{{getElectionType(response.election_type)}}</h1>
-          <h4 class="text-center text-uppercase">Starts: {{getDateTime(dates['start'])}}</h4>
-          <h4 class="text-center text-uppercase">Ends: {{getDateTime(dates['end'])}}</h4>
+      <h1 class="text-center">{{getElectionType(response.election_type)}}</h1>
+          <h4 class="text-center">Starts: {{getDateTime(dates['start'])}}</h4>
+          <h4 class="text-center">Ends: {{getDateTime(dates['end'])}}</h4>
           <countdown [status]="status" [date]="dates['start']"></countdown>
       </div>
     </div>
     <div *ngIf="response">
       <div *ngIf="startTime < now">
-        <h1 class="text-center text-uppercase">{{getElectionType(response.election_type)}}</h1>
+        <h1 class="text-center">{{getElectionType(response.election_type)}}</h1>
         <a *ngIf="isLoggedIn" href="vote" class="btn btn-primary btn-block btn-lg" role="button">Vote Now!</a>
         <a *ngIf="!isLoggedIn" class="btn btn-primary btn-block btn-lg" [href]="'https://saml.aswwu.com/?redirectURI=/elections'+ router.url">Log in</a>
         <countdown [status]="status" [date]="dates['end']"></countdown>
