@@ -14,7 +14,7 @@ export class HomeComponent implements OnInit {
   // User roles
   roles = [""];
   response = null;
-  isLoggedIn: Boolean = false;
+  isLoggedIn: boolean = false;
   router: any;
   now = Date.now();
   dates = null;
@@ -25,15 +25,20 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getResponse(); 
-
+    // verify the user is logged in
+    this.rs.verify((data) => {
+      this.isLoggedIn = this.rs.isLoggedOn();
+    });
+    // setup election options on landing page
+    this.getCurrentElectionOptions(); 
+    // check if the user is an admin
     if (this.roles.indexOf('admin') > -1) {
       this.admin = true;
     }
   }
 
   // Makes get request to elections/current to set up information for homepage
-  getResponse() {
+  getCurrentElectionOptions() {
     this.rs.get('elections/current').subscribe((data) => {
       this.response = data;
 
@@ -56,10 +61,6 @@ export class HomeComponent implements OnInit {
       } else {
         this.status = "now";
       }
-
-      // Checks to see if user is logged in; changes "vote" button to "log in" in html if user not logged in
-      this.isLoggedIn = this.rs.isLoggedOn();
-      console.log("Response", this.response);
     }, (error)=> {
       this.status = "none";
     });
