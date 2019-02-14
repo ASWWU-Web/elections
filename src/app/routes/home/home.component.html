@@ -6,10 +6,9 @@
     </div>
     <div *ngIf="response">
       <div *ngIf="startTime > now">
-      <h1 class="text-center">{{getElectionType(response.election_type)}}</h1>
-          <h4 class="text-center">Starts: {{getDateTime(dates['start'])}}</h4>
-          <h4 class="text-center">Ends: {{getDateTime(dates['end'])}}</h4>
-          <countdown [status]="status" [date]="dates['start']"></countdown>
+        <h1 class="text-center">{{getElectionType(response.election_type)}}</h1>
+        <p class="text-center">Starts: {{getDateTime(dates['start'])}}<br/>Ends: {{getDateTime(dates['end'])}}</p>
+        <countdown [status]="status" [date]="dates['start']"></countdown>
       </div>
     </div>
     <div *ngIf="response">
