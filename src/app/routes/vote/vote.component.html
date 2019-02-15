@@ -1,6 +1,18 @@
 <div>
   <header title="Elections"></header>
-  <!-- show distrcict selection if it is a senate election -->
-  <district-selection></district-selection>
-  <multi-position-handler></multi-position-handler>
+  <div [ngSwitch]="switchState" class="container">
+    <!-- loading state -->
+    <div *ngSwitchDefault>
+      <p>Loading...</p>
+    </div>
+    <!-- start state -->
+    <div *ngSwitchCase="'start'">
+      <h1>Welcome to the election</h1>
+      <button (click)="start()">Start!</button>
+    </div>
+    <!-- district selection state -->
+    <district-selection *ngSwitchCase="'district'" [election]="election" [positions]="positions" (onComplete)="districtSelected($event)"></district-selection>
+    <!-- voting state -->
+    <multi-position-handler *ngSwitchCase="'vote'"></multi-position-handler>
+  </div>
 </div>
