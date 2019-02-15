@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { RequestService } from '../../../shared-ng/services/request.service';
 
 // election interface
-interface Election { 
-  id: string, 
-  election_type: string, 
-  name: string, 
-  max_votes: number, 
-  start: string, 
-  end: string, 
+interface Election {
+  id: string,
+  election_type: string,
+  name: string,
+  max_votes: number,
+  start: string,
+  end: string,
   show_results: string
 };
 // position interface
