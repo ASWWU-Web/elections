@@ -3,16 +3,22 @@
   <div [ngSwitch]="switchState" class="container">
     <!-- loading state -->
     <div *ngSwitchDefault>
-      <p>Loading...</p>
+      <h1>Loading...</h1>
     </div>
     <!-- start state -->
-    <div *ngSwitchCase="'start'">
-      <h1>Welcome to the election</h1>
-      <button (click)="start()">Start!</button>
+    <div *ngSwitchCase="Switches.Start">
+      <h1>Welcome to the {{election.name}}!</h1>
+      <p>Press Start! to begin voting for your district's senators.</p>
+      <button (click)="start()" class="btn btn-primary">Start!</button>
     </div>
     <!-- district selection state -->
-    <district-selection *ngSwitchCase="'district'" [election]="election" [positions]="positions" (onComplete)="districtSelected($event)"></district-selection>
+    <district-selection *ngSwitchCase="Switches.District" [election]="election" [positions]="positions" (onComplete)="districtSelected($event)"></district-selection>
     <!-- voting state -->
-    <multi-position-handler *ngSwitchCase="'vote'"></multi-position-handler>
+    <multi-position-handler *ngSwitchCase="Switches.Vote"></multi-position-handler>
+    <!-- complete -->
+    <div *ngSwitchCase="Switches.Complete">
+      <h1>You have voted!</h1>
+      <p>Thank you for participating in democracy!</p>
+    </div>
   </div>
 </div>

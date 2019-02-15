@@ -20,15 +20,25 @@ interface Position {
   order: number
 }
 
+// switch states
+enum Switches {
+  Loading = 0,
+  Start = 1,
+  District = 2,
+  Vote = 4,
+  Complete = 5
+}
+
 @Component({
   selector: 'app-vote',
   templateUrl: './vote.component.html',
   styleUrls: ['./vote.component.css']
 })
 export class VoteComponent implements OnInit {
+  Switches = Switches;  // include switch enum
   election: Election = null;  // the current election
   positions: Position[] = [];  // the positions based on the election type
-  public switchState: string = 'loading';  // the switchable state of the view
+  switchState: number = Switches.Loading;  // the switchable state of the view
 
   constructor(private rs: RequestService) { }
 
@@ -39,7 +49,7 @@ export class VoteComponent implements OnInit {
       // get positions for the election type
       this.rs.get('elections/position', { election_type: this.election.election_type }).subscribe((positionData) => {
         this.positions = positionData.positions;
-        this.switchState = 'start';
+        this.switchState = Switches.Start;
       }, null);
     }, null);
   }
@@ -48,16 +58,15 @@ export class VoteComponent implements OnInit {
   start() {
     // determine next switch state based on election type
     if (this.election.election_type == 'senate') {
-      this.switchState = 'district';
+      this.switchState = Switches.District;
     } else {
-      this.switchState = 'vote'
+      this.switchState = Switches.Vote
     }
   }
 
   // function called when the user selects a district in a senate election
   districtSelected(positionIndex: number) {
     let position = this.positions[positionIndex];
-    this.switchState = 'vote';
-    console.log(position);
+    this.switchState = Switches.Vote;
   }
 }
