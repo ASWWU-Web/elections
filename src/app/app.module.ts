@@ -42,6 +42,9 @@ import {
   AdminPositionsComponent,
   AdminPositionsRowComponent
 } from './shared/shared';
+import { VoteFormComponent } from './shared/vote-form/vote-form.component';
+import { MultiPositionHandlerComponent } from './shared/multi-position-handler/multi-position-handler.component';
+import { DistrictSelectionComponent } from './shared/district-selection/district-selection.component';
 
 
 @NgModule({
@@ -63,7 +66,10 @@ import {
     AdminPositionsComponent,
     AdminPositionsRowComponent,
     AswwuElectionsComponent,
-    SenateElectionsComponent
+    SenateElectionsComponent,
+    VoteFormComponent,
+    MultiPositionHandlerComponent,
+    DistrictSelectionComponent
   ],
   imports: [
     NgbModule,

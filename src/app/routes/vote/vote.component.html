@@ -1,13 +1,6 @@
 <div>
   <header title="Elections"></header>
-  <div class="container-fluid">
-    <div class="container">
-      <div *ngIf="election_type == 'aswwu'">
-        <aswwu-elections></aswwu-elections>
-      </div>
-      <div *ngIf="election_type == 'senate'">
-          <senate-elections></senate-elections>
-      </div>
-    </div>
-  </div>
+  <!-- show distrcict selection if it is a senate election -->
+  <district-selection></district-selection>
+  <multi-position-handler></multi-position-handler>
 </div>

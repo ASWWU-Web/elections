@@ -16,6 +16,9 @@ export class VoteComponent implements OnInit {
     this.rs.get('elections/current').subscribe((data) => {
       this.election_type = data.election_type;
     }, null);
+    this.rs.get('elections/current').subscribe((data) => {
+      this.election_type = data.election_type;
+    }, null);
   }
 
 }
