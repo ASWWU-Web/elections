@@ -65,6 +65,7 @@ export class VoteFormComponent implements OnInit {
   ngOnInit() {
     this.formGroup = this.formGroupFactory();
     this.setCandidates();
+    this.setExistingVotes();
   }
 
   formGroupFactory(): FormGroup {
@@ -116,8 +117,12 @@ export class VoteFormComponent implements OnInit {
   setExistingVotes() {
     const votesObservable = this.rs.get('elections/vote');
     votesObservable.subscribe(
-      (data) => {
-
+      (data: {votes: Vote[]}) => {
+        this.existingVotes = data.votes;
+        if (this.existingVotes.length >= this.election.max_votes) { console.error('There are too many votes in the database for this election!'); }
+        this.existingVotes.forEach((existingVote, index) => {
+          this.formGroup['controls'].writeInArray['controls'][index].controls.writeIn.setValue(existingVote.vote);
+        });
       }, (err) => {
         // TODO (stephen)
       }, () => {
@@ -143,8 +148,6 @@ export class VoteFormComponent implements OnInit {
       })
     );
   }
-
-
 
   onReset() {
   }
