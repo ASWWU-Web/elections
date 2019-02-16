@@ -4,7 +4,8 @@ import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { RequestService } from 'src/shared-ng/services/services';
 import { CURRENT_YEAR, MEDIA_SM, DEFAULT_PHOTO } from 'src/shared-ng/config';
-import { Profile } from 'selenium-webdriver/firefox';
+import { Observable, of } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap, map } from 'rxjs/operators';
 
 // election interface
 interface Election {
@@ -80,9 +81,9 @@ export class VoteFormComponent implements OnInit {
           photoUri += (data.photo !== 'None') ? data.photo : null;
           candidates[index].photoUri = photoUri;
         }, (err) => {
-
+          // TODO (stephen)
         }, () => {
-
+          // TODO (stephen)
         }
       );
     }
@@ -98,12 +99,35 @@ export class VoteFormComponent implements OnInit {
           setCandidatePhoto(candidate.info.username, index, this.rs, this.candidates);
         });
       }, (err) => {
-
+        // TODO (stephen)
       }, () => {
+        // TODO (stephen)
       }
     );
   }
 
-  submit() {
+  search(text$: Observable<string>) {
+    function getNames(query: string, rs) {
+      if (query === '') {
+        return of({results: []});
+      }
+      return rs.get('search/names', {'full_name': query});
+    }
+
+    let rs = this.rs;
+    return text$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap((data) => getNames(data, rs)),
+      map((data: {results: {username: string, full_name: string}[]}) => {
+        return data.results.map((item) => item.username);
+      })
+    );
+  }
+
+  onSubmit() {
+  }
+
+  onReset() {
   }
 }
