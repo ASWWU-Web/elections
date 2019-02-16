@@ -58,7 +58,7 @@ export class VoteComponent implements OnInit {
 
   // function called when the user presses start
   nextPage() {
-    console.log(this.switchState);
+    // console.log(this.switchState);
     // switch to district selection state
     if (this.switchState == Switches.Start && this.election.election_type == 'senate') {
       this.switchState = Switches.District;
@@ -72,7 +72,7 @@ export class VoteComponent implements OnInit {
     } else {
       this.switchState++;
     }
-    console.log(this.switchState);
+    // console.log(this.switchState);
   }
 
   // start the voting process over again
