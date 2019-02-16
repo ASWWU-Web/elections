@@ -4,7 +4,7 @@ import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { RequestService } from 'src/shared-ng/services/services';
 import { CURRENT_YEAR, MEDIA_SM, DEFAULT_PHOTO } from 'src/shared-ng/config';
-import { Observable, of } from 'rxjs';
+import { Observable, of, forkJoin } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, map } from 'rxjs/operators';
 
 // election interface
@@ -119,7 +119,7 @@ export class VoteFormComponent implements OnInit {
     votesObservable.subscribe(
       (data: {votes: Vote[]}) => {
         this.existingVotes = data.votes;
-        if (this.existingVotes.length >= this.election.max_votes) { console.error('There are too many votes in the database for this election!'); }
+        if (this.existingVotes.length > this.election.max_votes) { console.error('There are too many votes in the database for this election!'); }
         this.existingVotes.forEach((existingVote, index) => {
           this.formGroup['controls'].writeInArray['controls'][index].controls.writeIn.setValue(existingVote.vote);
         });
@@ -152,6 +152,43 @@ export class VoteFormComponent implements OnInit {
   onReset() {
   }
 
+  buildRequestArrayObservable() {
+    let updatableVotes: Vote[] = this.existingVotes;
+    let unsubmittedVotes: string[] = (this.formGroup['controls'].writeInArray['controls']).map((control) => control.value.writeIn);
+
+    let requestArray = [];
+    for (let updatableVote of updatableVotes) {
+      let updateVote = Object.assign({}, updatableVote);
+      updateVote.vote = unsubmittedVotes.shift();
+      if (updateVote.vote !== '') {
+        requestArray.push(this.rs.put('elections/vote/' + updateVote.id, updateVote));
+      }
+    }
+
+    for (let unsubmittedVote of unsubmittedVotes) {
+      let newVote = {
+        election: this.election.id,
+        position: this.position.id,
+        vote: unsubmittedVote
+      };
+      if (newVote.vote !== '') {
+        requestArray.push(this.rs.post('elections/vote', newVote));
+      }
+    }
+
+    return forkJoin(requestArray);
+  }
+
   onSubmit() {
+    let requestArrayObservable = this.buildRequestArrayObservable();
+    requestArrayObservable.subscribe(
+      (data) => {
+        window.alert('success');
+      }, (err) => {
+        // TODO (stephen)
+      }, () => {
+        // TODO (stephen)
+      }
+    );
   }
 }
