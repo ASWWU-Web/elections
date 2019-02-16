@@ -28,6 +28,10 @@ enum Switches {
   Vote = 3,
   Complete = 4
 }
+export enum PageTransitions {
+  NextPage = 0,
+  StartOver = 1
+}
 
 
 @Component({
@@ -58,31 +62,36 @@ export class VoteComponent implements OnInit {
   }
 
   // function called when the user presses start
-  nextPage() {
-    // switch to district selection state
-    if (this.switchState == Switches.Start && this.election.election_type == 'senate') {
-      this.switchState = Switches.District;
-    // switch to voting state
-    } else if (this.switchState == Switches.Start && this.election.election_type != 'senate') {
-      this.switchState = Switches.Vote;
-    // start over if the function is called and the vote process is complete
-    } else if (this.switchState == Switches.Complete) {
+  pageTransition(transition: number = PageTransitions.NextPage) {
+    // normal page transition
+    if (transition == PageTransitions.NextPage) {
+      // switch to district selection state
+      if (this.switchState == Switches.Start && this.election.election_type == 'senate') {
+        this.switchState = Switches.District;
+      // switch to voting state
+      } else if (this.switchState == Switches.Start && this.election.election_type != 'senate') {
+        this.switchState = Switches.Vote;
+      // start over if the function is called and the vote process is complete
+      } else if (this.switchState == Switches.Complete) {
+        this.startOver();
+      // switch to the next state
+      } else {
+        this.switchState++;
+      }
+    // start over
+    } else if (transition == PageTransitions.StartOver) {
       this.startOver();
-    // switch to the next state
-    } else {
-      this.switchState++;
     }
   }
 
-  // start the voting process over again
-  startOver() {
+  // function to start the voting process over
+  private startOver() {
     this.switchState = Switches.Loading;
     this.ngOnInit();
   }
 
   // function called when the user selects a district in a senate election
-  districtSelected(positionIndex: number) {
+  districtSelect(positionIndex: number) {
     let position = this.positions[positionIndex];
-    this.nextPage();
   }
 }

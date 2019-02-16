@@ -9,12 +9,12 @@
     <div *ngSwitchCase="Switches.Start">
       <h1>Welcome to the {{election.name}}!</h1>
       <p>Press Start! to begin voting for your district's senators.</p>
-      <button (click)="nextPage()" class="btn btn-primary">Start!</button>
+      <button (click)="pageTransition()" class="btn btn-primary">Start!</button>
     </div>
     <!-- district selection state -->
-    <district-selection *ngSwitchCase="Switches.District" [positions]="positions" (onComplete)="districtSelected($event)"></district-selection>
+    <district-selection *ngSwitchCase="Switches.District" [positions]="positions" (onDistrictSelect)="districtSelect($event)" (onComplete)="pageTransition($event)"></district-selection>
     <!-- voting state -->
-    <multi-position-handler *ngSwitchCase="Switches.Vote" [election]="election" [positions]="positions" (onComplete)="districtSelected($event)"></multi-position-handler>
+    <multi-position-handler *ngSwitchCase="Switches.Vote" [positions]="positions" [election]="election" (onComplete)="pageTransition($event)"></multi-position-handler>
     <!-- complete -->
     <div *ngSwitchCase="Switches.Complete">
       <h1>You have voted!</h1>

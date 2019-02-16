@@ -7,7 +7,7 @@ import { CURRENT_YEAR, MEDIA_SM, DEFAULT_PHOTO } from 'src/shared-ng/config';
 import { Observable, of, forkJoin } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, map } from 'rxjs/operators';
 
-import { Election, Position } from 'src/app/routes/vote/vote.component';
+import { Election, Position, PageTransitions } from 'src/app/routes/vote/vote.component';
 
 interface Candidate {
   id: string;
@@ -16,7 +16,6 @@ interface Candidate {
   username: string;
   display_name: string;
 }
-
 interface Vote {
   id: string;
   election: string;
@@ -36,7 +35,8 @@ export class VoteFormComponent implements OnInit {
   @Input() election: Election;  // the current election
   @Input() position: Position;  // the list of district positions
   // completion emitter
-  @Output() valueChange: EventEmitter<string> = new EventEmitter<string>();
+  @Output() valueChange: EventEmitter<number> = new EventEmitter<number>();
+
   candidates: {info: Candidate, photoUri: string}[];
   existingVotes: Vote[];
   formGroup: FormGroup;
@@ -134,7 +134,7 @@ export class VoteFormComponent implements OnInit {
   }
 
   onReset() {
-    this.valueChange.emit('reset');
+    this.valueChange.emit(PageTransitions.StartOver);
   }
 
   buildRequestArrayObservable() {
@@ -169,7 +169,7 @@ export class VoteFormComponent implements OnInit {
     requestArrayObservable.subscribe(
       (data) => {
         window.alert('success');
-        this.valueChange.emit('next');
+        this.valueChange.emit(PageTransitions.NextPage);
       }, (err) => {
         // TODO (stephen)
       }, () => {
