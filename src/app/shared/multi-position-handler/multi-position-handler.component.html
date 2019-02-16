@@ -1,3 +1,3 @@
 <div>
-  <vote-form></vote-form>
-</div>>
+  <vote-form [position]="positions[currentPosition]" [election]="election" (valueChange)="nextPosition($event)"></vote-form>
+</div>

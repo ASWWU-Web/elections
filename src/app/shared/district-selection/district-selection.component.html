@@ -1,3 +1,10 @@
-<p>
-  district-selection works!
-</p>
+<div>
+  <form [formGroup]="districtFormGroup">
+    <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" formControlName="district">
+      <label *ngFor="let p of positions" ngbButtonLabel class="btn-outline-primary">
+        <input ngbButton type="radio" value="{{p.id}}">{{p.position}}
+      </label>
+    </div>
+  </form>
+  <button (click)="formComplete()">BUTTON</button>
+</div>
