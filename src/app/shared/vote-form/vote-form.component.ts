@@ -52,7 +52,7 @@ export class VoteFormComponent implements OnInit {
   @Input() election: Election;  // the current election
   @Input() position: Position;  // the list of district positions
   // completion emitter
-  @Output() valueChange: EventEmitter<null> = new EventEmitter<null>();
+  @Output() valueChange: EventEmitter<string> = new EventEmitter<string>();
   candidates: {info: Candidate, photoUri: string}[];
   existingVotes: Vote[];
   formGroup: FormGroup;
@@ -150,6 +150,7 @@ export class VoteFormComponent implements OnInit {
   }
 
   onReset() {
+    this.valueChange.emit('reset');
   }
 
   buildRequestArrayObservable() {
@@ -184,6 +185,7 @@ export class VoteFormComponent implements OnInit {
     requestArrayObservable.subscribe(
       (data) => {
         window.alert('success');
+        this.valueChange.emit('next');
       }, (err) => {
         // TODO (stephen)
       }, () => {
