@@ -1,4 +1,7 @@
+// https://alligator.io/angular/reactive-forms-formarray-dynamic-fields/
+
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
+import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 
 // election interface
 interface Election {
@@ -19,6 +22,14 @@ interface Position {
   order: number
 }
 
+interface Candidate {
+  id: string;
+  election: string;
+  position: string;
+  username: string;
+  display_name: string;
+}
+
 @Component({
   selector: 'vote-form',
   templateUrl: './vote-form.component.html',
@@ -31,9 +42,41 @@ export class VoteFormComponent implements OnInit {
     // completion emitter
     @Output() valueChange: EventEmitter<null> = new EventEmitter<null>();
 
-  constructor() { }
+  @Input() election: Election;
+  @Input() position: Position;
+  @Input() numVotes: number;
+  candidates: Candidate[];
+  formGroup: FormGroup;
+
+  constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
+    this.formGroup = this.formGroupFactory();
   }
+
+  formGroupFactory() {// : FormGroup {
+    function writeInArrayFactory(fb, numVotes) {
+      const writeInArrayItem = fb.group({
+        writeIn: ''
+      });
+      const writeInArray = new Array(numVotes);
+      writeInArray.fill(writeInArrayItem);
+      return writeInArray;
+    }
+
+    const writeInsFormGroup = this.fb.group({
+      writeInArray: this.fb.array( writeInArrayFactory(this.fb, this.numVotes) )
+    });
+
+    return writeInsFormGroup;
+  }
+
+  getCandidates() {
+  }
+
+  submit() {
+  }
+
+
 
 }

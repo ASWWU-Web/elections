@@ -1,3 +1,14 @@
+<!-- https://alligator.io/angular/reactive-forms-formarray-dynamic-fields/ -->
+
 <p>
   vote-form works!
 </p>
+
+<div [formGroup]="formGroup">
+<div formArrayName="writeInArray" *ngFor="let item of formGroup.get('writeInArray').controls; let i = index;">
+  <div [formGroupName]="i">
+    <input formControlName="writeIn" placeholder="Item name">
+  </div>
+  Chosen name: {{ formGroup.controls.writeInArray.controls[i].controls.writeIn.value }}
+</div>
+</div>
