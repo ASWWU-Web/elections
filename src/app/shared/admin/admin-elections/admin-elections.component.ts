@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { NgbModal, ModalDismissReasons, NgbActiveModal, NgbDate, NgbCalendar, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalOptions, ModalDismissReasons, NgbActiveModal, NgbDate, NgbCalendar, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { RequestService } from 'src/shared-ng/services/services';
 import { NgbTimeStructAdapter } from '@ng-bootstrap/ng-bootstrap/timepicker/ngb-time-adapter';
 import { NgbTime } from '@ng-bootstrap/ng-bootstrap/timepicker/ngb-time';
@@ -42,7 +42,6 @@ interface Position {
   styleUrls: ['./admin-elections.component.css']
 })
 export class AdminElectionsRowComponent implements OnInit {
-
   @Input() rowData: Election;
   @Input() positions: Position[];
   rowFormGroup: FormGroup;
@@ -116,10 +115,12 @@ export class AdminElectionsRowComponent implements OnInit {
 
   openCandidatesModal() {
     const electionID = this.rowData.id;
+    const election_type = this.rowData.election_type;
     const candidateData = this.candidates;
     const positionData = this.positions;
-    const modalRef = this.modalService.open(AdminElectionsCandidateModalComponent);
+    const modalRef = this.modalService.open(AdminElectionsCandidateModalComponent, {size:'lg'});
     modalRef.componentInstance.electionID = electionID;
+    modalRef.componentInstance.election_type = election_type;
     modalRef.componentInstance.candidates = candidateData;
     modalRef.componentInstance.positions = positionData;
   }

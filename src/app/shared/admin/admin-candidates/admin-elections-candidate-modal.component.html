@@ -9,6 +9,7 @@
     <table class="table table-striped">
       <thead>
         <tr>
+          <th scope="col">ID</th>
           <th scope="col">Position</th>
           <th scope="col">Username</th>
           <th scope="col">Display Name</th>
@@ -16,10 +17,9 @@
         </tr>
       </thead>
       <tbody *ngIf="candidates">
-        <tr admin-candidates-row *ngFor="let row of candidates" [rowData]="row" [positions]="positions"></tr>
+        <tr admin-candidates-row *ngFor="let row of candidates" [rowData]="row" [positions]="positions" [electionID]="electionID"  [election_type]="election_type" style="overflow: scroll"></tr>
       </tbody>
     </table>
-
     <button class="btn btn-primary" (click)="addCandidate()">Add New Candidate</button>
     <button class="btn btn-success">Save</button>
 
