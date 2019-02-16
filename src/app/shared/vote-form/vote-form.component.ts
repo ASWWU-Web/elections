@@ -5,21 +5,21 @@ import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 
 // election interface
 interface Election {
-  id: string,
-  election_type: string,
-  name: string,
-  max_votes: number,
-  start: string,
-  end: string,
-  show_results: string
+  id: string;
+  election_type: string;
+  name: string;
+  max_votes: number;
+  start: string;
+  end: string;
+  show_results: string;
 };
 // position interface
 interface Position {
-  id: string,
-  position: string,
-  election_type: string,
-  active: boolean,
-  order: number
+  id: string;
+  position: string;
+  election_type: string;
+  active: boolean;
+  order: number;
 }
 
 interface Candidate {
@@ -36,15 +36,11 @@ interface Candidate {
   styleUrls: ['./vote-form.component.css']
 })
 export class VoteFormComponent implements OnInit {
-    // request data
-    @Input() election: Election = null;  // the current election
-    @Input() position: Position = null;  // the list of district positions
-    // completion emitter
-    @Output() valueChange: EventEmitter<null> = new EventEmitter<null>();
-
-  @Input() election: Election;
-  @Input() position: Position;
-  @Input() numVotes: number;
+  // request data
+  @Input() election: Election;  // the current election
+  @Input() position: Position;  // the list of district positions
+  // completion emitter
+  @Output() valueChange: EventEmitter<null> = new EventEmitter<null>();
   candidates: Candidate[];
   formGroup: FormGroup;
 
@@ -65,7 +61,7 @@ export class VoteFormComponent implements OnInit {
     }
 
     const writeInsFormGroup = this.fb.group({
-      writeInArray: this.fb.array( writeInArrayFactory(this.fb, this.numVotes) )
+      writeInArray: this.fb.array( writeInArrayFactory(this.fb, this.election.max_votes) )
     });
 
     return writeInsFormGroup;

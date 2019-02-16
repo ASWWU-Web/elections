@@ -12,11 +12,11 @@ interface Election {
 };
 // position interface
 interface Position {
-  id: string,
-  position: string,
-  election_type: string,
-  active: boolean,
-  order: number
+  id: string;
+  position: string;
+  election_type: string;
+  active: boolean;
+  order: number;
 }
 
 interface Election {
@@ -49,21 +49,6 @@ export class MultiPositionHandlerComponent implements OnInit {
 
   // member variables
   currentPosition: number = 0;  // current position being voted for
-
-  dummyPosition: Position = {
-    id: 'position-id-blah',
-    position: 'position BlAh',
-    election_type: 'aswwu',
-    active: true,
-    order: 0
-  };
-  dummyElection: Election = {
-    id: 'election-id-blah',
-    election_type: 'aswwu',
-    start: '2019-02-12 15:37:30.000000',
-    end: '2019-03-01 15:00:00.000000',
-    show_results: '2019-03-01 15:00:00.000000'
-  };
 
   constructor() { }
 
