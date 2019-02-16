@@ -48,11 +48,9 @@ export class VoteFormComponent implements OnInit {
   candidates: {info: Candidate, photoUri: string}[];
   formGroup: FormGroup;
   defaultPhoto: string;
-  photosReady: boolean;
 
   constructor(private fb: FormBuilder, private rs: RequestService) {
     this.defaultPhoto = MEDIA_SM + '/' + DEFAULT_PHOTO;
-    this.photosReady = false;
   }
 
   ngOnInit() {
@@ -124,9 +122,9 @@ export class VoteFormComponent implements OnInit {
     );
   }
 
-  onSubmit() {
+  onReset() {
   }
 
-  onReset() {
+  onSubmit() {
   }
 }
