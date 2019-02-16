@@ -15,11 +15,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   AppComponent
 } from '../shared-ng/components/app/app.component';
-import { 
-  FooterComponent, 
-  NavBarComponent, 
-  MobileNavComponent, 
-  UserBubbleComponent, 
+import {
+  FooterComponent,
+  NavBarComponent,
+  MobileNavComponent,
+  UserBubbleComponent,
   HeaderComponent
 } from '../shared-ng/components/components';
 import {
@@ -34,17 +34,15 @@ import {
 } from './routes/routes';
 import {
   CountdownComponent,
-  AswwuElectionsComponent,
-  SenateElectionsComponent,
   AdminElectionsComponent,
   AdminElectionsCandidateModalComponent,
   AdminElectionsRowComponent,
   AdminPositionsComponent,
-  AdminPositionsRowComponent
+  AdminPositionsRowComponent,
+  VoteFormComponent,
+  MultiPositionHandlerComponent,
+  DistrictSelectionComponent
 } from './shared/shared';
-import { VoteFormComponent } from './shared/vote-form/vote-form.component';
-import { MultiPositionHandlerComponent } from './shared/multi-position-handler/multi-position-handler.component';
-import { DistrictSelectionComponent } from './shared/district-selection/district-selection.component';
 
 
 @NgModule({
@@ -58,15 +56,12 @@ import { DistrictSelectionComponent } from './shared/district-selection/district
     HeaderComponent,
     CountdownComponent,
     VoteComponent,
-    SenateElectionsComponent,
     AdminComponent,
     AdminElectionsComponent,
     AdminElectionsCandidateModalComponent,
     AdminElectionsRowComponent,
     AdminPositionsComponent,
     AdminPositionsRowComponent,
-    AswwuElectionsComponent,
-    SenateElectionsComponent,
     VoteFormComponent,
     MultiPositionHandlerComponent,
     DistrictSelectionComponent

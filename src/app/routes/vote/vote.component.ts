@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { RequestService } from '../../../shared-ng/services/request.service';
 
+
 // election interface
-interface Election {
+export interface Election {
   id: string,
   election_type: string,
   name: string,
@@ -12,14 +13,13 @@ interface Election {
   show_results: string
 };
 // position interface
-interface Position {
+export interface Position {
   id: string,
   position: string,
   election_type: string,
   active: boolean,
   order: number
 }
-
 // switch states
 enum Switches {
   Loading = 0,
@@ -28,6 +28,7 @@ enum Switches {
   Vote = 3,
   Complete = 4
 }
+
 
 @Component({
   selector: 'app-vote',
@@ -58,7 +59,6 @@ export class VoteComponent implements OnInit {
 
   // function called when the user presses start
   nextPage() {
-    console.log(this.switchState);
     // switch to district selection state
     if (this.switchState == Switches.Start && this.election.election_type == 'senate') {
       this.switchState = Switches.District;
@@ -72,7 +72,6 @@ export class VoteComponent implements OnInit {
     } else {
       this.switchState++;
     }
-    console.log(this.switchState);
   }
 
   // start the voting process over again
