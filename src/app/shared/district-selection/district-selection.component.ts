@@ -26,10 +26,12 @@ interface Position {
   styleUrls: ['./district-selection.component.css']
 })
 export class DistrictSelectionComponent implements OnInit {
-  @Input() election: Election = null;  // the current election
+  // request data
   @Input() positions: Position[] = [];  // the list of district positions
+  // completion emitter
   @Output() onComplete: EventEmitter<number> = new EventEmitter<number>();  // event emitter for distric choosing
 
+  // member variables
   selectedDistrict: number = 0;  // the currently selectied district
   districtFormGroup: FormGroup;  // the form group controller for choosing a district
 

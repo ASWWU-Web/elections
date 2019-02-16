@@ -35,10 +35,12 @@ enum Switches {
   styleUrls: ['./vote.component.css']
 })
 export class VoteComponent implements OnInit {
+  // switch data
   Switches = Switches;  // include switch enum
+  private switchState: number = Switches.Loading;  // the switchable state of the view
+  // request data
   election: Election = null;  // the current election
   positions: Position[] = [];  // the positions based on the election type
-  switchState: number = Switches.Loading;  // the switchable state of the view
 
   constructor(private rs: RequestService) { }
 
@@ -55,18 +57,31 @@ export class VoteComponent implements OnInit {
   }
 
   // function called when the user presses start
-  start() {
-    // determine next switch state based on election type
-    if (this.election.election_type == 'senate') {
+  nextPage() {
+    // switch to district selection state
+    if (this.switchState == Switches.Start && this.election.election_type == 'senate') {
       this.switchState = Switches.District;
+    // switch to voting state
+    } else if (this.switchState == Switches.Start && this.election.election_type != 'senate') {
+      this.switchState = Switches.Vote;
+    // start over if the function is called and the vote process is complete
+    } else if (this.switchState == Switches.Complete) {
+      this.startOver();
+    // switch to the next state
     } else {
-      this.switchState = Switches.Vote
+      this.switchState++;
     }
+  }
+
+  // start the voting process over again
+  startOver() {
+    this.switchState = Switches.Loading;
+    this.ngOnInit();
   }
 
   // function called when the user selects a district in a senate election
   districtSelected(positionIndex: number) {
     let position = this.positions[positionIndex];
-    this.switchState = Switches.Vote;
+    this.nextPage();
   }
 }
