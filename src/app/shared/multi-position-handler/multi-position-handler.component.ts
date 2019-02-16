@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import { Election, Position } from 'src/app/routes/vote/vote.component';
+import { Election, Position, PageTransitions } from 'src/app/routes/vote/vote.component';
 
 
 @Component({
@@ -13,7 +13,7 @@ export class MultiPositionHandlerComponent implements OnInit {
   @Input() election: Election = null;  // the current election
   @Input() positions: Position[] = [];  // the list of district positions
   // completion emitter
-  @Output() onComplete: EventEmitter<null> = new EventEmitter<null>();
+  @Output() onComplete: EventEmitter<number> = new EventEmitter<number>();
 
   // member variables
   currentPosition: number = 0;  // current position being voted for
@@ -23,14 +23,18 @@ export class MultiPositionHandlerComponent implements OnInit {
   ngOnInit() {
   }
 
-  nextPosition() {
+  formChange(transition: number = PageTransitions.NextPage) {
+    // go back to the start page
+    if (transition == PageTransitions.StartOver) {
+      this.onComplete.emit(PageTransitions.StartOver);
     // go to the next position to vote for
-    if (this.currentPosition + 1 < this.positions.length) {
+    } else if (transition == PageTransitions.NextPage && this.currentPosition + 1 < this.positions.length) {
+      console.log('next position');
       this.currentPosition++;
     // got to the completion page
     } else {
-      this.onComplete.emit();
+      console.log('next page');
+      this.onComplete.emit(PageTransitions.NextPage);
     }
   }
-
 }

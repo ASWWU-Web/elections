@@ -2,9 +2,10 @@
   <form [formGroup]="districtFormGroup">
     <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" formControlName="district">
       <label *ngFor="let p of positions" ngbButtonLabel class="btn-outline-primary">
-        <input ngbButton type="radio" value="{{p.id}}">{{p.position}}
+        <input ngbButton type="radio" value="{{p.id}}" (click)="districtSelect()">{{p.position}}
       </label>
     </div>
   </form>
-  <button (click)="formComplete()">BUTTON</button>
+  <button (click)="formComplete()">Next</button>
+  <button (click)="startOver()">Start Over</button>
 </div>

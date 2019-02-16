@@ -1,3 +1,20 @@
+<!-- https://alligator.io/angular/reactive-forms-formarray-dynamic-fields/ -->
+
 <p>
   vote-form works!
 </p>
+
+<div *ngFor="let candidate of candidates">
+  <img src="{{candidate.photoUri || defaultPhoto}}">
+</div>
+
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+  <div formArrayName="writeInArray" *ngFor="let item of formGroup.get('writeInArray').controls; let i = index;">
+    <div [formGroupName]="i">
+      <input formControlName="writeIn" placeholder="Item name" type="text" [ngbTypeahead]="search" editable>
+    </div>
+    Chosen name: {{ formGroup.controls.writeInArray.controls[i].controls.writeIn.value }}
+  </div>
+  <button type="submit">Vote</button>
+  <button type="button" (click)="onReset()">Start Over</button>
+</form>
