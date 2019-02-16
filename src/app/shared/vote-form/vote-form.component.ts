@@ -7,24 +7,7 @@ import { CURRENT_YEAR, MEDIA_SM, DEFAULT_PHOTO } from 'src/shared-ng/config';
 import { Observable, of, forkJoin } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, map } from 'rxjs/operators';
 
-// election interface
-interface Election {
-  id: string;
-  election_type: string;
-  name: string;
-  max_votes: number;
-  start: string;
-  end: string;
-  show_results: string;
-}
-// position interface
-interface Position {
-  id: string;
-  position: string;
-  election_type: string;
-  active: boolean;
-  order: number;
-}
+import { Election, Position } from 'src/app/routes/vote/vote.component';
 
 interface Candidate {
   id: string;
@@ -41,6 +24,7 @@ interface Vote {
   vote: string;
   username: string;
 }
+
 
 @Component({
   selector: 'vote-form',

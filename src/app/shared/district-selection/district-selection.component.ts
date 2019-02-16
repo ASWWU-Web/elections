@@ -1,24 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
-// election interface
-interface Election {
-  id: string,
-  election_type: string,
-  name: string,
-  max_votes: number,
-  start: string,
-  end: string,
-  show_results: string
-};
-// position interface
-interface Position {
-  id: string,
-  position: string,
-  election_type: string,
-  active: boolean,
-  order: number
-}
+import { Position } from 'src/app/routes/vote/vote.component';
+
 
 @Component({
   selector: 'district-selection',
