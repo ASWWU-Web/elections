@@ -2,13 +2,13 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 // election interface
 interface Election {
-  id: string,
-  election_type: string,
-  name: string,
-  max_votes: number,
-  start: string,
-  end: string,
-  show_results: string
+  id: string;
+  election_type: string;
+  name: string;
+  max_votes: number;
+  start: string;
+  end: string;
+  show_results: string;
 };
 // position interface
 interface Position {
@@ -17,14 +17,6 @@ interface Position {
   election_type: string;
   active: boolean;
   order: number;
-}
-
-interface Election {
-  id: string;
-  election_type: string;
-  start: string;
-  end: string;
-  show_results: string;
 }
 
 interface Position {
