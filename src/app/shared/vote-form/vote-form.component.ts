@@ -50,20 +50,14 @@ export class VoteFormComponent implements OnInit {
     this.formGroup = this.formGroupFactory();
   }
 
-  formGroupFactory() {// : FormGroup {
+  formGroupFactory(): FormGroup {
     function writeInArrayFactory(fb, numVotes) {
-      const writeInArrayItem = fb.group({
-        writeIn: ''
-      });
-      const writeInArray = new Array(numVotes);
-      writeInArray.fill(writeInArrayItem);
+      const writeInArray = Array.from({length: numVotes}, () => fb.group({writeIn: ''}));
       return writeInArray;
     }
-
     const writeInsFormGroup = this.fb.group({
       writeInArray: this.fb.array( writeInArrayFactory(this.fb, this.election.max_votes) )
     });
-
     return writeInsFormGroup;
   }
 
