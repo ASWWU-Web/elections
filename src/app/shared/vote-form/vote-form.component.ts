@@ -2,6 +2,9 @@
 
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
+import { RequestService } from 'src/shared-ng/services/services';
+import { CURRENT_YEAR, MEDIA_SM, DEFAULT_PHOTO } from 'src/shared-ng/config';
+import { Profile } from 'selenium-webdriver/firefox';
 
 // election interface
 interface Election {
@@ -41,13 +44,19 @@ export class VoteFormComponent implements OnInit {
   @Input() position: Position;  // the list of district positions
   // completion emitter
   @Output() valueChange: EventEmitter<null> = new EventEmitter<null>();
-  candidates: Candidate[];
+  candidates: {info: Candidate, photoUri: string}[];
   formGroup: FormGroup;
+  defaultPhoto: string;
+  photosReady: boolean;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private rs: RequestService) {
+    this.defaultPhoto = MEDIA_SM + '/' + DEFAULT_PHOTO;
+    this.photosReady = false;
+  }
 
   ngOnInit() {
     this.formGroup = this.formGroupFactory();
+    this.setCandidates();
   }
 
   formGroupFactory(): FormGroup {
@@ -61,12 +70,40 @@ export class VoteFormComponent implements OnInit {
     return writeInsFormGroup;
   }
 
-  getCandidates() {
+  setCandidates() {
+    function setCandidatePhoto(username, index, rs, candidates) {
+      const uri = '/profile/' + CURRENT_YEAR + '/' + username;
+      const profileObservable = rs.get(uri);
+      profileObservable.subscribe(
+        (data) => {
+          let photoUri = MEDIA_SM + '/';
+          photoUri += (data.photo !== 'None') ? data.photo : null;
+          candidates[index].photoUri = photoUri;
+        }, (err) => {
+
+        }, () => {
+
+        }
+      );
+    }
+
+    const getUri = 'elections/election/' + this.election.id + '/candidate';
+    const getCandidatesObservable = this.rs.get(getUri, {position: this.position.id});
+    getCandidatesObservable.subscribe(
+      (data) => {
+        let candidates = data.candidates;
+        candidates = candidates.map((item: Candidate) => ({info: item, photoUri: ''}));
+        this.candidates = candidates;
+        this.candidates.forEach((candidate, index) => {
+          setCandidatePhoto(candidate.info.username, index, this.rs, this.candidates);
+        });
+      }, (err) => {
+
+      }, () => {
+      }
+    );
   }
 
   submit() {
   }
-
-
-
 }

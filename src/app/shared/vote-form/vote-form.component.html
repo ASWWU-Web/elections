@@ -4,6 +4,10 @@
   vote-form works!
 </p>
 
+<div *ngFor="let candidate of candidates">
+  <img src="{{candidate.photoUri || defaultPhoto}}">
+</div>
+
 <div [formGroup]="formGroup">
 <div formArrayName="writeInArray" *ngFor="let item of formGroup.get('writeInArray').controls; let i = index;">
   <div [formGroupName]="i">
