@@ -12,9 +12,19 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 // shared-ng components
-import { AppComponent } from '../shared-ng/components/app/app.component';
-import { FooterComponent, NavBarComponent, MobileNavComponent, UserBubbleComponent} from '../shared-ng/components/components';
-import { RequestService } from '../shared-ng/services/services';
+import {
+  AppComponent
+} from '../shared-ng/components/app/app.component';
+import { 
+  FooterComponent, 
+  NavBarComponent, 
+  MobileNavComponent, 
+  UserBubbleComponent, 
+  HeaderComponent
+} from '../shared-ng/components/components';
+import {
+  RequestService
+} from '../shared-ng/services/services';
 
 // project components
 import {
@@ -23,7 +33,6 @@ import {
   AdminComponent
 } from './routes/routes';
 import {
-  HeaderComponent,
   CountdownComponent,
   AswwuElectionsComponent,
   SenateElectionsComponent,
@@ -67,21 +76,6 @@ import {
     ReactiveFormsModule,
     NgbModule.forRoot(),
     AppRoutingModule,
-    RouterModule.forRoot([
-      {
-        'path': 'vote',
-        component: VoteComponent
-      },
-      {
-        'path': 'admin',
-        component: AdminComponent
-      },
-      {
-        'path': '',
-        component: HomeComponent
-      }
-    ])
-
   ],
   providers: [
     RequestService

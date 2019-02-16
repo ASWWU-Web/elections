@@ -34,7 +34,7 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "src/shared-ng/environments/environment.prod.ts",
+                  "replace": "src/shared-ng/environments/environment.ts",
                   "with": "src/shared-ng/environments/environment.prod.ts"
                 }
               ],

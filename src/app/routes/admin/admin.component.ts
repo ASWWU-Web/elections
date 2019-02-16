@@ -26,8 +26,8 @@ interface Position {
 })
 export class AdminComponent implements OnInit {
 
-  electionsData: Election[];
-  positionsData: Position[];
+  electionsData: Election[] = [];
+  positionsData: Position[] = [];
 
   constructor(private rs: RequestService) { }
 
