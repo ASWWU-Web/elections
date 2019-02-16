@@ -16,7 +16,7 @@ interface Election {
   start: string;
   end: string;
   show_results: string;
-};
+}
 // position interface
 interface Position {
   id: string;
@@ -34,6 +34,14 @@ interface Candidate {
   display_name: string;
 }
 
+interface Vote {
+  id: string;
+  election: string;
+  position: string;
+  vote: string;
+  username: string;
+}
+
 @Component({
   selector: 'vote-form',
   templateUrl: './vote-form.component.html',
@@ -46,6 +54,7 @@ export class VoteFormComponent implements OnInit {
   // completion emitter
   @Output() valueChange: EventEmitter<null> = new EventEmitter<null>();
   candidates: {info: Candidate, photoUri: string}[];
+  existingVotes: Vote[];
   formGroup: FormGroup;
   defaultPhoto: string;
 
@@ -104,6 +113,19 @@ export class VoteFormComponent implements OnInit {
     );
   }
 
+  setExistingVotes() {
+    const votesObservable = this.rs.get('elections/vote');
+    votesObservable.subscribe(
+      (data) => {
+
+      }, (err) => {
+        // TODO (stephen)
+      }, () => {
+        // TODO (stephen)
+      }
+    );
+  }
+
   getNames(query: string) {
     if (query === '') {
       return of({results: []});
@@ -121,6 +143,8 @@ export class VoteFormComponent implements OnInit {
       })
     );
   }
+
+
 
   onReset() {
   }
