@@ -25,8 +25,8 @@ enum Switches {
   Loading = 0,
   Start = 1,
   District = 2,
-  Vote = 4,
-  Complete = 5
+  Vote = 3,
+  Complete = 4
 }
 
 @Component({
@@ -37,7 +37,7 @@ enum Switches {
 export class VoteComponent implements OnInit {
   // switch data
   Switches = Switches;  // include switch enum
-  private switchState: number = Switches.Loading;  // the switchable state of the view
+  switchState: number = Switches.Loading;  // the switchable state of the view
   // request data
   election: Election = null;  // the current election
   positions: Position[] = [];  // the positions based on the election type
@@ -58,6 +58,7 @@ export class VoteComponent implements OnInit {
 
   // function called when the user presses start
   nextPage() {
+    console.log(this.switchState);
     // switch to district selection state
     if (this.switchState == Switches.Start && this.election.election_type == 'senate') {
       this.switchState = Switches.District;
@@ -71,6 +72,7 @@ export class VoteComponent implements OnInit {
     } else {
       this.switchState++;
     }
+    console.log(this.switchState);
   }
 
   // start the voting process over again

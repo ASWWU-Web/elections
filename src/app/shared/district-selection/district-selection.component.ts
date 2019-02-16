@@ -38,7 +38,6 @@ export class DistrictSelectionComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.positions);
     this.districtFormGroup = new FormGroup({
       district: new FormControl()
     })
