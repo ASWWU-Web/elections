@@ -4,17 +4,36 @@
   vote-form works!
 </p>
 
-<div *ngFor="let candidate of candidates">
-  <img src="{{candidate.photoUri || defaultPhoto}}">
-</div>
-
-<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
-  <div formArrayName="writeInArray" *ngFor="let item of formGroup.get('writeInArray')['controls']; let i = index;">
-    <div [formGroupName]="i">
-      <input formControlName="writeIn" placeholder="Item name" type="text" [ngbTypeahead]="search" editable>
-    </div>
-    Chosen name: {{ formGroup['controls'].writeInArray.controls[i].controls.writeIn.value }}
+<div class="card">
+  <div class="card-header">
+    <h4>{{ position.position }}</h4>
   </div>
-  <navigator [primaryName]="'Vote!'" [dangerName]="'Start Over'" [primaryEvent]="null" (onButtonClick)="pageTransition($event)"></navigator>
-</form>
-`
+  <div class="card-body">
+    <div class="row">
+      <div *ngFor="let candidate of candidates" class="col-6 col-md-4">
+        <div class="card"></div>
+        <img class="card-img-top mx-auto d-block" src="{{candidate.photoUri || defaultPhoto}}">
+        <div class="card-footer btn-group-toggle">
+          <button class="btn btn-outline-primary btn-nowrap mx-auto w-100 d-block">
+            {{candidate.info.display_name}}
+          </button>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <form [formGroup]="formGroup">
+      <div class="row">
+        <div formArrayName="writeInArray" *ngFor="let item of formGroup.get('writeInArray')['controls']; let i = index;" class="col-6 col-md-4">
+          <div [formGroupName]="i">
+            <input formControlName="writeIn" placeholder="Item name" type="text" [ngbTypeahead]="search" editable class="form-control" placeholder="Candidate Username">
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="card-footer">
+    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+      <navigator [primaryName]="'Vote!'" [dangerName]="'Start Over'" [primaryEvent]="null" (onButtonClick)="pageTransition($event)"></navigator>
+    </form>
+  </div>
+</div>
