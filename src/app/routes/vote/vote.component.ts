@@ -49,6 +49,7 @@ export class VoteComponent implements OnInit {
   // request data
   election: Election = null;  // the current election
   positions: Position[] = [];  // the positions based on the election type
+  visiblePositions: Position[] = [];  // the positions based on the election type
 
   constructor(private rs: RequestService) { }
 
@@ -59,6 +60,7 @@ export class VoteComponent implements OnInit {
       // get positions for the election type
       this.rs.get('elections/position', { election_type: this.election.election_type }).subscribe((positionData) => {
         this.positions = positionData.positions;
+        this.visiblePositions = positionData.positions;
         this.switchState = Switches.Start;
       }, null);
     }, null);
@@ -97,6 +99,6 @@ export class VoteComponent implements OnInit {
 
   // function called when the user selects a district in a senate election
   districtSelect(positionIndex: number) {
-    let position = this.positions[positionIndex];
+    this.visiblePositions = [this.positions[positionIndex]];
   }
 }

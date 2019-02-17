@@ -1,10 +1,10 @@
 <div>
   <form [formGroup]="districtFormGroup">
     <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" formControlName="district">
-      <label *ngFor="let p of positions" ngbButtonLabel class="btn-outline-primary">
-        <input ngbButton type="radio" value="{{p.id}}" (click)="districtSelect()">{{p.position}}
+      <label *ngFor="let p of positions; let i = index;" ngbButtonLabel class="btn-outline-primary">
+        <input ngbButton type="radio" value="{{i}}" (click)="districtSelect(i)">{{p.position}}
       </label>
     </div>
   </form>
-  <navigator [primaryName]="'Next'" [dangerName]="'Start Over'" (onButtonClick)="formComplete($event)"></navigator>
+  <navigator [primaryName]="'Next'" [dangerName]="'Start Over'" [primaryDisabled]="selectedDistrict == null" (onButtonClick)="formComplete($event)"></navigator>
 </div>

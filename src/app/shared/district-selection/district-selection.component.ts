@@ -17,7 +17,7 @@ export class DistrictSelectionComponent implements OnInit {
   @Output() onComplete: EventEmitter<number> = new EventEmitter<number>();  // event emitter for page transitions
 
   // member variables
-  selectedDistrict: number = 0;  // the currently selectied district
+  selectedDistrict: number = null;  // the currently selectied district
   districtFormGroup: FormGroup;  // the form group controller for choosing a district
 
   constructor() { }
@@ -29,8 +29,10 @@ export class DistrictSelectionComponent implements OnInit {
   }
 
   // change selected district
-  districtSelect() {
-    this.onDistrictSelect.emit(this.selectedDistrict);
+  districtSelect(district: number) {
+    this.selectedDistrict = district;
+    this.onDistrictSelect.emit(district);
+    console.log(district)
   }
 
   // function to transition to the next page
