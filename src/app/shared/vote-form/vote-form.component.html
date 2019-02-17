@@ -15,6 +15,5 @@
     </div>
     Chosen name: {{ formGroup.controls.writeInArray.controls[i].controls.writeIn.value }}
   </div>
-  <button type="submit">Vote</button>
-  <button type="button" (click)="onReset()">Start Over</button>
+  <navigator [primaryName]="'Vote!'" [dangerName]="'Start Over'" [primaryEvent]="null" (onButtonClick)="pageTransition($event)"></navigator>
 </form>

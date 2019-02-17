@@ -24,10 +24,14 @@ export class NavigatorComponent implements OnInit {
   }
 
   primaryClick() {
-    this.onButtonClick.emit(this.primaryEvent);
+    if (this.primaryEvent != null) {
+      this.onButtonClick.emit(this.primaryEvent);
+    }
   }
 
   dangerClick() {
-    this.onButtonClick.emit(this.dangerEvent);
+    if (this.dangerEvent != null) {
+      this.onButtonClick.emit(this.dangerEvent);
+    }
   }
 }
