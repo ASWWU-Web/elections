@@ -15,6 +15,9 @@ export class NavigatorComponent implements OnInit {
   // the events to emit on click
   @Input() primaryEvent: number = PageTransitions.NextPage;
   @Input() dangerEvent: number = PageTransitions.StartOver;
+  // button enabled/disabled states
+  @Input() primaryDisabled: boolean = false;
+  @Input() dangerDisabled: boolean = false;
   // navigation button event emitters
   @Output() onButtonClick: EventEmitter<number> = new EventEmitter<number>();
 
