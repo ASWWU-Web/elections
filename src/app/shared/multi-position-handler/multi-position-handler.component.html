@@ -1,3 +1,5 @@
-<div>
-  <vote-form [position]="positions[currentPosition]" [election]="election" (valueChange)="formChange($event)"></vote-form>
+<div [ngSwitch]="currentPosition">
+  <div *ngFor="let p of positions; let i = index">
+    <vote-form *ngSwitchCase="i" [position]="p" [election]="election" (valueChange)="formChange($event)"></vote-form>
+  </div>
 </div>

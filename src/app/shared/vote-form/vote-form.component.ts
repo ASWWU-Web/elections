@@ -99,7 +99,7 @@ export class VoteFormComponent implements OnInit {
   }
 
   setExistingVotes() {
-    const votesObservable = this.rs.get('elections/vote');
+    const votesObservable = this.rs.get('elections/vote', { position: this.position.id });
     votesObservable.subscribe(
       (data: {votes: Vote[]}) => {
         this.existingVotes = data.votes;
