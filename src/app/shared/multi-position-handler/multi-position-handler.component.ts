@@ -29,11 +29,9 @@ export class MultiPositionHandlerComponent implements OnInit {
       this.onComplete.emit(PageTransitions.StartOver);
     // go to the next position to vote for
     } else if (transition == PageTransitions.NextPage && this.currentPosition + 1 < this.positions.length) {
-      console.log('next position');
       this.currentPosition++;
     // got to the completion page
     } else {
-      console.log('next page');
       this.onComplete.emit(PageTransitions.NextPage);
     }
   }

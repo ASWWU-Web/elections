@@ -34,12 +34,7 @@ export class DistrictSelectionComponent implements OnInit {
   }
 
   // function to transition to the next page
-  formComplete() {
-    this.onComplete.emit(PageTransitions.NextPage);
-  }
-
-  // function to start over
-  startOver() {
-    this.onComplete.emit(PageTransitions.StartOver);
+  formComplete(transition: number) {
+    this.onComplete.emit(transition);
   }
 }

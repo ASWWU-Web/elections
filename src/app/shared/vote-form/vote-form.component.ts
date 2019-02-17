@@ -133,8 +133,8 @@ export class VoteFormComponent implements OnInit {
     );
   }
 
-  onReset() {
-    this.valueChange.emit(PageTransitions.StartOver);
+  pageTransition(transition: number) {
+    this.valueChange.emit(transition);
   }
 
   buildRequestArrayObservable() {
@@ -169,7 +169,7 @@ export class VoteFormComponent implements OnInit {
     requestArrayObservable.subscribe(
       (data) => {
         window.alert('success');
-        this.valueChange.emit(PageTransitions.NextPage);
+        this.pageTransition(PageTransitions.NextPage);
       }, (err) => {
         // TODO (stephen)
       }, () => {

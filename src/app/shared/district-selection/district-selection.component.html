@@ -6,6 +6,5 @@
       </label>
     </div>
   </form>
-  <button (click)="formComplete()">Next</button>
-  <button (click)="startOver()">Start Over</button>
+  <navigator [primaryName]="'Next'" [dangerName]="'Start Over'" (onButtonClick)="formComplete($event)"></navigator>
 </div>
