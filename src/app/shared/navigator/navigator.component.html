@@ -1,4 +1,4 @@
 <div>
-  <button (click)="dangerClick()" class="btn btn-danger">{{this.dangerName}}</button>
-  <button (click)="primaryClick()" class="btn btn=primary">{{this.primaryName}}</button>
-</div>>
+  <button *ngIf="dangerName != null" (click)="dangerClick()" class="btn btn-danger">{{this.dangerName}}</button>
+  <button *ngIf="primaryName != null" (click)="primaryClick()" class="btn btn-primary">{{this.primaryName}}</button>
+</div>

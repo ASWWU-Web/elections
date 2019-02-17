@@ -16,8 +16,7 @@ export class NavigatorComponent implements OnInit {
   @Input() primaryEvent: number = PageTransitions.NextPage;
   @Input() dangerEvent: number = PageTransitions.StartOver;
   // navigation button event emitters
-  @Output() onClickPrimary: EventEmitter<number> = new EventEmitter<number>();
-  @Output() onClickDanger: EventEmitter<number> = new EventEmitter<number>();
+  @Output() onButtonClick: EventEmitter<number> = new EventEmitter<number>();
 
   constructor() { }
 
@@ -25,10 +24,10 @@ export class NavigatorComponent implements OnInit {
   }
 
   primaryClick() {
-    this.onClickPrimary.emit(this.primaryEvent);
+    this.onButtonClick.emit(this.primaryEvent);
   }
 
   dangerClick() {
-    this.onClickDanger.emit(this.dangerEvent);
+    this.onButtonClick.emit(this.dangerEvent);
   }
 }

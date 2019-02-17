@@ -9,7 +9,8 @@
     <div *ngSwitchCase="Switches.Start">
       <h1>Welcome to the {{election.name}}!</h1>
       <p>Press Start! to begin voting for your district's senators.</p>
-      <button (click)="pageTransition()" class="btn btn-primary">Start!</button>
+      <!-- <button (click)="pageTransition()" class="btn btn-primary">Start!</button> -->
+      <navigator [primaryName]="'Start'" (onButtonClick)="pageTransition($event)"></navigator>
     </div>
     <!-- district selection state -->
     <district-selection *ngSwitchCase="Switches.District" [positions]="positions" (onDistrictSelect)="districtSelect($event)" (onComplete)="pageTransition($event)"></district-selection>
@@ -19,6 +20,7 @@
     <div *ngSwitchCase="Switches.Complete">
       <h1>You have voted!</h1>
       <p>Thank you for participating in democracy!</p>
+      <navigator [primaryName]="'Back to ASWWU'" [dangerName]="'Start Over'" [primaryEvent]="PageTransitions.ASWWU" (onButtonClick)="pageTransition($event)"></navigator>
     </div>
   </div>
 </div>

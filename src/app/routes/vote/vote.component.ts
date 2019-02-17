@@ -44,6 +44,8 @@ export class VoteComponent implements OnInit {
   // switch data
   Switches = Switches;  // include switch enum
   switchState: number = Switches.Loading;  // the switchable state of the view
+  // transition states
+  PageTransitions = PageTransitions;
   // request data
   election: Election = null;  // the current election
   positions: Position[] = [];  // the positions based on the election type
@@ -82,6 +84,8 @@ export class VoteComponent implements OnInit {
     // start over
     } else if (transition == PageTransitions.StartOver) {
       this.startOver();
+    } else if (transition == PageTransitions.ASWWU) {
+      alert('direct to aswwu.com');
     }
   }
 
