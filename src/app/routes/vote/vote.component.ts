@@ -30,7 +30,8 @@ enum Switches {
 }
 export enum PageTransitions {
   NextPage = 0,
-  StartOver = 1
+  StartOver = 1,
+  ASWWU = 2
 }
 
 
