@@ -26,6 +26,7 @@
         </div>
       </div>
     </form>
+    <small class="text-danger">{{serverErrorText}}</small>
   </div>
   <div class="card-footer">
     <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">

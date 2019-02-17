@@ -41,6 +41,7 @@ export class VoteFormComponent implements OnInit {
   existingVotes: Vote[];
   formGroup: FormGroup;
   defaultPhoto: string;
+  serverErrorText: string;
 
   constructor(private fb: FormBuilder, private rs: RequestService) {
     this.defaultPhoto = MEDIA_SM + '/' + DEFAULT_PHOTO;
@@ -50,6 +51,7 @@ export class VoteFormComponent implements OnInit {
     this.formGroup = this.formGroupFactory();
     this.setCandidates();
     this.setExistingVotes();
+    this.serverErrorText = '';
   }
 
   formGroupFactory(): FormGroup {
@@ -180,9 +182,12 @@ export class VoteFormComponent implements OnInit {
     requestArrayObservable.subscribe(
       (data) => {
         window.alert('success');
+        this.serverErrorText = '';
         this.pageTransition(PageTransitions.NextPage);
       }, (err) => {
-        // TODO (stephen)
+        // show user error text from the server
+        console.log(err);
+        this.serverErrorText = err.error.status;
       }, () => {
         // TODO (stephen)
       }
