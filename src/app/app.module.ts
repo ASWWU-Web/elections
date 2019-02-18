@@ -15,11 +15,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   AppComponent
 } from '../shared-ng/components/app/app.component';
-import { 
-  FooterComponent, 
-  NavBarComponent, 
-  MobileNavComponent, 
-  UserBubbleComponent, 
+import {
+  FooterComponent,
+  NavBarComponent,
+  MobileNavComponent,
+  UserBubbleComponent,
   HeaderComponent
 } from '../shared-ng/components/components';
 import {
@@ -34,14 +34,16 @@ import {
 } from './routes/routes';
 import {
   CountdownComponent,
-  AswwuElectionsComponent,
-  SenateElectionsComponent,
   AdminElectionsComponent,
   AdminElectionsCandidateModalComponent,
   AdminCandidatesRowComponent,
   AdminElectionsRowComponent,
   AdminPositionsComponent,
-  AdminPositionsRowComponent
+  AdminPositionsRowComponent,
+  VoteFormComponent,
+  MultiPositionHandlerComponent,
+  DistrictSelectionComponent,
+  NavigatorComponent
 } from './shared/shared';
 
 
@@ -56,7 +58,6 @@ import {
     HeaderComponent,
     CountdownComponent,
     VoteComponent,
-    SenateElectionsComponent,
     AdminComponent,
     AdminElectionsComponent,
     AdminElectionsCandidateModalComponent,
@@ -64,8 +65,10 @@ import {
     AdminElectionsRowComponent,
     AdminPositionsComponent,
     AdminPositionsRowComponent,
-    AswwuElectionsComponent,
-    SenateElectionsComponent
+    VoteFormComponent,
+    MultiPositionHandlerComponent,
+    DistrictSelectionComponent,
+    NavigatorComponent
   ],
   imports: [
     NgbModule,
