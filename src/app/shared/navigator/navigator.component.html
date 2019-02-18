@@ -1,4 +1,5 @@
-<div>
-  <button type="button" *ngIf="dangerName != null" (click)="dangerClick()" [disabled]="dangerDisabled" class="btn btn-danger">{{this.dangerName}}</button>
-  <button type="submit" *ngIf="primaryName != null" (click)="primaryClick()" [disabled]="primaryDisabled" class="btn btn-primary">{{this.primaryName}}</button>
+<div class="row">
+  <button type="button" *ngIf="dangerName != null" (click)="dangerClick()" [disabled]="dangerDisabled" class="btn btn-danger col-3 m-3">{{this.dangerName}}</button>
+  <button type="submit" *ngIf="primaryName != null" (click)="primaryClick()" [disabled]="primaryDisabled" class="btn btn-primary col-3 my-3">{{this.primaryName}}</button>
 </div>
+<!-- col-lg-4 col-sm-6 col-12 mt-3 -->

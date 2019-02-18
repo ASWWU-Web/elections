@@ -41,6 +41,7 @@ export class VoteFormComponent implements OnInit {
   existingVotes: Vote[];
   formGroup: FormGroup;
   defaultPhoto: string;
+  serverErrorText: string;
 
   constructor(private fb: FormBuilder, private rs: RequestService) {
     this.defaultPhoto = MEDIA_SM + '/' + DEFAULT_PHOTO;
@@ -50,6 +51,7 @@ export class VoteFormComponent implements OnInit {
     this.formGroup = this.formGroupFactory();
     this.setCandidates();
     this.setExistingVotes();
+    this.serverErrorText = '';
   }
 
   formGroupFactory(): FormGroup {
@@ -115,6 +117,19 @@ export class VoteFormComponent implements OnInit {
     );
   }
 
+  fillWriteIn(candidateUsername) {
+    // fill first empty write in slot with `candidateUsername`
+    for (let index = 0; index < this.formGroup['value'].writeInArray.length; index++) {
+      let writeIn = this.formGroup['value'].writeInArray[index];
+      if (writeIn.writeIn === '' || !writeIn.writeIn) {
+        this.formGroup['controls'].writeInArray['controls'][index].controls.writeIn.setValue(candidateUsername);
+        return;
+      } else if (writeIn.writeIn == candidateUsername) {
+        return;
+      }
+    }
+  }
+
   getNames(query: string) {
     if (query === '') {
       return of({results: []});
@@ -168,10 +183,12 @@ export class VoteFormComponent implements OnInit {
     let requestArrayObservable = this.buildRequestArrayObservable();
     requestArrayObservable.subscribe(
       (data) => {
-        window.alert('success');
+        this.serverErrorText = '';
         this.pageTransition(PageTransitions.NextPage);
       }, (err) => {
-        // TODO (stephen)
+        // show user error text from the server
+        console.log(err);
+        this.serverErrorText = err.error.status;
       }, () => {
         // TODO (stephen)
       }

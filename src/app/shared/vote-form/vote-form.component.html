@@ -1,20 +1,44 @@
 <!-- https://alligator.io/angular/reactive-forms-formarray-dynamic-fields/ -->
 
-<p>
-  vote-form works!
-</p>
-
-<div *ngFor="let candidate of candidates">
-  <img src="{{candidate.photoUri || defaultPhoto}}">
-</div>
-
-<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
-  <div formArrayName="writeInArray" *ngFor="let item of formGroup.get('writeInArray')['controls']; let i = index;">
-    <div [formGroupName]="i">
-      <input formControlName="writeIn" placeholder="Item name" type="text" [ngbTypeahead]="search" editable>
+<div class="card">
+  <!-- header -->
+  <div class="card-header">
+    <h4>{{position.position}}</h4>
+    <div [ngSwitch]="election.max_votes">
+      <span *ngSwitchDefault>Select or write-in up to {{election.max_votes}} candidates.</span>
+      <span *ngSwitchCase="1">Select or write-in up to {{election.max_votes}} candidate.</span>
     </div>
-    Chosen name: {{ formGroup['controls'].writeInArray.controls[i].controls.writeIn.value }}
   </div>
-  <navigator [primaryName]="'Vote!'" [dangerName]="'Start Over'" [primaryEvent]="null" (onButtonClick)="pageTransition($event)"></navigator>
-</form>
-`
+  <div class="card-body py-0">
+    <!-- candidate selection -->
+    <div class="row">
+      <div *ngFor="let candidate of candidates" class="col-lg-4 col-sm-6 col-12 mt-3">
+        <div class="card"></div>
+        <img class="card-img-top mx-auto d-block" src="{{candidate.photoUri || defaultPhoto}}">
+        <div class="card-footer btn-group-toggle">
+          <button class="btn btn-outline-primary btn-nowrap mx-auto w-100 d-block" (click)="fillWriteIn(candidate.info.username)">
+            {{candidate.info.display_name}}
+          </button>
+        </div>
+      </div>
+    </div>
+    <hr *ngIf="candidates.length != 0" class="mb-0">
+    <!-- write in votes -->
+    <form [formGroup]="formGroup">
+      <div class="row">
+        <div formArrayName="writeInArray" *ngFor="let item of formGroup.get('writeInArray')['controls']; let i = index;" class="col-lg-4 col-sm-6 col-12 my-3">
+          <div [formGroupName]="i">
+            <input formControlName="writeIn" placeholder="Item name" type="text" [ngbTypeahead]="search" editable class="form-control" placeholder="Candidate Username">
+          </div>
+        </div>
+      </div>
+    </form>
+    <small class="text-danger">{{serverErrorText}}</small>
+  </div>
+  <!-- footer -->
+  <div class="card-footer py-0">
+    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+      <navigator [primaryName]="'Vote!'" [dangerName]="'Start Over'" [primaryEvent]="null" (onButtonClick)="pageTransition($event)"></navigator>
+    </form>
+  </div>
+</div>

@@ -8,7 +8,10 @@
     <!-- start state -->
     <div *ngSwitchCase="Switches.Start">
       <h1>Welcome to the {{election.name}}!</h1>
-      <p>Press Start! to begin voting for your district's senators.</p>
+      <div [ngSwitch]="election.election_type">
+        <p *ngSwitchCase="'aswwu'">Press start to begin voting for next year's ASWWU representatives.</p>
+        <p *ngSwitchCase="'senate'">Press start to begin voting for your district's senators.</p>
+      </div>
       <!-- <button (click)="pageTransition()" class="btn btn-primary">Start!</button> -->
       <navigator [primaryName]="'Start'" (onButtonClick)="pageTransition($event)"></navigator>
     </div>
