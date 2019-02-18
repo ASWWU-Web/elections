@@ -5,8 +5,8 @@
   <div class="card-header">
     <h4>{{position.position}}</h4>
     <div [ngSwitch]="election.max_votes">
-      <span *ngSwitchDefault>Select or write in up to {{election.max_votes}} candidates.</span>
-      <span *ngSwitchCase="1">Select or write in up to {{election.max_votes}} candidate.</span>
+      <span *ngSwitchDefault>Select or write-in up to {{election.max_votes}} candidates.</span>
+      <span *ngSwitchCase="1">Select or write-in up to {{election.max_votes}} candidate.</span>
     </div>
   </div>
   <div class="card-body py-0">
@@ -22,11 +22,11 @@
         </div>
       </div>
     </div>
-    <hr>
+    <hr *ngIf="candidates.length != 0" class="mb-0">
     <!-- write in votes -->
     <form [formGroup]="formGroup">
       <div class="row">
-        <div formArrayName="writeInArray" *ngFor="let item of formGroup.get('writeInArray')['controls']; let i = index;" class="col-lg-4 col-sm-6 col-12 mb-3">
+        <div formArrayName="writeInArray" *ngFor="let item of formGroup.get('writeInArray')['controls']; let i = index;" class="col-lg-4 col-sm-6 col-12 my-3">
           <div [formGroupName]="i">
             <input formControlName="writeIn" placeholder="Item name" type="text" [ngbTypeahead]="search" editable class="form-control" placeholder="Candidate Username">
           </div>
@@ -36,7 +36,7 @@
     <small class="text-danger">{{serverErrorText}}</small>
   </div>
   <!-- footer -->
-  <div class="card-footer">
+  <div class="card-footer py-0">
     <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
       <navigator [primaryName]="'Vote!'" [dangerName]="'Start Over'" [primaryEvent]="null" (onButtonClick)="pageTransition($event)"></navigator>
     </form>

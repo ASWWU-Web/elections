@@ -119,10 +119,12 @@ export class VoteFormComponent implements OnInit {
 
   fillWriteIn(candidateUsername) {
     // fill first empty write in slot with `candidateUsername`
-    for (let index = 0; index < this.formGroup['value'].writeInArray.length; index++ ) {
+    for (let index = 0; index < this.formGroup['value'].writeInArray.length; index++) {
       let writeIn = this.formGroup['value'].writeInArray[index];
       if (writeIn.writeIn === '' || !writeIn.writeIn) {
         this.formGroup['controls'].writeInArray['controls'][index].controls.writeIn.setValue(candidateUsername);
+        return;
+      } else if (writeIn.writeIn == candidateUsername) {
         return;
       }
     }
@@ -181,7 +183,6 @@ export class VoteFormComponent implements OnInit {
     let requestArrayObservable = this.buildRequestArrayObservable();
     requestArrayObservable.subscribe(
       (data) => {
-        window.alert('success');
         this.serverErrorText = '';
         this.pageTransition(PageTransitions.NextPage);
       }, (err) => {
