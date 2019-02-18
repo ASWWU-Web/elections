@@ -29,7 +29,7 @@
       <div class="row">
         <div formArrayName="writeInArray" *ngFor="let item of formGroup.get('writeInArray')['controls']; let i = index;" class="col-lg-4 col-sm-6 col-12 my-3">
           <div [formGroupName]="i">
-            <input formControlName="writeIn" placeholder="Item name" type="text" [ngbTypeahead]="search" editable class="form-control" placeholder="Candidate Username">
+            <input formControlName="writeIn" placeholder="Item name" type="search" [ngbTypeahead]="search" editable class="form-control" placeholder="Candidate Username">
           </div>
         </div>
       </div>

@@ -160,7 +160,7 @@ export class VoteFormComponent implements OnInit {
     for (let updatableVote of updatableVotes) {
       let updateVote = Object.assign({}, updatableVote);
       updateVote.vote = unsubmittedVotes.shift();
-      if (updateVote.vote !== '') {
+      if (updateVote.vote !== '' && updateVote.vote != null) {
         requestArray.push(this.rs.put('elections/vote/' + updateVote.id, updateVote));
       }
     }
