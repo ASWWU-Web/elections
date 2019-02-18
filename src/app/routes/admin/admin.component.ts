@@ -26,8 +26,8 @@ interface Position {
 })
 export class AdminComponent implements OnInit {
 
-  electionsData: Election[];
-  positionsData: Position[];
+  electionsData: Election[] = [];
+  positionsData: Position[] = [];
 
   constructor(private rs: RequestService) { }
 
@@ -40,10 +40,10 @@ export class AdminComponent implements OnInit {
       (data: [{elections: Election[]}, {positions: Position[]}]) => {
         this.electionsData = data[0].elections;
         this.positionsData = data[1].positions;
+        console.log(this.positionsData);
       }, (err) => {
         window.alert('Unable to fetch data for elections and/or positions\n' + err.error.status);
       }
     );
   }
-
 }

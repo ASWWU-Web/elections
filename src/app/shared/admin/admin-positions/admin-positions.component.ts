@@ -46,7 +46,6 @@ export class AdminPositionsRowComponent implements OnInit {
     let saveObservable: Observable<any>;
 
     if (newPosition) {
-      console.log(formData);
       saveObservable = this.rs.post('elections/position', formData);
     } else {
       formData['id'] = this.rowData.id;

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { NgbModal, ModalDismissReasons, NgbActiveModal, NgbDate, NgbCalendar, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalOptions, ModalDismissReasons, NgbActiveModal, NgbDate, NgbCalendar, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { RequestService } from 'src/shared-ng/services/services';
 import { NgbTimeStructAdapter } from '@ng-bootstrap/ng-bootstrap/timepicker/ngb-time-adapter';
 import { NgbTime } from '@ng-bootstrap/ng-bootstrap/timepicker/ngb-time';
@@ -8,14 +8,17 @@ import { timestamp } from 'rxjs/operators';
 import { FormsModule, ReactiveFormsModule, AbstractControl, ValidatorFn } from '@angular/forms';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { Observable } from 'rxjs/internal/Observable';
+import { AdminElectionsCandidateModalComponent } from '../admin';
 
 interface Election {
-  id: string;
-  election_type: string;
-  start: string;
-  end: string;
-  show_results: string;
-}
+  id: string,
+  election_type: string,
+  name: string,
+  max_votes: number,
+  start: string,
+  end: string,
+  show_results: string
+};
 
 
 interface Candidate {
@@ -26,19 +29,12 @@ interface Candidate {
   display_name: string;
 }
 
-
-@Component({
-  selector: 'app-admin-elections-candidate-modal',
-  templateUrl: './admin-elections-candidate-modal.component.html',
-  styleUrls: ['./admin-elections.component.css']
-})
-export class AdminElectionsCandidateModalComponent implements OnInit {
-  electionID: string;
-
-  constructor(public activeModal: NgbActiveModal) {
-  }
-
-  ngOnInit() {}
+interface Position {
+  id: string;
+  position: string;
+  election_type: string;
+  active: boolean; // this may need to be a string
+  order: number; // this may need to be a string
 }
 
 
@@ -48,8 +44,8 @@ export class AdminElectionsCandidateModalComponent implements OnInit {
   styleUrls: ['./admin-elections.component.css']
 })
 export class AdminElectionsRowComponent implements OnInit {
-
   @Input() rowData: Election;
+  @Input() positions: Position[];
   rowFormGroup: FormGroup;
   candidates: Candidate[];
 
@@ -60,9 +56,11 @@ export class AdminElectionsRowComponent implements OnInit {
     // this.newRowData = Object.assign({}, this.rowData);
     this.candidates = [];
     this.rowFormGroup = new FormGroup({
+      name: new FormControl(this.rowData.name, [Validators.required]),
       election_type: new FormControl(this.rowData.election_type, [Validators.required]),
       start: new FormControl(this.rowData.start, [Validators.required, this.dateValidator]),
-      end: new FormControl(this.rowData.end, [Validators.required, this.dateValidator])
+      end: new FormControl(this.rowData.end, [Validators.required, this.dateValidator]),
+      max_votes: new FormControl(this.rowData.max_votes, [Validators.required])
     });
     // get candidates for this row
     const candidatesObservable = this.rs.get('elections/election/' + this.rowData.id + '/candidate');
@@ -123,8 +121,14 @@ export class AdminElectionsRowComponent implements OnInit {
 
   openCandidatesModal() {
     const electionID = this.rowData.id;
-    const modalRef = this.modalService.open(AdminElectionsCandidateModalComponent);
+    const election_type = this.rowData.election_type;
+    const candidateData = this.candidates;
+    const positionData = this.positions;
+    const modalRef = this.modalService.open(AdminElectionsCandidateModalComponent, {size:'lg'});
     modalRef.componentInstance.electionID = electionID;
+    modalRef.componentInstance.election_type = election_type;
+    modalRef.componentInstance.candidates = candidateData;
+    modalRef.componentInstance.positions = positionData;
   }
 }
 
@@ -138,6 +142,7 @@ export class AdminElectionsRowComponent implements OnInit {
 export class AdminElectionsComponent implements OnInit {
 
   @Input() data: Election[];
+  @Input() positions: Position[];
 
   constructor(private rs: RequestService, private modalService: NgbModal) { }
 
@@ -148,9 +153,11 @@ export class AdminElectionsComponent implements OnInit {
     const newElection: Election = {
       id: '',
       election_type: '',
+      name: '',
+      max_votes: 1,
       start: '',
       end: '',
-      show_results: null,
+      show_results: null
     };
     this.data.push(newElection);
   }

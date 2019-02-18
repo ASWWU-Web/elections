@@ -12,9 +12,19 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 // shared-ng components
-import { AppComponent } from '../shared-ng/components/app/app.component';
-import { FooterComponent, NavBarComponent, MobileNavComponent, UserBubbleComponent} from '../shared-ng/components/components';
-import { RequestService } from '../shared-ng/services/services';
+import {
+  AppComponent
+} from '../shared-ng/components/app/app.component';
+import {
+  FooterComponent,
+  NavBarComponent,
+  MobileNavComponent,
+  UserBubbleComponent,
+  HeaderComponent
+} from '../shared-ng/components/components';
+import {
+  RequestService
+} from '../shared-ng/services/services';
 
 // project components
 import {
@@ -23,15 +33,17 @@ import {
   AdminComponent
 } from './routes/routes';
 import {
-  HeaderComponent,
   CountdownComponent,
-  AswwuElectionsComponent,
-  SenateElectionsComponent,
   AdminElectionsComponent,
   AdminElectionsCandidateModalComponent,
+  AdminCandidatesRowComponent,
   AdminElectionsRowComponent,
   AdminPositionsComponent,
-  AdminPositionsRowComponent
+  AdminPositionsRowComponent,
+  VoteFormComponent,
+  MultiPositionHandlerComponent,
+  DistrictSelectionComponent,
+  NavigatorComponent
 } from './shared/shared';
 
 
@@ -46,15 +58,17 @@ import {
     HeaderComponent,
     CountdownComponent,
     VoteComponent,
-    SenateElectionsComponent,
     AdminComponent,
     AdminElectionsComponent,
     AdminElectionsCandidateModalComponent,
+    AdminCandidatesRowComponent,
     AdminElectionsRowComponent,
     AdminPositionsComponent,
     AdminPositionsRowComponent,
-    AswwuElectionsComponent,
-    SenateElectionsComponent
+    VoteFormComponent,
+    MultiPositionHandlerComponent,
+    DistrictSelectionComponent,
+    NavigatorComponent
   ],
   imports: [
     NgbModule,
@@ -65,21 +79,6 @@ import {
     ReactiveFormsModule,
     NgbModule.forRoot(),
     AppRoutingModule,
-    RouterModule.forRoot([
-      {
-        'path': 'vote',
-        component: VoteComponent
-      },
-      {
-        'path': 'admin',
-        component: AdminComponent
-      },
-      {
-        'path': '',
-        component: HomeComponent
-      }
-    ])
-
   ],
   providers: [
     RequestService

@@ -1,10 +1,29 @@
-<div class="container-fluid">
-  <div class="container">
-    <div *ngIf="election_type == 'aswwu'">
-      <aswwu-elections></aswwu-elections>
+<div>
+  <header title="Elections"></header>
+  <div [ngSwitch]="switchState" class="container">
+    <!-- loading state -->
+    <div *ngSwitchDefault>
+      <h1>Loading...</h1>
     </div>
-    <div *ngIf="election_type == 'senate'">
-        <senate-elections></senate-elections>
+    <!-- start state -->
+    <div *ngSwitchCase="Switches.Start">
+      <h1>Welcome to the {{election.name}}!</h1>
+      <div [ngSwitch]="election.election_type">
+        <p *ngSwitchCase="'aswwu'">Press start to begin voting for next year's ASWWU representatives.</p>
+        <p *ngSwitchCase="'senate'">Press start to begin voting for your district's senators.</p>
+      </div>
+      <!-- <button (click)="pageTransition()" class="btn btn-primary">Start!</button> -->
+      <navigator [primaryName]="'Start'" (onButtonClick)="pageTransition($event)"></navigator>
+    </div>
+    <!-- district selection state -->
+    <district-selection *ngSwitchCase="Switches.District" [positions]="positions" (onDistrictSelect)="districtSelect($event)" (onComplete)="pageTransition($event)"></district-selection>
+    <!-- voting state -->
+    <multi-position-handler *ngSwitchCase="Switches.Vote" [positions]="visiblePositions" [election]="election" (onComplete)="pageTransition($event)"></multi-position-handler>
+    <!-- complete -->
+    <div *ngSwitchCase="Switches.Complete">
+      <h1>You have voted! 🤗</h1>
+      <p>Thank you for participating in democracy!</p>
+      <navigator [primaryName]="'Back to ASWWU'" [dangerName]="'Start Over'" [primaryEvent]="PageTransitions.ASWWU" (onButtonClick)="pageTransition($event)"></navigator>
     </div>
   </div>
 </div>
