@@ -188,10 +188,10 @@ export class VoteFormComponent implements OnInit {
       }, (err) => {
         // show user error text from the server
         console.log(err);
-        this.serverErrorText = 'Something went wrong, make sure all entered usernames are valid.'
+        this.serverErrorText = 'Something went wrong, make sure all entered usernames are valid.';
         this.pageTransition(PageTransitions.NextPage);
       }, () => {
-        // TODO (stephen)
+        this.pageTransition(PageTransitions.NextPage);
       }
     );
   }
