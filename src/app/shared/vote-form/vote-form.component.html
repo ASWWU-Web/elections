@@ -1,16 +1,18 @@
 <!-- https://alligator.io/angular/reactive-forms-formarray-dynamic-fields/ -->
 
 <div class="card">
+  <!-- header -->
   <div class="card-header">
-    <h4>{{ position.position }}</h4>
+    <h4>{{position.position}}</h4>
     <div [ngSwitch]="election.max_votes">
       <span *ngSwitchDefault>Select or write in up to {{election.max_votes}} candidates.</span>
       <span *ngSwitchCase="1">Select or write in up to {{election.max_votes}} candidate.</span>
     </div>
   </div>
-  <div class="card-body">
+  <div class="card-body py-0">
+    <!-- candidate selection -->
     <div class="row">
-      <div *ngFor="let candidate of candidates" class="col-6 col-md-4">
+      <div *ngFor="let candidate of candidates" class="col-lg-4 col-sm-6 col-12 mt-3">
         <div class="card"></div>
         <img class="card-img-top mx-auto d-block" src="{{candidate.photoUri || defaultPhoto}}">
         <div class="card-footer btn-group-toggle">
@@ -21,9 +23,10 @@
       </div>
     </div>
     <hr>
+    <!-- write in votes -->
     <form [formGroup]="formGroup">
       <div class="row">
-        <div formArrayName="writeInArray" *ngFor="let item of formGroup.get('writeInArray')['controls']; let i = index;" class="col-6 col-md-4">
+        <div formArrayName="writeInArray" *ngFor="let item of formGroup.get('writeInArray')['controls']; let i = index;" class="col-lg-4 col-sm-6 col-12 mb-3">
           <div [formGroupName]="i">
             <input formControlName="writeIn" placeholder="Item name" type="text" [ngbTypeahead]="search" editable class="form-control" placeholder="Candidate Username">
           </div>
@@ -32,6 +35,7 @@
     </form>
     <small class="text-danger">{{serverErrorText}}</small>
   </div>
+  <!-- footer -->
   <div class="card-footer">
     <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
       <navigator [primaryName]="'Vote!'" [dangerName]="'Start Over'" [primaryEvent]="null" (onButtonClick)="pageTransition($event)"></navigator>
