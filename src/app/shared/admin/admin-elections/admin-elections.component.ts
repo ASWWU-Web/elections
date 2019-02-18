@@ -69,8 +69,7 @@ export class AdminElectionsRowComponent implements OnInit {
         this.candidates = data.candidates;
       },
       (err) => {
-        // window.alert('Unable to get candidates\n' + err.error.status);
-        console.log('unable to get candidates');
+        window.alert('Unable to get candidates\n' + err.error.status);
       });
   }
 
@@ -131,7 +130,6 @@ export class AdminElectionsRowComponent implements OnInit {
     modalRef.componentInstance.positions = positionData;
   }
 }
-
 
 
 @Component({
