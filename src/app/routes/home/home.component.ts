@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 export class HomeComponent implements OnInit {
   status: string;
   admin: Boolean;
-  
+
   // User roles
   roles = [""];
   response = null;
@@ -30,7 +30,7 @@ export class HomeComponent implements OnInit {
       this.isLoggedIn = this.rs.isLoggedOn();
     });
     // setup election options on landing page
-    this.getCurrentElectionOptions(); 
+    this.getCurrentElectionOptions();
     // check if the user is an admin
     if (this.roles.indexOf('admin') > -1) {
       this.admin = true;
@@ -64,16 +64,6 @@ export class HomeComponent implements OnInit {
     }, (error)=> {
       this.status = "none";
     });
-  }
-
-  getElectionType(election_type) {
-    if (election_type=="aswwu") {
-      return "General Election";
-    } 
-
-    if (election_type=="senate") {
-      return "Senate Election";
-    }
   }
 
   getDateTime(datetime) {
