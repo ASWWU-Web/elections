@@ -87,7 +87,7 @@ export class VoteComponent implements OnInit {
     } else if (transition == PageTransitions.StartOver) {
       this.startOver();
     } else if (transition == PageTransitions.ASWWU) {
-      alert('direct to aswwu.com');
+      window.location.href = 'https://aswwu.com';
     }
   }
 
