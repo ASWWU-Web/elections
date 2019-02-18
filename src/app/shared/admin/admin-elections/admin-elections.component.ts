@@ -11,12 +11,14 @@ import { Observable } from 'rxjs/internal/Observable';
 import { AdminElectionsCandidateModalComponent } from '../admin';
 
 interface Election {
-  id: string;
-  election_type: string;
-  start: string;
-  end: string;
-  show_results: string;
-}
+  id: string,
+  election_type: string,
+  name: string,
+  max_votes: number,
+  start: string,
+  end: string,
+  show_results: string
+};
 
 
 interface Candidate {
@@ -54,9 +56,11 @@ export class AdminElectionsRowComponent implements OnInit {
     // this.newRowData = Object.assign({}, this.rowData);
     this.candidates = [];
     this.rowFormGroup = new FormGroup({
+      name: new FormControl(this.rowData.name, [Validators.required]),
       election_type: new FormControl(this.rowData.election_type, [Validators.required]),
       start: new FormControl(this.rowData.start, [Validators.required, this.dateValidator]),
-      end: new FormControl(this.rowData.end, [Validators.required, this.dateValidator])
+      end: new FormControl(this.rowData.end, [Validators.required, this.dateValidator]),
+      max_votes: new FormControl(this.rowData.max_votes, [Validators.required])
     });
     // get candidates for this row
     const candidatesObservable = this.rs.get('elections/election/' + this.rowData.id + '/candidate');
@@ -147,9 +151,11 @@ export class AdminElectionsComponent implements OnInit {
     const newElection: Election = {
       id: '',
       election_type: '',
+      name: '',
+      max_votes: 1,
       start: '',
       end: '',
-      show_results: null,
+      show_results: null
     };
     this.data.push(newElection);
   }

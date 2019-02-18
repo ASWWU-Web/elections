@@ -1,17 +1,27 @@
 .custom-day {
-    text-align: center;
-    padding: 0.185rem 0.25rem;
-    display: inline-block;
-    height: 2rem;
-    width: 2rem;
-  }
-  .custom-day.focused {
-    background-color: #e6e6e6;
-  }
-  .custom-day.range, .custom-day:hover {
-    background-color: rgb(2, 117, 216);
-    color: white;
-  }
-  .custom-day.faded {
-    background-color: rgba(2, 117, 216, 0.5);
-  }
+  text-align: center;
+  padding: 0.185rem 0.25rem;
+  display: inline-block;
+  height: 2rem;
+  width: 2rem;
+}
+.custom-day.focused {
+  background-color: #e6e6e6;
+}
+.custom-day.range, .custom-day:hover {
+  background-color: rgb(2, 117, 216);
+  color: white;
+}
+.custom-day.faded {
+  background-color: rgba(2, 117, 216, 0.5);
+}
+
+#ElectionMaxVotes {
+  max-width: 60px;
+}
+#ElectionName {
+  min-width: 200px;
+}
+#ElectionStart, #ElectionEnd {
+  min-width: 200px;
+}
