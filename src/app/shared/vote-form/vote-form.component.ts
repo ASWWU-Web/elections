@@ -117,7 +117,7 @@ export class VoteFormComponent implements OnInit {
     );
   }
 
-  fillWriteIn(candidateUsername) {
+  fillWriteIn(candidateUsername: string) {
     // fill first empty write in slot with `candidateUsername`
     for (let index = 0; index < this.formGroup['value'].writeInArray.length; index++) {
       let writeIn = this.formGroup['value'].writeInArray[index];
@@ -188,7 +188,8 @@ export class VoteFormComponent implements OnInit {
       }, (err) => {
         // show user error text from the server
         console.log(err);
-        this.serverErrorText = err.error.status;
+        this.serverErrorText = 'Something went wrong, make sure all entered usernames are valid.'
+        this.pageTransition(PageTransitions.NextPage);
       }, () => {
         // TODO (stephen)
       }
