@@ -184,7 +184,6 @@ export class VoteFormComponent implements OnInit {
     requestArrayObservable.subscribe(
       (data) => {
         this.serverErrorText = '';
-        this.pageTransition(PageTransitions.NextPage);
       }, (err) => {
         // show user error text from the server
         console.log(err);

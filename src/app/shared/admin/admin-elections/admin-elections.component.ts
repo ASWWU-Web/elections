@@ -1,12 +1,8 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { NgbModal, NgbModalOptions, ModalDismissReasons, NgbActiveModal, NgbDate, NgbCalendar, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnInit, Input } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RequestService } from 'src/shared-ng/services/services';
-import { NgbTimeStructAdapter } from '@ng-bootstrap/ng-bootstrap/timepicker/ngb-time-adapter';
-import { NgbTime } from '@ng-bootstrap/ng-bootstrap/timepicker/ngb-time';
-import { timestamp } from 'rxjs/operators';
-// import { FormGroup, FormControl } from '@angular/forms';
-import { FormsModule, ReactiveFormsModule, AbstractControl, ValidatorFn } from '@angular/forms';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { AbstractControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/internal/Observable';
 import { AdminElectionsCandidateModalComponent } from '../admin';
 
@@ -18,9 +14,7 @@ interface Election {
   start: string,
   end: string,
   show_results: string
-};
-
-
+}
 interface Candidate {
   id: string;
   election: string;
@@ -28,7 +22,6 @@ interface Candidate {
   username: string;
   display_name: string;
 }
-
 interface Position {
   id: string;
   position: string;
