@@ -37,7 +37,7 @@ export class VoteFormComponent implements OnInit {
   // completion emitter
   @Output() valueChange: EventEmitter<number> = new EventEmitter<number>();
 
-  candidates: {info: Candidate, photoUri: string}[];
+  candidates: {info: Candidate, photoUri: string}[] = [];
   existingVotes: Vote[];
   formGroup: FormGroup;
   defaultPhoto: string;
