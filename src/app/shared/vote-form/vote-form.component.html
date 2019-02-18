@@ -3,6 +3,10 @@
 <div class="card">
   <div class="card-header">
     <h4>{{ position.position }}</h4>
+    <div [ngSwitch]="election.max_votes">
+      <span *ngSwitchDefault>Select or write in up to {{election.max_votes}} candidates.</span>
+      <span *ngSwitchCase="1">Select or write in up to {{election.max_votes}} candidate.</span>
+    </div>
   </div>
   <div class="card-body">
     <div class="row">
