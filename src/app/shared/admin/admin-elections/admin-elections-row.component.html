@@ -1,7 +1,15 @@
+<!-- name -->
 <td>
-  {{rowData.id | slice:0:8 }}
+  <form [formGroup]="rowFormGroup">
+      <div class="form-group">
+        <div class="input-group">
+          <input id="ElectionName" class="form-control" placeholder="Election name" formControlName="name" [ngClass]="{'is-invalid': rowFormGroup.controls.name.invalid}">
+        </div>
+      </div>
+    </form>
 </td>
 
+<!-- election type -->
 <td>
   <form [formGroup]="rowFormGroup">
     <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" formControlName="election_type">
@@ -15,6 +23,7 @@
   </form>
 </td>
 
+<!-- start and end time -->
 <td>
   <form [formGroup]="rowFormGroup">
     <div class="form-group">
@@ -23,8 +32,6 @@
       </div>
     </div>
   </form>
-</td>
-<td>
   <form [formGroup]="rowFormGroup">
       <div class="form-group">
         <div class="input-group">
@@ -33,20 +40,22 @@
       </div>
   </form>
 </td>
+
+<!-- max votes -->
+<td>
+  <form [formGroup]="rowFormGroup">
+      <div class="form-group">
+        <div class="input-group">
+          <input id="ElectionMaxVotes" class="form-control" type="number" placeholder="Votes" formControlName="max_votes" [ngClass]="{'is-invalid': rowFormGroup.controls.max_votes.invalid}">
+        </div>
+      </div>
+    </form>
+  </td>
+
+<!-- save buttons -->
 <td>
   <form [formGroup]="rowFormGroup" (ngSubmit)="saveRow()">
       <button type="button" class="btn btn-primary" (click)="openCandidatesModal()">Candidates ({{candidates.length}})</button>
       <button type="submit" class="btn btn-success" [disabled]="rowFormGroup.invalid" [ngClass]="{'btn-danger': rowFormGroup.dirty}">Save</button>
   </form>
 </td>
-
-<!-- <div style="position: absolute; bottom:0px; left:0px; background-color: white; z-index: 1000;">
-  <pre>
-    rowData:        {{rowData | json}}
-    newRowData:     {{newRowData | json}}
-    electionSaved:  {{electionSaved | json}}
-    electionsEqual: {{electionsEqual | json}}
-    rowFormGroup:   {{rowFormGroup.value | json}}, {{rowFormGroup.invalid}}
-
-  </pre>
-</div> -->
