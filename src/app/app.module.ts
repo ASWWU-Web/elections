@@ -8,17 +8,43 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 // shared-ng components
-import { AppComponent } from '../shared-ng/components/app/app.component';
-import { FooterComponent, NavBarComponent, MobileNavComponent, UserBubbleComponent} from '../shared-ng/components/components';
-import { RequestService } from '../shared-ng/services/services';
+import {
+  AppComponent
+} from '../shared-ng/components/app/app.component';
+import {
+  FooterComponent,
+  NavBarComponent,
+  MobileNavComponent,
+  UserBubbleComponent,
+  HeaderComponent
+} from '../shared-ng/components/components';
+import {
+  RequestService
+} from '../shared-ng/services/services';
 
 // project components
-import { HomeComponent, VoteComponent } from './routes/routes';
-import { HeaderComponent, CountdownComponent, SenateElectionsComponent } from './shared/shared';
+import {
+  HomeComponent,
+  VoteComponent,
+  AdminComponent
+} from './routes/routes';
+import {
+  CountdownComponent,
+  AdminElectionsComponent,
+  AdminElectionsCandidateModalComponent,
+  AdminCandidatesRowComponent,
+  AdminElectionsRowComponent,
+  AdminPositionsComponent,
+  AdminPositionsRowComponent,
+  VoteFormComponent,
+  MultiPositionHandlerComponent,
+  DistrictSelectionComponent,
+  NavigatorComponent
+} from './shared/shared';
 
 
 @NgModule({
@@ -32,7 +58,17 @@ import { HeaderComponent, CountdownComponent, SenateElectionsComponent } from '.
     HeaderComponent,
     CountdownComponent,
     VoteComponent,
-    SenateElectionsComponent
+    AdminComponent,
+    AdminElectionsComponent,
+    AdminElectionsCandidateModalComponent,
+    AdminCandidatesRowComponent,
+    AdminElectionsRowComponent,
+    AdminPositionsComponent,
+    AdminPositionsRowComponent,
+    VoteFormComponent,
+    MultiPositionHandlerComponent,
+    DistrictSelectionComponent,
+    NavigatorComponent
   ],
   imports: [
     NgbModule,
@@ -40,23 +76,18 @@ import { HeaderComponent, CountdownComponent, SenateElectionsComponent } from '.
     HttpModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     NgbModule.forRoot(),
     AppRoutingModule,
-    RouterModule.forRoot([
-      {
-        'path': 'vote',
-        component: VoteComponent
-      },
-      {
-        'path': '',
-        component: HomeComponent
-      }
-    ])
-
   ],
   providers: [
     RequestService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [
+    AdminElectionsCandidateModalComponent,
+    AdminElectionsRowComponent,
+    AdminPositionsRowComponent,
+  ]
 })
 export class AppModule { }

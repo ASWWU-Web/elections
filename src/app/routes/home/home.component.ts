@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RequestService } from '../../../shared-ng/services/request.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -10,36 +11,52 @@ export class HomeComponent implements OnInit {
   status: string;
   admin: Boolean;
 
-  // response = {
-  //   "id": "e7c5c84f-0a58-4f3b-8490-14ee0737d96f",
-  //   "election_type": "senate",
-  //   "start": "2018-12-07 08:00:00.000000",
-  //   "end": "2018-12-07 20:00:00.000000"
-  // }
-
+  // User roles
   roles = [""];
   response = null;
+  isLoggedIn: boolean = false;
+  router: any;
+  now = Date.now();
+  dates = null;
+  startTime = null;
 
-  constructor(private rs: RequestService) { }
+  constructor(private rs: RequestService, private _router: Router) {
+    this.router = _router;
+  }
 
   ngOnInit() {
-    this.getResponse();
-
+    // verify the user is logged in
+    this.rs.verify((data) => {
+      this.isLoggedIn = this.rs.isLoggedOn();
+    });
+    // setup election options on landing page
+    this.getCurrentElectionOptions();
+    // check if the user is an admin
     if (this.roles.indexOf('admin') > -1) {
       this.admin = true;
     }
   }
 
   // Makes get request to elections/current to set up information for homepage
-  getResponse() {
+  getCurrentElectionOptions() {
     this.rs.get('elections/current').subscribe((data) => {
       this.response = data;
 
-      console.log(this.response);
+      // Converts date string into an array of numbers, as different browsers support different formats for dates
+      var arrStart = this.response['start'].split(/[- :]/).map(Number), arrEnd = this.response['end'].split(/[- :]/).map(Number);
 
-      let election_start = new Date(this.response['start']);
+      var dateStart = new Date(arrStart[0], arrStart[1]-1, arrStart[2], arrStart[3], arrStart[4], arrStart[5]);
+      var dateEnd = new Date(arrEnd[0], arrEnd[1]-1, arrEnd[2], arrEnd[3], arrEnd[4], arrEnd[5]);
 
-      if (election_start.getTime() >= Date.now()) {
+      this.dates = {};
+
+      this.dates["start"] = dateStart;
+      this.dates["end"] = dateEnd;
+
+      this.startTime = this.dates['start'].getTime();
+
+
+      if (this.startTime > Date.now()) {
         this.status = "upcoming";
       } else {
         this.status = "now";
@@ -47,16 +64,6 @@ export class HomeComponent implements OnInit {
     }, (error)=> {
       this.status = "none";
     });
-  }
-
-  getElectionType(election_type) {
-    if (election_type=="aswwu") {
-      return "ASWWU General Election";
-    } 
-
-    if (election_type=="senate") {
-      return "Senate Election";
-    }
   }
 
   getDateTime(datetime) {

@@ -6,14 +6,16 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./countdown.component.css']
 })
 export class CountdownComponent implements OnInit {
-  @Input() date: string;
+  @Input() date: Date;
   @Input() status: string;
 
   constructor() { }
 
   ngOnInit() {
-    var display = document.querySelector('#time'), date = new Date(this.date);
-    var difference = Math.abs((Date.now() - date.getTime())/1000);
+
+    var display = document.querySelector('#time');
+    var difference = Math.abs(Date.now() - this.date.getTime());
+
     this.startTimer(difference, display);
   }
 
@@ -23,12 +25,14 @@ export class CountdownComponent implements OnInit {
       return "opens";
     }
     if (this.status == "now") {
-      return "closes"
+      return "closes";
     }
   }
 
   // duration = time in seconds, display = id to display to 
+  // Source: https://stackoverflow.com/questions/20618355/the-simplest-possible-javascript-countdown-timer 
   startTimer(duration, display) {
+    duration = duration / 1000;
     var timer = duration, days, hours, minutes, seconds;
     setInterval(function () {
         days = Math.floor(timer / 86400);
@@ -44,7 +48,7 @@ export class CountdownComponent implements OnInit {
         display.textContent = days + "d " + hours + "h " + minutes + "m " + seconds + "s";
 
         if (--timer < 0) {
-            timer = duration;
+            window.location.reload(true);
         }
     }, 1000);
 }

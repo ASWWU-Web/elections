@@ -1,0 +1,19 @@
+<br />
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Type</th>
+      <th scope="col">Title</th>
+      <th scope="col">Active</th>
+      <th scope="col">Order</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody *ngIf="data">
+    <tr positions-row *ngFor="let row of data" [rowData]="row"></tr>
+  </tbody>
+</table>
+
+<button class="btn btn-primary" (click)="addPosition()">Add Position</button>
