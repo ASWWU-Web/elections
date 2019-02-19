@@ -32,7 +32,6 @@ export class DistrictSelectionComponent implements OnInit {
   districtSelect(district: number) {
     this.selectedDistrict = district;
     this.onDistrictSelect.emit(district);
-    console.log(district)
   }
 
   // function to transition to the next page
