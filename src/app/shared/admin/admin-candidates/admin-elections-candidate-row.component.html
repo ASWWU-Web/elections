@@ -1,42 +1,38 @@
+<!-- id -->
 <td>
-    {{rowData.id | slice:0:8 }}
-  </td>
-  <td>
-    <div ngbDropdown class="d-inline-block">
-      <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Position</button>
-      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-        <form [formGroup]="rowFormGroup">
-          <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" formControlName="position">
-            <label *ngFor="let position of positions" ngbButtonLabel class="btn-primary">
-              <input ngbButton class="dropdown-item" type="radio" value="{{position.id}}">{{position.position}}
-            </label>
-          </div>
-        </form>
+  {{rowData.id | slice:0:8 }}
+</td>
+<!-- position -->
+<td>
+  <form [formGroup]="rowFormGroup">
+    <select formControlName="position" class="custom-select">
+      <option *ngFor="let p of positions" [value]="p.id">{{p.position}}</option>
+    </select>
+  </form>
+</td>
+<!-- username -->
+<td>
+  <form [formGroup]="rowFormGroup">
+    <div class="form-group">
+      <div class="input-group">
+        <div class="col-md-12 p-1"><input type="text" class="form-control" [ngbTypeahead]="search" editable placeholder="Username" formControlName="username" /></div>
       </div>
     </div>
-  </td>
-  <td>
-    <form [formGroup]="rowFormGroup">
-      <div class="form-group">
-        <div class="input-group">
-          <div class="col-md-12 p-1"><input type="text" class="form-control" [ngbTypeahead]="search" editable placeholder="Username" formControlName="username" /></div>
-        </div>
+  </form>
+</td>
+<!-- display name -->
+<td>
+  <form [formGroup]="rowFormGroup">
+    <div class="form-group">
+      <div class="input-group">
+          <div class="col-md-12 p-1"><input type="text" class="form-control" editable placeholder="Display name" formControlName="display_name" /></div>
       </div>
-    </form>
-  </td>
-  <td>
-    <form [formGroup]="rowFormGroup">
-      <div class="form-group">
-        <div class="input-group">
-            <div class="col-md-12 p-1"><input type="text" class="form-control" editable placeholder="Display name" formControlName="display_name" /></div>
-        </div>
-      </div>
-    </form>
-  </td>
-  <td>
-    <form [formGroup]="rowFormGroup" (ngSubmit)="saveRow()">
-      <button type="submit" class="btn btn-success" [disabled]="rowFormGroup.invalid" [ngClass]="{'btn-danger': rowFormGroup.dirty}">Save</button>
-    </form>
-  </td>
-  
-  <!-- <pre>{{rowFormGroup.value | json}}</pre> -->
+    </div>
+  </form>
+</td>
+<!-- buttons -->
+<td>
+  <form [formGroup]="rowFormGroup" (ngSubmit)="saveRow()">
+    <button type="submit" class="btn btn-success" [disabled]="rowFormGroup.invalid" [ngClass]="{'btn-danger': rowFormGroup.dirty}">Save</button>
+  </form>
+</td>

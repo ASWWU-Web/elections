@@ -56,14 +56,16 @@ export class AdminElectionsRowComponent implements OnInit {
       max_votes: new FormControl(this.rowData.max_votes, [Validators.required])
     });
     // get candidates for this row
-    const candidatesObservable = this.rs.get('elections/election/' + this.rowData.id + '/candidate');
-    candidatesObservable.subscribe(
-      (data: {candidates: Candidate[]}) => {
-        this.candidates = data.candidates;
-      },
-      (err) => {
-        window.alert('Unable to get candidates\n' + err.error.status);
-      });
+    if (this.rowData.id !== '') {
+      const candidatesObservable = this.rs.get('elections/election/' + this.rowData.id + '/candidate');
+      candidatesObservable.subscribe(
+        (data: {candidates: Candidate[]}) => {
+          this.candidates = data.candidates;
+        },
+        (err) => {
+          window.alert('Unable to get candidates\n' + err.error.status);
+        });
+    }
   }
 
   dateValidator(control: AbstractControl): {[key: string]: any} | null {
@@ -95,7 +97,6 @@ export class AdminElectionsRowComponent implements OnInit {
 
     if (newElection) {
       formData['show_results'] = null;
-      console.log(formData);
       saveObservable = this.rs.post('elections/election', formData);
     } else {
       formData['id'] = this.rowData.id;
