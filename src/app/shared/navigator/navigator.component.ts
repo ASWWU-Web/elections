@@ -24,6 +24,7 @@ export class NavigatorComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    scrollTo(0,0);
   }
 
   primaryClick() {
