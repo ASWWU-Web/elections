@@ -26,21 +26,15 @@
     <hr *ngIf="candidates.length != 0" class="mb-0">
     <!-- write in votes -->
     <form [formGroup]="formGroup">
-      <div class="row">
-        <div formArrayName="writeInArray" *ngFor="let item of formGroup.get('writeInArray')['controls']; let i = index;" class="col-lg-4 col-sm-6 col-12 my-3">
+        <!-- <div formArrayName="writeInArray" *ngFor="let item of formGroup.get('writeInArray')['controls']; let i = index;" class="col-lg-4 col-sm-6 col-12 my-3">
           <div [formGroupName]="i">
             <input formControlName="writeIn" placeholder="Item name" type="search" [ngbTypeahead]="search" editable class="form-control" placeholder="Candidate Username">
           </div>
-        </div>
-      </div>
+        </div> -->
     </form>
     <div>
       <ul class="list-group">
-        <li class="list-group-item">Cras justo odio</li>
-        <li class="list-group-item">Dapibus ac facilisis in</li>
-        <li class="list-group-item">Morbi leo risus</li>
-        <li class="list-group-item">Porta ac consectetur ac</li>
-        <li class="list-group-item">Vestibulum at eros</li>
+        <li *ngFor="let vote of stagedVotes">{{vote}}</li>
       </ul>
     </div>
 
@@ -50,8 +44,8 @@
   </div>
   <!-- footer -->
   <div class="card-footer py-0">
-    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
-      <navigator [primaryName]="'Vote!'" [dangerName]="'Start Over'" [primaryEvent]="null" (onButtonClick)="pageTransition($event)"></navigator>
-    </form>
+    <!-- <form [formGroup]="formGroup" (ngSubmit)="onSubmit()"> -->
+      <navigator [primaryName]="'Vote!'" [dangerName]="'Start Over'" [primaryEvent]="callBackTest" (onButtonClick)="pageTransition($event)"></navigator>
+    <!-- </form> -->
   </div>
 </div>

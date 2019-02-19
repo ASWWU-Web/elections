@@ -1,7 +1,7 @@
 // https://alligator.io/angular/reactive-forms-formarray-dynamic-fields/
 
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
 import { RequestService } from 'src/shared-ng/services/services';
 import { CURRENT_YEAR, MEDIA_SM, DEFAULT_PHOTO } from 'src/shared-ng/config';
 import { Observable, of, forkJoin } from 'rxjs';
@@ -39,30 +39,20 @@ export class VoteFormComponent implements OnInit {
 
   candidates: {info: Candidate, photoUri: string}[] = [];
   existingVotes: Vote[];
+  stagedVotes: string[];
   formGroup: FormGroup;
   defaultPhoto: string;
   serverErrorText: string;
 
   constructor(private fb: FormBuilder, private rs: RequestService) {
     this.defaultPhoto = MEDIA_SM + '/' + DEFAULT_PHOTO;
+    this.formGroup = new FormGroup({writeIn: new FormControl('')});
   }
 
   ngOnInit() {
-    this.formGroup = this.formGroupFactory();
     this.setCandidates();
     this.setExistingVotes();
     this.serverErrorText = '';
-  }
-
-  formGroupFactory(): FormGroup {
-    function writeInArrayFactory(fb, numVotes) {
-      const writeInArray = Array.from({length: numVotes}, () => fb.group({writeIn: ''}));
-      return writeInArray;
-    }
-    const writeInsFormGroup = this.fb.group({
-      writeInArray: this.fb.array( writeInArrayFactory(this.fb, this.election.max_votes) )
-    });
-    return writeInsFormGroup;
   }
 
   setCandidates() {
@@ -101,32 +91,26 @@ export class VoteFormComponent implements OnInit {
   }
 
   setExistingVotes() {
+    function stageExistingVotes(existingVotes: Vote[]) {
+      for (const vote of existingVotes) {
+        this.stageVote(vote.vote);
+      }
+    }
+
     const votesObservable = this.rs.get('elections/vote', { position: this.position.id });
     votesObservable.subscribe(
       (data: {votes: Vote[]}) => {
         this.existingVotes = data.votes;
-        if (this.existingVotes.length > this.election.max_votes) { console.error('There are too many votes in the database for this election!'); }
-        this.existingVotes.forEach((existingVote, index) => {
-          this.formGroup['controls'].writeInArray['controls'][index].controls.writeIn.setValue(existingVote.vote);
-        });
+        stageExistingVotes(this.existingVotes);
       }, (err) => {
-        // TODO (stephen)
       }, () => {
-        // TODO (stephen)
       }
     );
   }
 
-  fillWriteIn(candidateUsername: string) {
-    // fill first empty write in slot with `candidateUsername`
-    for (let index = 0; index < this.formGroup['value'].writeInArray.length; index++) {
-      let writeIn = this.formGroup['value'].writeInArray[index];
-      if (writeIn.writeIn === '' || !writeIn.writeIn) {
-        this.formGroup['controls'].writeInArray['controls'][index].controls.writeIn.setValue(candidateUsername);
-        return;
-      } else if (writeIn.writeIn == candidateUsername) {
-        return;
-      }
+  stageVote(candidateUsername) {
+    if (!this.stagedVotes.includes(candidateUsername)) {
+      this.stagedVotes.push(candidateUsername);
     }
   }
 
@@ -146,6 +130,13 @@ export class VoteFormComponent implements OnInit {
         return data.results.map((item) => item.username);
       })
     );
+  }
+
+  stageWriteIn() {
+    let writeIn = null; // get this from the formgroup
+    if (writeIn) {
+      this.stageVote(writeIn);
+    }
   }
 
   pageTransition(transition: number) {
@@ -193,5 +184,9 @@ export class VoteFormComponent implements OnInit {
         this.pageTransition(PageTransitions.NextPage);
       }
     );
+  }
+
+  callBackTest() {
+    console.log(this.election.id);
   }
 }
