@@ -39,19 +39,17 @@ export class VoteFormComponent implements OnInit {
   @Output() valueChange: EventEmitter<number> = new EventEmitter<number>();
 
   candidates: {info: Candidate, photoUri: string}[] = [];
-  // list of votes includes information for which ones to delete from the server, if the vote exists in the staged votes
-  // it should be indicated to the user that the vote will be deleted when they click submit.
-  // if the vote does not exist in existing votes it might be a good idea to just remove it
-  // from the staged votes list and not indicate that it will be removed.
   stagedVotes: {vote: Vote, toDelete: boolean}[]; // only ever set toDelete to true if it also exists on the server (vote.id != null)
   formGroup: FormGroup;
   defaultPhoto: string;
+  numVotesToKeep: number;
   serverErrorText: string;
 
   constructor(private fb: FormBuilder, private rs: RequestService) {
     this.defaultPhoto = MEDIA_SM + '/' + DEFAULT_PHOTO;
     this.formGroup = new FormGroup({writeIn: new FormControl('')});
     this.stagedVotes = [];
+    this.numVotesToKeep = 0;
   }
 
   ngOnInit() {
@@ -133,7 +131,21 @@ export class VoteFormComponent implements OnInit {
     return index;
   }
 
+  updateNumVotesToKeep() {
+    let newNumVotesToKeep = 0;
+    for (let vote of this.stagedVotes) {
+      if (!vote.toDelete) {
+        newNumVotesToKeep += 1;
+      }
+    }
+    this.numVotesToKeep = newNumVotesToKeep;
+  }
+
   stageVote(vote: Vote) {
+    // early exit, cancel if staging the vote would exceed max_votes
+    if (this.numVotesToKeep + 1 > this.election.max_votes) {
+      return;
+    }
     // look for a vote in staged votes with the same username as the passed in vote
     // if no vote is staged by that name, stage the vote, otherwise,
     // just make sure the vote isn't set to be deleted.
@@ -145,23 +157,33 @@ export class VoteFormComponent implements OnInit {
         toDelete: false
       };
       this.stagedVotes.push(voteToStage);
+      // this.numVotesToKeep = this.numVotesToKeep + 1;
     } else {
       this.stagedVotes[stagedVoteIndex].toDelete = false;
     }
+    this.updateNumVotesToKeep();
+  }
+
+  stageVoteRemoval(stagedVoteIndex) {
+    // stages a vote removal or removes a vote from stagedVotes if it doesn't exist on the server
+    const index = stagedVoteIndex;
+    if (stagedVoteIndex < this.stagedVotes.length && stagedVoteIndex >= 0) {
+      if (this.stagedVotes[index].vote.id) {
+        this.stagedVotes[index].toDelete = true;
+      } else {
+        this.stagedVotes.splice(index, 1);
+      }
+    }
+    this.updateNumVotesToKeep();
   }
 
   onDeleteVoteButton(stagedVoteIndex) {
-    // if the vote at the index is saved on the server then toggle the toDelete flag
-    // otherwise just remove it from the staging area immediately.
     const index = stagedVoteIndex;
     if (index < this.stagedVotes.length && index >= 0) {
-      if (this.stagedVotes[index].vote.id) {
-        // if the id is defined then this vote exists on the server,
-        // so we only toggle the deletion flag
-        this.stagedVotes[index].toDelete = !this.stagedVotes[index].toDelete;
+      if (this.stagedVotes[index].toDelete) {
+        this.stageVote(this.stagedVotes[index].vote);
       } else {
-        // otherwise, just unstage it
-        this.stagedVotes.splice(index, 1);
+        this.stageVoteRemoval(index);
       }
     }
   }
@@ -198,7 +220,7 @@ export class VoteFormComponent implements OnInit {
     }
   }
 
-  stageCandidate(candidateUsername) {
+  stageUsername(candidateUsername) {
     const voteToStage: Vote = {
       id: null,
       election: this.election.id,

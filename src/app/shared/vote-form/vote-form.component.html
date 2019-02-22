@@ -17,7 +17,7 @@
         <div class="card"></div>
         <img class="card-img-top mx-auto d-block" src="{{candidate.photoUri || defaultPhoto}}">
         <div class="card-footer btn-group-toggle">
-          <button class="btn btn-outline-primary btn-nowrap mx-auto w-100 d-block" (click)="stageCandidate(candidate.info.username)">
+          <button class="btn btn-outline-primary btn-nowrap mx-auto w-100 d-block" (click)="stageUsername(candidate.info.username)">
             {{candidate.info.display_name}}
           </button>
         </div>
