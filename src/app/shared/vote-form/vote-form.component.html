@@ -17,7 +17,7 @@
         <div class="card"></div>
         <img class="card-img-top mx-auto d-block" src="{{candidate.photoUri || defaultPhoto}}">
         <div class="card-footer btn-group-toggle">
-          <button class="btn btn-outline-primary btn-nowrap mx-auto w-100 d-block" (click)="stageUsername(candidate.info.username)">
+          <button class="btn btn-outline-primary btn-nowrap mx-auto w-100 d-block" (click)="stageUsername(candidate.info.username)" [disabled]="disableVoteStaging">
             {{candidate.info.display_name}}
           </button>
         </div>
@@ -26,14 +26,14 @@
     <hr *ngIf="candidates.length != 0">
     <form [formGroup]="formGroup" (ngSubmit)="stageWriteIn()">
       <input formControlName="writeIn" placeholder="Candidate Username" type="search" [ngbTypeahead]="search" editable class="form-control">
-      <button type="submit">Stage Vote</button>
+      <button type="submit" class="btn-primary" [disabled]="disableVoteStaging">Stage Vote</button>
     </form>
     <hr>
     <div>
       <ul class="list-group">
         <li *ngFor="let vote of stagedVotes; let i = index" class="list-group-item list" [ngClass]="{'list-group-item-danger': vote.toDelete}">
           {{vote.vote.vote}}
-          <button (click)="onDeleteVoteButton(i)" class="btn-danger float-right">{{vote.toDelete ? 'Undo Deletion' : 'Delete'}}</button>
+          <button (click)="onDeleteVoteButton(i)" class="btn-danger float-right" [disabled]="disableVoteStaging && stagedVotes[i].toDelete">{{vote.toDelete ? 'Undo Deletion' : 'Delete'}}</button>
         </li>
       </ul>
     </div>

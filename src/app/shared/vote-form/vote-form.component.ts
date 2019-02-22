@@ -8,7 +8,6 @@ import { Observable, of, forkJoin } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, map } from 'rxjs/operators';
 
 import { Election, Position, PageTransitions } from 'src/app/routes/vote/vote.component';
-import { updateBinding } from '@angular/core/src/render3/instructions';
 
 interface Candidate {
   id: string;
@@ -43,6 +42,7 @@ export class VoteFormComponent implements OnInit {
   formGroup: FormGroup;
   defaultPhoto: string;
   numVotesToKeep: number;
+  disableVoteStaging: boolean;
   serverErrorText: string;
 
   constructor(private fb: FormBuilder, private rs: RequestService) {
@@ -50,6 +50,7 @@ export class VoteFormComponent implements OnInit {
     this.formGroup = new FormGroup({writeIn: new FormControl('')});
     this.stagedVotes = [];
     this.numVotesToKeep = 0;
+    this.disableVoteStaging = false;
   }
 
   ngOnInit() {
@@ -139,6 +140,11 @@ export class VoteFormComponent implements OnInit {
       }
     }
     this.numVotesToKeep = newNumVotesToKeep;
+    if (this.numVotesToKeep + 1 > this.election.max_votes) {
+      this.disableVoteStaging = true;
+    } else {
+      this.disableVoteStaging = false;
+    }
   }
 
   stageVote(vote: Vote) {
