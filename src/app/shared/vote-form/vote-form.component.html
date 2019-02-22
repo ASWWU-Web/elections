@@ -25,7 +25,7 @@
     </div>
     <hr *ngIf="candidates.length != 0">
     <form [formGroup]="formGroup" (ngSubmit)="stageWriteIn()">
-      <input formControlName="writeIn" placeholder="Candidate Username" type="search" [ngbTypeahead]="search" editable class="form-control">
+      <input formControlName="writeIn" placeholder="Candidate Name or username" type="search" [ngbTypeahead]="search" editable class="form-control">
       <button type="submit" class="btn-primary" [disabled]="disableVoteStaging">Stage Vote</button>
     </form>
     <hr>
