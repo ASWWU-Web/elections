@@ -218,42 +218,39 @@ export class VoteFormComponent implements OnInit {
     let newVotes: Vote[] = [];
 
     // sort votes into new votes and votes that can be updated or deleted
-    // since toDelete should never be true if a vote is not on the server we could
-    // only sort by toDelete, we sort with existance of ID just to be sure that the vote
-    // exists on the server
     for (let vote of this.stagedVotes) {
-      if (vote.toDelete && vote.vote.id) {
+      if (vote.vote.id && vote.toDelete) {
         updatableVotes.push(vote);
-      } else {
+      } else if ( !vote.vote.id ) {
         newVotes.push(vote.vote);
+      } else {
+        // do nothing, this means the current vote exists on the server, but will not be deleted or overwritten
       }
     }
 
     let requestArray = [];
-
-    // for each vote to be updated we pop one vote off of the newVotes array, and update (put) the
-    // updatableVote with the new vote candidate username
-    for (const vote of updatableVotes) {
-      let updatableVote = vote.vote;
-      updatableVote.vote = newVotes.shift().vote;
-      requestArray.push(this.rs.put('elections/vote/' + updatableVote.id, updatableVote));
+    for (let i = 0; i < updatableVotes.length || i < newVotes.length; i++) {
+      if (i < updatableVotes.length && i < newVotes.length) {
+        const updatableVote: Vote = updatableVotes[i].vote;
+        updatableVote.vote = newVotes[i].vote;
+        requestArray.push(this.rs.put('elections/vote/' + updatableVote.id, updatableVote));
+      } else {
+        if (i < updatableVotes.length) {
+          // toDelete.push(updatableVotes[i].vote);
+          requestArray.push(this.rs.delete('elections/vote/' + updatableVotes[i].vote.id));
+        } else if (i < newVotes.length) {
+          // toPost.push(newVotes[i]);
+          const voteToPost = {
+            election: this.election.id,
+            position: this.position.id,
+            vote: newVotes[i].vote
+          };
+          requestArray.push(this.rs.post('elections/vote', voteToPost));
+        } else {
+          console.error('buildRequestArrayObservable second sort, this error should never happen.');
+        }
+      }
     }
-
-    // now post the remaining newVotes
-    for (const vote of newVotes) {
-      const newVote = {
-        election: this.election.id,
-        position: this.position.id,
-        vote: vote.vote
-      };
-      requestArray.push(this.rs.post('elections/vote', newVote));
-    }
-
-    // and finally delete any remaining updatable votes still on the server
-    for (const vote of updatableVotes) {
-      requestArray.push(this.rs.delete('elections/vote/' + vote.vote.id));
-    }
-
     return forkJoin(requestArray);
   }
 
