@@ -31,7 +31,10 @@
     <hr>
     <div>
       <ul class="list-group">
-        <li *ngFor="let vote of stagedVotes; let i = index" class="list-group-item list" [ngClass]="{'list-group-item-danger': vote.toDelete}">{{vote.vote.vote}} <button (click)="onDeleteVoteButton(i)" class="btn-danger">{{vote.toDelete ? 'Undo Deletion' : 'Delete'}}</button></li>
+        <li *ngFor="let vote of stagedVotes; let i = index" class="list-group-item list" [ngClass]="{'list-group-item-danger': vote.toDelete}">
+          {{vote.vote.vote}}
+          <button (click)="onDeleteVoteButton(i)" class="btn-danger float-right">{{vote.toDelete ? 'Undo Deletion' : 'Delete'}}</button>
+        </li>
       </ul>
     </div>
 
