@@ -47,6 +47,7 @@ export class VoteFormComponent implements OnInit {
   constructor(private fb: FormBuilder, private rs: RequestService) {
     this.defaultPhoto = MEDIA_SM + '/' + DEFAULT_PHOTO;
     this.formGroup = new FormGroup({writeIn: new FormControl('')});
+    this.stagedVotes = [];
   }
 
   ngOnInit() {
@@ -91,9 +92,9 @@ export class VoteFormComponent implements OnInit {
   }
 
   setExistingVotes() {
-    function stageExistingVotes(existingVotes: Vote[]) {
+    function stageExistingVotes(existingVotes: Vote[], This) {
       for (const vote of existingVotes) {
-        this.stageVote(vote.vote);
+        This.stageVote(vote.vote);
       }
     }
 
@@ -101,7 +102,7 @@ export class VoteFormComponent implements OnInit {
     votesObservable.subscribe(
       (data: {votes: Vote[]}) => {
         this.existingVotes = data.votes;
-        stageExistingVotes(this.existingVotes);
+        stageExistingVotes(this.existingVotes, this);
       }, (err) => {
       }, () => {
       }
@@ -133,7 +134,7 @@ export class VoteFormComponent implements OnInit {
   }
 
   stageWriteIn() {
-    let writeIn = null; // get this from the formgroup
+    const writeIn = this.formGroup.value.writeIn;
     if (writeIn) {
       this.stageVote(writeIn);
     }
@@ -184,9 +185,5 @@ export class VoteFormComponent implements OnInit {
         this.pageTransition(PageTransitions.NextPage);
       }
     );
-  }
-
-  callBackTest() {
-    console.log(this.election.id);
   }
 }
