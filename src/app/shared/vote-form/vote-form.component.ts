@@ -114,8 +114,8 @@ export class VoteFormComponent implements OnInit {
       // access a property deep in an object
       let propertyValue = object;
       for (const property of localPropertyPath) {
-        if (value[property]) {
-          propertyValue = value[property];
+        if (propertyValue[property]) {
+          propertyValue = propertyValue[property];
         } else {
           return;
         }
@@ -198,6 +198,17 @@ export class VoteFormComponent implements OnInit {
     }
   }
 
+  stageCandidate(candidateUsername) {
+    const voteToStage: Vote = {
+      id: null,
+      election: this.election.id,
+      position: this.position.id,
+      username: null,
+      vote: candidateUsername
+    }
+    this.stageVote(voteToStage);
+  }
+
   pageTransition(transition: number) {
     this.valueChange.emit(transition);
   }
@@ -233,7 +244,7 @@ export class VoteFormComponent implements OnInit {
       const newVote = {
         election: this.election.id,
         position: this.position.id,
-        vote: vote.id
+        vote: vote.vote
       };
       requestArray.push(this.rs.post('elections/vote', newVote));
     }

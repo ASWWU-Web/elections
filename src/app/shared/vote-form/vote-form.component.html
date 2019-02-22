@@ -17,7 +17,7 @@
         <div class="card"></div>
         <img class="card-img-top mx-auto d-block" src="{{candidate.photoUri || defaultPhoto}}">
         <div class="card-footer btn-group-toggle">
-          <button class="btn btn-outline-primary btn-nowrap mx-auto w-100 d-block" (click)="fillWriteIn(candidate.info.username)">
+          <button class="btn btn-outline-primary btn-nowrap mx-auto w-100 d-block" (click)="stageCandidate(candidate.info.username)">
             {{candidate.info.display_name}}
           </button>
         </div>
@@ -31,7 +31,7 @@
     <hr>
     <div>
       <ul class="list-group">
-        <li *ngFor="let vote of stagedVotes; let i = index" class="list-group-item list" [ngClass]="{'list-group-item-danger': vote.toDelete}">{{vote.vote}} <button (click)="onDeleteVote(i)" class="btn-danger">{{vote.toDelete ? 'Undo Deletion' : 'Delete'}}</button></li>
+        <li *ngFor="let vote of stagedVotes; let i = index" class="list-group-item list" [ngClass]="{'list-group-item-danger': vote.toDelete}">{{vote.vote.vote}} <button (click)="onDeleteVoteButton(i)" class="btn-danger">{{vote.toDelete ? 'Undo Deletion' : 'Delete'}}</button></li>
       </ul>
     </div>
 
