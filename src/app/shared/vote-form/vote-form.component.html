@@ -25,15 +25,18 @@
     </div>
     <hr *ngIf="candidates.length != 0">
     <form [formGroup]="formGroup" (ngSubmit)="stageWriteIn()">
-      <input formControlName="writeIn" placeholder="Candidate Name or username" type="search" [ngbTypeahead]="search" editable class="form-control">
-      <button type="submit" class="btn-primary" [disabled]="disableVoteStaging">Stage Vote</button>
+      <input formControlName="writeIn" placeholder="Write-in name or username" type="search" [ngbTypeahead]="search" editable class="form-control">
+      <button type="submit" class="btn-primary" [disabled]="disableVoteStaging">Add Vote</button>
     </form>
     <hr>
-    <div>
+    <div class="mb-3">
       <ul class="list-group">
         <li *ngFor="let vote of stagedVotes; let i = index" class="list-group-item list" [ngClass]="{'list-group-item-danger': vote.toDelete}">
           {{vote.vote.vote}}
-          <button (click)="onDeleteVoteButton(i)" class="btn-danger float-right" [disabled]="disableVoteStaging && stagedVotes[i].toDelete">{{vote.toDelete ? 'Undo Deletion' : 'Delete'}}</button>
+          <button (click)="onDeleteVoteButton(i)" class="btn float-right p-0" [disabled]="disableVoteStaging && stagedVotes[i].toDelete">
+            <i *ngIf="vote.toDelete" class="fa fa-undo-alt"></i>
+            <i *ngIf="!vote.toDelete" class="fa fa-trash-alt"></i>
+          </button>
         </li>
       </ul>
     </div>
