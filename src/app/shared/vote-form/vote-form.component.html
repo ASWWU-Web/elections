@@ -27,7 +27,7 @@
     <br>
     <!-- write-ins -->
     <form [formGroup]="formGroup" (ngSubmit)="stageWriteIn()" class="input-group">
-      <input formControlName="writeIn" placeholder="Write-in name or username" type="search" [ngbTypeahead]="search" editable id="write-in" class="form-control py-3">
+      <input formControlName="writeIn" placeholder="Write-in name or username" type="search" [ngbTypeahead]="search" editable id="write-in" class="form-control">
       <div class="input-group-append">
         <button type="submit" class="btn btn-primary" [disabled]="disableVoteStaging"><i class="fa fa-plus"></i></button>
       </div>
