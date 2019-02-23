@@ -1,45 +1,60 @@
 <!-- https://alligator.io/angular/reactive-forms-formarray-dynamic-fields/ -->
 
-<div class="card">
+<div class="">
   <!-- header -->
-  <div class="card-header">
-    <h4>{{position.position}}</h4>
+  <div class="">
+    <h1>{{position.position}}</h1>
     <div [ngSwitch]="election.max_votes">
       <span *ngSwitchDefault>Select or write-in up to {{election.max_votes}} candidates.</span>
       <span *ngSwitchCase="1">Select or write-in up to {{election.max_votes}} candidate.</span>
     </div>
   </div>
   <!-- card body -->
-  <div class="card-body py-0">
+  <div class="py-0">
     <!-- candidate selection -->
     <div class="row">
       <div *ngFor="let candidate of candidates" class="col-lg-4 col-sm-6 col-12 mt-3">
-        <div class="card"></div>
-        <img class="card-img-top mx-auto d-block" src="{{candidate.photoUri || defaultPhoto}}">
-        <div class="card-footer btn-group-toggle">
-          <button class="btn btn-outline-primary btn-nowrap mx-auto w-100 d-block" (click)="fillWriteIn(candidate.info.username)">
-            {{candidate.info.display_name}}
-          </button>
-        </div>
-      </div>
-    </div>
-    <hr *ngIf="candidates.length != 0" class="mb-0">
-    <!-- write in votes -->
-    <form [formGroup]="formGroup">
-      <div class="row">
-        <div formArrayName="writeInArray" *ngFor="let item of formGroup.get('writeInArray')['controls']; let i = index;" class="col-lg-4 col-sm-6 col-12 my-3">
-          <div [formGroupName]="i">
-            <input formControlName="writeIn" placeholder="Item name" type="search" [ngbTypeahead]="search" editable class="form-control" placeholder="Candidate Username">
+        <img class="card-img-top" src="{{candidate.photoUri || defaultPhoto}}">
+        <div class="card-footer">
+          <div class="btn-group-toggle">
+            <button class="btn btn-outline-primary btn-nowrap mx-auto w-100 d-block" (click)="stageUsername(candidate.info.username)" [disabled]="disableVoteStaging">
+              {{candidate.info.display_name}}
+            </button>
           </div>
         </div>
       </div>
+    </div>
+    <br>
+    <!-- write-ins -->
+    <form [formGroup]="formGroup" (ngSubmit)="stageWriteIn()" class="input-group">
+      <input formControlName="writeIn" placeholder="Write-in name or username" type="search" [ngbTypeahead]="search" editable id="write-in" class="form-control">
+      <div class="input-group-append">
+        <button type="submit" class="btn btn-primary" [disabled]="disableVoteStaging"><i class="fa fa-plus"></i></button>
+      </div>
     </form>
+    <hr class="mb-3 mt-4">
+    <!-- vote list -->
+    <h3>Votes</h3>
+    <div class="mb-3">
+      <ul class="list-group">
+        <li *ngIf="stagedVotes.length == 0" class="list-group-item list py-2 px-3">None</li>
+        <li *ngFor="let vote of stagedVotes; let i = index" class="list-group-item list py-2 px-3" [ngClass]="{'list-group-item-danger': vote.toDelete}">
+          <div class="row">
+            <p class="col mb-0">{{vote.vote.vote}}</p>
+            <button (click)="onDeleteVoteButton(i)" class="btn py-0 pl-0 col-1" [disabled]="disableVoteStaging && stagedVotes[i].toDelete">
+              <i *ngIf="vote.toDelete" class="fa fa-undo-alt float-right"></i>
+              <i *ngIf="!vote.toDelete" class="fa fa-trash-alt float-right"></i>
+            </button>
+          </div>
+        </li>
+      </ul>
+    </div>
     <small class="text-danger">{{serverErrorText}}</small>
   </div>
   <!-- footer -->
-  <div class="card-footer py-0">
-    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
-      <navigator [primaryName]="'Vote!'" [dangerName]="'Start Over'" [primaryEvent]="null" (onButtonClick)="pageTransition($event)"></navigator>
+  <div class="py-0">
+    <form (ngSubmit)="onSubmit()">
+      <navigator [primaryName]="'Cast Votes!'" [dangerName]="'Start Over'" [primaryEvent]="null" (onButtonClick)="pageTransition($event)"></navigator>
     </form>
   </div>
 </div>
