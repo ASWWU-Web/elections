@@ -14,12 +14,13 @@
     <!-- candidate selection -->
     <div class="row">
       <div *ngFor="let candidate of candidates" class="col-lg-4 col-sm-6 col-12 mt-3">
-        <div class="card"></div>
-        <img class="card-img-top mx-auto d-block" src="{{candidate.photoUri || defaultPhoto}}">
-        <div class="card-footer btn-group-toggle">
-          <button class="btn btn-outline-primary btn-nowrap mx-auto w-100 d-block" (click)="stageUsername(candidate.info.username)" [disabled]="disableVoteStaging">
-            {{candidate.info.display_name}}
-          </button>
+        <img class="card-img-top" src="{{candidate.photoUri || defaultPhoto}}">
+        <div class="card-footer">
+          <div class="btn-group-toggle">
+            <button class="btn btn-outline-primary btn-nowrap mx-auto w-100 d-block" (click)="stageUsername(candidate.info.username)" [disabled]="disableVoteStaging">
+              {{candidate.info.display_name}}
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -31,7 +32,8 @@
         <button type="submit" class="btn btn-primary" [disabled]="disableVoteStaging"><i class="fa fa-plus"></i></button>
       </div>
     </form>
-    <hr>
+    <hr class="mb-3 mt-4">
+    <!-- vote list -->
     <h3>Votes</h3>
     <div class="mb-3">
       <ul class="list-group">
