@@ -24,6 +24,8 @@ export class NavigatorComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    // scroll to the top of the window after page transition
+    scrollTo(0,0);
   }
 
   primaryClick() {
