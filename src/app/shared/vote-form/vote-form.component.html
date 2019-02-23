@@ -24,19 +24,23 @@
       </div>
     </div>
     <hr *ngIf="candidates.length != 0">
-    <form [formGroup]="formGroup" (ngSubmit)="stageWriteIn()">
-      <input formControlName="writeIn" placeholder="Write-in name or username" type="search" [ngbTypeahead]="search" editable class="form-control">
-      <button type="submit" class="btn-primary" [disabled]="disableVoteStaging">Add Vote</button>
+    <form [formGroup]="formGroup" (ngSubmit)="stageWriteIn()" class="input-group">
+      <input formControlName="writeIn" placeholder="Write-in name or username" type="search" [ngbTypeahead]="search" editable class="form-control py-3">
+      <div class="input-group-append">
+        <button type="submit" class="btn btn-primary" [disabled]="disableVoteStaging"><i class="fa fa-plus"></i></button>
+      </div>
     </form>
     <hr>
     <div class="mb-3">
       <ul class="list-group">
-        <li *ngFor="let vote of stagedVotes; let i = index" class="list-group-item list" [ngClass]="{'list-group-item-danger': vote.toDelete}">
-          {{vote.vote.vote}}
-          <button (click)="onDeleteVoteButton(i)" class="btn float-right p-0" [disabled]="disableVoteStaging && stagedVotes[i].toDelete">
-            <i *ngIf="vote.toDelete" class="fa fa-undo-alt"></i>
-            <i *ngIf="!vote.toDelete" class="fa fa-trash-alt"></i>
-          </button>
+        <li *ngFor="let vote of stagedVotes; let i = index" class="list-group-item list py-2 px-3" [ngClass]="{'list-group-item-danger': vote.toDelete}">
+          <div class="row">
+            <p class="col mb-0">{{vote.vote.vote}}</p>
+            <button (click)="onDeleteVoteButton(i)" class="btn py-0 pl-0 col-1" [disabled]="disableVoteStaging && stagedVotes[i].toDelete">
+              <i *ngIf="vote.toDelete" class="fa fa-undo-alt float-right"></i>
+              <i *ngIf="!vote.toDelete" class="fa fa-trash-alt float-right"></i>
+            </button>
+          </div>
         </li>
       </ul>
     </div>
@@ -48,7 +52,7 @@
   <!-- footer -->
   <div class="card-footer py-0">
     <form (ngSubmit)="onSubmit()">
-      <navigator [primaryName]="'Vote!'" [dangerName]="'Start Over'" [primaryEvent]="null" (onButtonClick)="pageTransition($event)"></navigator>
+      <navigator [primaryName]="'Cast Votes!'" [dangerName]="'Start Over'" [primaryEvent]="null" (onButtonClick)="pageTransition($event)"></navigator>
     </form>
   </div>
 </div>
