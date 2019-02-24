@@ -60,6 +60,10 @@ export class AdminBallotsComponent implements OnInit {
   }
 
   onSaveBallot(ballot: BallotPOST) {
-    console.log(ballot);
+    this.rs.post('elections/election/' + ballot.election + '/ballot', ballot).subscribe((data) => {
+      console.log('success');
+    }, (error) => {
+      console.error(error);
+    });
   }
 }
