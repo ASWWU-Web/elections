@@ -41,6 +41,7 @@ export class AdminBallotModalContentComponent implements OnInit {
   @Output() saveBallot: EventEmitter<BallotPOST> = new EventEmitter();
   @Output() closeModal: EventEmitter<null> = new EventEmitter();
   ballotForm: FormGroup;
+  clostFormFlag = false;
 
   constructor(public activeModal: NgbActiveModal, private fb: FormBuilder) { }
 
@@ -119,11 +120,16 @@ export class AdminBallotModalContentComponent implements OnInit {
     });
     // clear the form data
     this.ballotForm.reset();
+    // check if the modal should be closed
+    if (this.clostFormFlag) {
+      this.closeModal.emit();
+      this.clostFormFlag = false;
+    }
   }
 
   onCloseModal(): void {
-    // emit a close signal for the modal
-    this.closeModal.emit();
+    // set the close form flag for when the votes have been submitted
+    this.clostFormFlag = true;
   }
 }
 
