@@ -5,4 +5,4 @@
   <button [disabled]="selectedElection === null" (click)="ballotModal.open()" class="btn btn-primary">Add ballot</button>
 </div>
 
-<app-admin-ballot-modal #ballotModal [selectedElection]="selectedElection" [positionsData]="positionsData" [candidateData]="candidatesData"></app-admin-ballot-modal>
+<app-admin-ballot-modal #ballotModal [selectedElection]="selectedElection" [positionsData]="availablePositions" [candidateData]="candidatesData"></app-admin-ballot-modal>

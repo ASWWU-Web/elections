@@ -13,6 +13,7 @@ export class AdminBallotsComponent implements OnInit {
   @Input() positionsData: Position[] = [];
   candidatesData: Candidate[] = [];
   selectedElection: Election = null;
+  availablePositions: Position[] = [];
 
   constructor(private rs: RequestService) { }
 
@@ -32,5 +33,7 @@ export class AdminBallotsComponent implements OnInit {
     this.candidatesData = [];
     // set the selected election
     this.selectedElection = this.electionsData[election];
+    // filter all the available positions
+    this.availablePositions = this.positionsData.filter(position => position.election_type === this.selectedElection.election_type);
   }
 }

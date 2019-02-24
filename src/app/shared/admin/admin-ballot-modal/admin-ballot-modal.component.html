@@ -1,3 +1,33 @@
-<p>
-  admin-ballot-modal works!
-</p>
+<!-- modal header -->
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">New Ballot Entry</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()"><i class="fas fa-times"></i></button>
+</div>
+
+<!-- modal body -->
+<div class="modal-body">
+  <form [formGroup]="ballotForm">
+    <!-- ballot student ID -->
+    <div class="form-group">
+      <label for="ballot-student-ID">Election</label>
+      <input id="ballot-student-ID" class="form-control" placeholder="Student ID" formControlName="studentID">
+    </div>
+    <div formArrayName="positions">
+      <h3>Positions</h3>
+      <div *ngFor="let address of positions.controls; let i=index">
+        <label>{{positionsData[i].position}}: </label>
+        <div *ngFor="let c of getCandidates(i)">
+          <input type="radio" [formControlName]="i" [value]="c.username">{{c.display_name}}
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- footer -->
+<div class="modal-footer">
+  <!-- save and close button -->
+  <form [formGroup]="ballotForm" (ngSubmit)="onSaveBallot()">
+    <button type="submit" class="btn btn-primary">Save</button>
+  </form>
+</div>
