@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, Input } from '@angular/core';
 import { NgbModal, NgbModalRef, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { Candidate } from 'src/app/shared/admin/admin-candidates/admin-elections-candidate-modal.component';
 
 interface Election {
@@ -47,7 +47,7 @@ export class AdminBallotModalContentComponent implements OnInit {
   ngOnInit() {
     // set up the ballot form
     this.ballotForm = this.fb.group({
-      studentID: [''],
+      studentID: ['', Validators.compose([Validators.required, Validators.pattern('[0-9]{7}')])],
       positions: this.fb.array([])
     });
     this.setPositions();

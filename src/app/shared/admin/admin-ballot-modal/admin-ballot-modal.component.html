@@ -9,7 +9,7 @@
   <form [formGroup]="ballotForm">
     <h2>Student ID</h2>
     <div class="mb-3 input-group">
-      <input placeholder="Student ID" formControlName="studentID" class="form-control">
+      <input type="search" pattern="[0-9]{7}" placeholder="Student ID" formControlName="studentID" class="form-control" required>
     </div>
     <div formArrayName="positions">
       <div *ngFor="let position of ballotForm.get('positions')['controls']; let p = index" [formGroupName]="p">
@@ -36,7 +36,7 @@
 <div class="modal-footer">
   <!-- save and close button -->
   <form [formGroup]="ballotForm" (ngSubmit)="onSaveBallot()">
-    <button type="submit" class="btn btn-secondary">Save and add</button>
-    <button type="submit" (click)="onCloseModal()" class="btn btn-primary">Save and close</button>
+    <button type="submit" [disabled]="!ballotForm.valid" class="btn btn-secondary">Save and add</button>
+    <button type="submit" [disabled]="!ballotForm.valid" (click)="onCloseModal()" class="btn btn-primary">Save and close</button>
   </form>
 </div>
