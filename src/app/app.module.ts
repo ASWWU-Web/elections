@@ -44,7 +44,8 @@ import {
   VoteFormComponent,
   MultiPositionHandlerComponent,
   DistrictSelectionComponent,
-  NavigatorComponent
+  NavigatorComponent,
+  AdminBallotModalComponent
 } from './shared/shared';
 
 
@@ -70,7 +71,8 @@ import {
     MultiPositionHandlerComponent,
     DistrictSelectionComponent,
     NavigatorComponent,
-    AdminBallotsComponent
+    AdminBallotsComponent,
+    AdminBallotModalComponent
   ],
   imports: [
     NgbModule,
