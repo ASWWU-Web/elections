@@ -1,7 +1,22 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { RequestService } from 'src/shared-ng/services/services';
-import { Election, Position } from 'src/app/routes/admin/admin.component';
 import { Candidate } from 'src/app/shared/admin/admin-candidates/admin-elections-candidate-modal.component';
+
+interface Election {
+  id: string;
+  election_type: string;
+  start: string;
+  end: string;
+  show_results: string;
+}
+
+interface Position {
+  id: string;
+  position: string;
+  election_type: string;
+  active: boolean;
+  order: number;
+}
 
 @Component({
   selector: 'app-admin-ballots',

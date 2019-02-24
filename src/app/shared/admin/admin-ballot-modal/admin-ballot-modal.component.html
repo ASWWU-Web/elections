@@ -14,10 +14,10 @@
     </div>
     <div formArrayName="positions">
       <h3>Positions</h3>
-      <div *ngFor="let address of positions.controls; let i=index">
+      <div *ngFor="let position of positions.controls; let i=index">
         <label>{{positionsData[i].position}}: </label>
-        <div *ngFor="let c of getCandidates(i)">
-          <input type="radio" [formControlName]="i" [value]="c.username">{{c.display_name}}
+        <div *ngFor="let candidate of position.get('candidates')['controls']; let j=index">
+          <input type="checkbox">{{getCandidates(this.positionsData[i])[j].display_name}}
         </div>
       </div>
     </div>

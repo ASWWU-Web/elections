@@ -3,7 +3,7 @@ import { RequestService } from 'src/shared-ng/services/services';
 import { forkJoin } from 'rxjs';
 import { CURRENT_YEAR } from 'src/shared-ng/config';
 
-export interface Election {
+interface Election {
   id: string;
   election_type: string;
   start: string;
@@ -11,12 +11,12 @@ export interface Election {
   show_results: string;
 }
 
-export interface Position {
+interface Position {
   id: string;
   position: string;
   election_type: string;
-  active: boolean; // this may need to be a string
-  order: number; // this may need to be a string
+  active: boolean;
+  order: number;
 }
 
 @Component({

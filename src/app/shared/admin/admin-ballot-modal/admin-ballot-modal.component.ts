@@ -2,8 +2,23 @@ import { Component, OnInit, Output, Input } from '@angular/core';
 import { NgbModal, NgbModalRef, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
-import { Election, Position } from 'src/app/routes/admin/admin.component';
 import { Candidate } from 'src/app/shared/admin/admin-candidates/admin-elections-candidate-modal.component';
+
+interface Election {
+  id: string;
+  election_type: string;
+  start: string;
+  end: string;
+  show_results: string;
+}
+
+interface Position {
+  id: string;
+  position: string;
+  election_type: string;
+  active: boolean;
+  order: number;
+}
 
 export interface BallotPOST {
   election: string;
@@ -28,22 +43,31 @@ export class AdminBallotModalContentComponent implements OnInit {
 
   ngOnInit() {
     for (let p of this.positionsData) {
-      this.addPosition();
+      this.addPosition(p);
     }
   }
 
-  get positions() {
+  get positions(): FormArray {
     return this.ballotForm.get('positions') as FormArray;
   }
 
-  addPosition() {
-    this.positions.push(this.fb.control(''));
+  addPosition(position: Position): void {
+    // create list of candidates
+    const candidates = this.fb.array([]);
+    for (let candidate of this.getCandidates(position)) {
+      candidates.push(this.fb.control(''));
+    }
+    // create a position form group
+    const positionGroup = this.fb.group({
+      candidates: candidates,
+      writeIn: ['']
+    });
+    // add new position to the form
+    this.positions.push(positionGroup);
   }
 
-  getCandidates(positionIndex: number): Candidate[] {
-    const candidates = this.candidateData.filter((candidate) => {
-      return candidate.position === this.positionsData[positionIndex].id;
-    });
+  getCandidates(position: Position): Candidate[] {
+    const candidates = this.candidateData.filter(candidate => candidate.position === position.id);
     return candidates;
   }
 
