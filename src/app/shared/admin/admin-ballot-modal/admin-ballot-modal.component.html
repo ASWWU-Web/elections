@@ -1,12 +1,16 @@
 <!-- modal header -->
 <div class="modal-header">
-  <h4 class="modal-title" id="modal-basic-title">New Ballot Entry</h4>
+  <h1 class="modal-title" id="modal-basic-title">New Ballot Entry</h1>
   <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()"><i class="fas fa-times"></i></button>
 </div>
 
 <!-- modal body -->
 <div class="modal-body">
   <form [formGroup]="ballotForm">
+    <h2>Student ID</h2>
+    <div class="mb-3 input-group">
+      <input placeholder="Student ID" formControlName="studentID" class="form-control">
+    </div>
     <div formArrayName="positions">
       <div *ngFor="let position of ballotForm.get('positions')['controls']; let p = index" [formGroupName]="p">
         <h2>{{positionsData[p].position}}</h2>
