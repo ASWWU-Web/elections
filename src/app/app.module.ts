@@ -40,6 +40,7 @@ import {
   AdminElectionsRowComponent,
   AdminPositionsComponent,
   AdminPositionsRowComponent,
+  AdminBallotsComponent,
   VoteFormComponent,
   MultiPositionHandlerComponent,
   DistrictSelectionComponent,
@@ -68,7 +69,8 @@ import {
     VoteFormComponent,
     MultiPositionHandlerComponent,
     DistrictSelectionComponent,
-    NavigatorComponent
+    NavigatorComponent,
+    AdminBallotsComponent
   ],
   imports: [
     NgbModule,
