@@ -7,20 +7,7 @@
 <!-- modal body -->
 <div class="modal-body">
   <form [formGroup]="ballotForm">
-    <!-- ballot student ID -->
-    <div class="form-group">
-      <label for="ballot-student-ID">Election</label>
-      <input id="ballot-student-ID" class="form-control" placeholder="Student ID" formControlName="studentID">
-    </div>
-    <div formArrayName="positions">
-      <h3>Positions</h3>
-      <div *ngFor="let position of positions.controls; let i=index">
-        <label>{{positionsData[i].position}}: </label>
-        <div *ngFor="let candidate of position.get('candidates')['controls']; let j=index">
-          <input type="checkbox">{{getCandidates(this.positionsData[i])[j].display_name}}
-        </div>
-      </div>
-    </div>
+
   </form>
 </div>
 

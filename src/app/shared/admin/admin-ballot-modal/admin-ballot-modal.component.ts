@@ -10,6 +10,7 @@ interface Election {
   start: string;
   end: string;
   show_results: string;
+  max_votes: number;
 }
 
 interface Position {
@@ -34,41 +35,55 @@ export interface BallotPOST {
 
 })
 export class AdminBallotModalContentComponent implements OnInit {
-  @Input() ballotForm: FormGroup;
+  @Input() selectedElection: Election = null;
   @Input() positionsData: Position[] = [];
   @Input() candidateData: Candidate[] = [];
   @Output() saveBallot: EventEmitter<FormGroup> = new EventEmitter();
+  ballotForm: FormGroup;
 
   constructor(public activeModal: NgbActiveModal, private fb: FormBuilder) { }
 
   ngOnInit() {
-    for (let p of this.positionsData) {
-      this.addPosition(p);
-    }
-  }
-
-  get positions(): FormArray {
-    return this.ballotForm.get('positions') as FormArray;
-  }
-
-  addPosition(position: Position): void {
-    // create list of candidates
-    const candidates = this.fb.array([]);
-    for (let candidate of this.getCandidates(position)) {
-      candidates.push(this.fb.control(''));
-    }
-    // create a position form group
-    const positionGroup = this.fb.group({
-      candidates: candidates,
-      writeIn: ['']
+    // set up the ballot form
+    this.ballotForm = this.fb.group({
+      studentID: [''],
+      positions: this.fb.array([])
     });
-    // add new position to the form
-    this.positions.push(positionGroup);
+    this.setPositions();
+  }
+
+  setPositions(): void {
+    const control = <FormArray>this.ballotForm.controls.positions;
+    this.positionsData.forEach(position => {
+      control.push(this.fb.group({
+        candidates: this.setCandidates(position),
+        writeins: this.setWriteIns()
+      }));
+    });
+  }
+
+  setCandidates(position: Position): FormArray {
+    const arr = new FormArray([]);
+    this.getCandidates(position).forEach(() => {
+      arr.push(this.fb.group({
+        candidate: false
+      }));
+    });
+    return arr;
+  }
+
+  setWriteIns(): FormArray {
+    const arr = new FormArray([]);
+    for (let w = 0; w < this.selectedElection.max_votes; w++) {
+      arr.push(this.fb.group({
+        writein: ''
+      }));
+    }
+    return arr;
   }
 
   getCandidates(position: Position): Candidate[] {
-    const candidates = this.candidateData.filter(candidate => candidate.position === position.id);
-    return candidates;
+    return this.candidateData.filter(candidate => candidate.position === position.id);
   }
 
   onSaveBallot(): void {
@@ -87,23 +102,18 @@ export class AdminBallotModalComponent implements OnInit {
   @Input() positionsData: Position[] = [];
   @Input() candidateData: Candidate[] = [];
   @Output() newBallot: EventEmitter<BallotPOST> = new EventEmitter();
-  ballotForm: FormGroup;
   modal: NgbModalRef;
 
-  constructor(private modalService: NgbModal, private fb: FormBuilder) { }
+  constructor(private modalService: NgbModal) { }
 
   ngOnInit() {
-    this.ballotForm = this.fb.group({
-      studentID: [''],
-      positions: this.fb.array([])
-    });
   }
 
   open(): void {
     // save the modal reference so we can close it
     this.modal = this.modalService.open(AdminBallotModalContentComponent);
-    // pass the form and data to the modal inputs
-    this.modal.componentInstance.ballotForm = this.ballotForm;
+    // pass data to the modal inputs
+    this.modal.componentInstance.selectedElection = this.selectedElection;
     this.modal.componentInstance.positionsData = this.positionsData;
     this.modal.componentInstance.candidateData = this.candidateData;
     // save the ballot when the modal save event is triggered
@@ -111,7 +121,7 @@ export class AdminBallotModalComponent implements OnInit {
       this.onSaveBallot(form);
       // close modal and reset the form
       this.modal.close();
-      this.ballotForm.reset();
+      // this.ballotForm.reset();
     });
   }
 
