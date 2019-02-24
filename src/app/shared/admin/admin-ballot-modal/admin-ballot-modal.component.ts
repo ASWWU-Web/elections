@@ -38,7 +38,8 @@ export class AdminBallotModalContentComponent implements OnInit {
   @Input() selectedElection: Election = null;
   @Input() positionsData: Position[] = [];
   @Input() candidateData: Candidate[] = [];
-  @Output() saveBallot: EventEmitter<FormGroup> = new EventEmitter();
+  @Output() saveBallot: EventEmitter<BallotPOST> = new EventEmitter();
+  @Output() closeModal: EventEmitter<null> = new EventEmitter();
   ballotForm: FormGroup;
 
   constructor(public activeModal: NgbActiveModal, private fb: FormBuilder) { }
@@ -87,7 +88,42 @@ export class AdminBallotModalContentComponent implements OnInit {
   }
 
   onSaveBallot(): void {
-    this.saveBallot.emit(this.ballotForm);
+    // emit the form data
+    const baseVote: BallotPOST = {
+      student_id: this.ballotForm.value.studentID,
+      election: this.selectedElection.id,
+      position: null,
+      vote: null
+    };
+    // cast votes for each position
+    this.positionsData.forEach((position: Position, p: number) => {
+      // set the position ID
+      baseVote.position = position.id;
+      // cast votes for each voted for candidate
+      this.getCandidates(position).forEach((candidate: Candidate, c: number) => {
+        // if the candidate was voted for, emit their vote
+        if (this.ballotForm.value.positions[p].candidates[c].candidate) {
+          // set the vote name and emit it
+          baseVote.vote = candidate.username;
+          this.saveBallot.emit(baseVote);
+        }
+      });
+      // cast votes for each writein caniddate
+      this.ballotForm.value.positions[p].writeins.forEach((writein: any) => {
+        // set the vote name and emit it
+        if (writein.writein !== null && writein.writein !== '') {
+          baseVote.vote = writein.writein;
+          this.saveBallot.emit(baseVote);
+        }
+      });
+    });
+    // clear the form data
+    this.ballotForm.reset();
+  }
+
+  onCloseModal(): void {
+    // emit a close signal for the modal
+    this.closeModal.emit();
   }
 }
 
@@ -101,7 +137,7 @@ export class AdminBallotModalComponent implements OnInit {
   @Input() selectedElection: Election = null;
   @Input() positionsData: Position[] = [];
   @Input() candidateData: Candidate[] = [];
-  @Output() newBallot: EventEmitter<BallotPOST> = new EventEmitter();
+  @Output() saveBallot: EventEmitter<BallotPOST> = new EventEmitter();
   modal: NgbModalRef;
 
   constructor(private modalService: NgbModal) { }
@@ -117,29 +153,12 @@ export class AdminBallotModalComponent implements OnInit {
     this.modal.componentInstance.positionsData = this.positionsData;
     this.modal.componentInstance.candidateData = this.candidateData;
     // save the ballot when the modal save event is triggered
-    this.modal.componentInstance.saveBallot.subscribe((form: any) => {
-      this.onSaveBallot(form);
-      // close modal and reset the form
-      this.modal.close();
-      // this.ballotForm.reset();
+    this.modal.componentInstance.saveBallot.subscribe((ballot: BallotPOST) => {
+      this.saveBallot.emit(ballot);
     });
-  }
-
-  onSaveBallot(form: any): void {
-    // get and save results locally
-    const result = Object.assign({}, form.value);
-    const ballot = {
-      election: null,
-      position: null,
-      student_id: null,
-      vote: null,
-    };
-    // update the ballot object
-    ballot.election = result.election;
-    ballot.position = result.position;
-    ballot.student_id = result.studentId;
-    ballot.vote = result.vote;
-    // emit the ballot
-    this.newBallot.emit(ballot);
+    // close the modal
+    this.modal.componentInstance.closeModal.subscribe(() => {
+      this.modal.close();
+    });
   }
 }

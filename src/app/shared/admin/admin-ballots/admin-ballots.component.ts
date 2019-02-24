@@ -18,6 +18,13 @@ interface Position {
   order: number;
 }
 
+interface BallotPOST {
+  election: string;
+  position: string;
+  student_id: string;
+  vote: string;
+}
+
 @Component({
   selector: 'app-admin-ballots',
   templateUrl: './admin-ballots.component.html',
@@ -50,5 +57,9 @@ export class AdminBallotsComponent implements OnInit {
     this.selectedElection = this.electionsData[election];
     // filter all the available positions
     this.availablePositions = this.positionsData.filter(position => position.election_type === this.selectedElection.election_type);
+  }
+
+  onSaveBallot(ballot: BallotPOST) {
+    console.log(ballot);
   }
 }
