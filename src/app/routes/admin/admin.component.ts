@@ -3,7 +3,7 @@ import { RequestService } from 'src/shared-ng/services/services';
 import { forkJoin } from 'rxjs';
 import { CURRENT_YEAR } from 'src/shared-ng/config';
 
-interface Election {
+export interface Election {
   id: string;
   election_type: string;
   start: string;
@@ -11,7 +11,7 @@ interface Election {
   show_results: string;
 }
 
-interface Position {
+export interface Position {
   id: string;
   position: string;
   election_type: string;

@@ -7,7 +7,7 @@ import { debounceTime, distinctUntilChanged, map, switchMap} from 'rxjs/operator
 import { of } from 'rxjs';
 
 
-interface Candidate {
+export interface Candidate {
   id: string;
   election: string;
   position: string;

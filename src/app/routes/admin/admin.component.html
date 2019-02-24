@@ -14,7 +14,7 @@
       </ngb-tab>
       <ngb-tab title="Ballots">
         <ng-template ngbTabContent>
-          <app-admin-ballots></app-admin-ballots>
+          <app-admin-ballots [electionsData]="electionsData" [positionsData]="positionsData"></app-admin-ballots>
         </ng-template>
       </ngb-tab>
     </ngb-tabset>
