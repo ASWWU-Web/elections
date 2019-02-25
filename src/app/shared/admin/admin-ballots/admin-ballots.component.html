@@ -16,7 +16,7 @@
       <tbody *ngIf="electionsData.length > 0">
         <tr *ngFor="let election of electionsData; let i = index">
           <td>{{election.name}}</td>
-          <td>{{election.election_type}}</td>
+          <td>{{prettyElectionType(election.election_type)}}</td>
           <td>{{election.start.substring(0, 4)}}</td>
           <td>
             <button (click)="onSelectElection(i)" class="btn btn-primary">Add Ballots</button>

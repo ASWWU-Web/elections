@@ -89,6 +89,15 @@ export class AdminBallotsComponent implements OnInit {
     });
   }
 
+  prettyElectionType(electionType: string): string {
+    if (electionType === 'aswwu') {
+      return 'ASWWU';
+    } else if (electionType === 'senate') {
+      return 'Senate';
+    }
+    return electionType;
+  }
+
   prettyUsername(username: string): string {
     return username.replace(/\./g, ' ');
   }
