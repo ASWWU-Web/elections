@@ -6,6 +6,14 @@
 
 <!-- modal body -->
 <div class="modal-body">
+  <!-- info text -->
+  <div>
+    <p *ngIf="selectedElection.max_votes <= 1">Add up to {{selectedElection.max_votes}} vote for each position.</p>
+    <p *ngIf="selectedElection.max_votes > 1">Add up to {{selectedElection.max_votes}} votes for each position.</p>
+    <p>
+      All ballot information entered will be validated against the online elections data. If a user is attempting to vote more than is allowed, an alert will appear giving information.
+    </p>
+  </div>
   <form [formGroup]="ballotForm">
     <h2>Student ID</h2>
     <div class="mb-3 input-group">
