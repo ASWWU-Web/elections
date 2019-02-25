@@ -47,6 +47,7 @@ export class AdminBallotsComponent implements OnInit {
   selectedElection: Election = null;
   availablePositions: Position[] = [];
   ballots: Ballot[] = [];
+  deleteState: number = null;
 
   constructor(private rs: RequestService) { }
 
@@ -94,5 +95,22 @@ export class AdminBallotsComponent implements OnInit {
 
   idToPosition(positionId: string): string {
     return this.positionsData.find(p => p.id === positionId).position;
+  }
+
+  deleteConfirmation(index: number): void {
+    // set delete state to confirm
+    this.deleteState = index;
+  }
+
+  deleteBallot(index: number): void {
+    // reset delete state
+    this.deleteState = null;
+    // delete ballot from the server
+    const deleteUrl = 'elections/election/' + this.selectedElection.id + '/ballot/' + this.ballots[index].id;
+    this.rs.delete(deleteUrl).subscribe(null, (error) => {
+      console.error(error);
+    });
+    // delete ballot from local array
+    this.ballots.splice(index, 1);
   }
 }

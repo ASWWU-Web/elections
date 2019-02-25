@@ -43,11 +43,14 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let ballot of ballots">
+        <tr *ngFor="let ballot of ballots; let i = index">
           <td class="text-capitalize">{{prettyUsername(ballot.vote)}}</td>
           <td>{{idToPosition(ballot.position)}}</td>
           <td class="text-capitalize">{{prettyUsername(ballot.manual_entry)}}</td>
-          <td><button class="btn btn-danger">Delete</button></td>
+          <td>
+            <button *ngIf="deleteState != i" (click)="deleteConfirmation(i)" class="btn btn-primary">Delete</button>
+            <button *ngIf="deleteState == i" (click)="deleteBallot(i)" class="btn btn-danger">Confirm</button>
+          </td>
         </tr>
       </tbody>
     </table>
