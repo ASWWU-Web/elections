@@ -36,6 +36,7 @@
     <table class="table table-striped">
       <thead>
         <tr>
+          <th scope="col">Student ID</th>
           <th scope="col">Candidate</th>
           <th scope="col">Position</th>
           <th scope="col">Entered By</th>
@@ -44,6 +45,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let ballot of ballots; let i = index">
+          <td>{{ballot.student_id}}</td>
           <td class="text-capitalize">{{prettyUsername(ballot.vote)}}</td>
           <td>{{idToPosition(ballot.position)}}</td>
           <td class="text-capitalize">{{prettyUsername(ballot.manual_entry)}}</td>
