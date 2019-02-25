@@ -31,7 +31,7 @@ interface Ballot {
   election: string;
   position: string;
   vote: string;
-  username: string;
+  student_id: string;
   manual_entry: string;
 }
 

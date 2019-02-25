@@ -7,13 +7,13 @@ import { Observable } from 'rxjs/internal/Observable';
 import { AdminElectionsCandidateModalComponent } from '../admin';
 
 interface Election {
-  id: string,
-  election_type: string,
-  name: string,
-  max_votes: number,
-  start: string,
-  end: string,
-  show_results: string
+  id: string;
+  election_type: string;
+  name: string;
+  max_votes: number;
+  start: string;
+  end: string;
+  show_results: string;
 }
 interface Candidate {
   id: string;
@@ -26,8 +26,8 @@ interface Position {
   id: string;
   position: string;
   election_type: string;
-  active: boolean; // this may need to be a string
-  order: number; // this may need to be a string
+  active: boolean;
+  order: number;
 }
 
 
