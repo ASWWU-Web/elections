@@ -224,6 +224,7 @@ export class VoteFormComponent implements OnInit {
       };
       this.stageVote(voteToStage);
     }
+    this.formGroup.reset();
   }
 
   stageUsername(candidateUsername) {
