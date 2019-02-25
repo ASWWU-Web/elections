@@ -85,7 +85,18 @@ export class AdminBallotsComponent implements OnInit {
       // add response data to ballots array
       this.ballots.unshift(data);
     }, (error) => {
-      console.error(error);
+      console.log(error);
+      window.alert(`This ballot could not be saved completely. ` +
+      `This probably because the user has already voted or this ballot has already been entered. ` +
+      `See the server error message for reason why this vote was rejected and make note if necessary.\n\n` +
+      `Server error message\n` +
+      `--------------------\n` +
+      error.error.status + `\n\n` +
+      `Invalid vote information\n` +
+      `------------------------\n` +
+      `Student ID: ` + ballot.student_id + `\n` +
+      `Voting for: ` + this.prettyUsername(ballot.vote) + `\n` +
+      `Position: ` + this.idToPosition(ballot.position));
     });
   }
 
@@ -99,7 +110,10 @@ export class AdminBallotsComponent implements OnInit {
   }
 
   prettyUsername(username: string): string {
-    return username.replace(/\./g, ' ');
+    // remove '.' character and capitalize names
+    return username.replace(/\./g, ' ').replace(/\w\S*/g, function(txt) {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
   }
 
   idToPosition(positionId: string): string {
