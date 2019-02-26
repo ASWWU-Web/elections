@@ -3,6 +3,10 @@ import { NgbModal, NgbModalRef, NgbActiveModal } from '@ng-bootstrap/ng-bootstra
 import { EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { Candidate } from 'src/app/shared/admin/admin-candidates/admin-elections-candidate-modal.component';
+import { Observable } from 'rxjs/internal/Observable';
+import { debounceTime, distinctUntilChanged, map, switchMap} from 'rxjs/operators';
+import { of } from 'rxjs';
+import { RequestService } from 'src/shared-ng/services/services';
 
 interface Election {
   id: string;
@@ -43,7 +47,7 @@ export class AdminBallotModalContentComponent implements OnInit {
   ballotForm: FormGroup;
   clostFormFlag = false;
 
-  constructor(public activeModal: NgbActiveModal, private fb: FormBuilder) { }
+  constructor(public activeModal: NgbActiveModal, private fb: FormBuilder, private rs: RequestService) { }
 
   ngOnInit() {
     // set up the ballot form
@@ -86,6 +90,24 @@ export class AdminBallotModalContentComponent implements OnInit {
 
   getCandidates(position: Position): Candidate[] {
     return this.candidateData.filter(candidate => candidate.position === position.id);
+  }
+
+  getNames(query: string) {
+    if (query === '') {
+      return of({results: []});
+    }
+    return this.rs.get('search/names', {'full_name': query});
+  }
+
+  search = (text$: Observable<string>) => {
+    return text$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap(data => this.getNames(data)),
+      map((data: {results: {username: string, full_name: string}[]}) => {
+        return data.results.map((item) => item.username);
+      })
+    );
   }
 
   onSaveBallot(): void {

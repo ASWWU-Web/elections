@@ -111,11 +111,11 @@ export class AdminCandidatesRowComponent implements OnInit {
     return text$.pipe(
       debounceTime(300),
       distinctUntilChanged(),
-      switchMap((data)=>{return this.getNames(data)}),
-      map((data: {results: {username: string, full_name: string}[]})=>{
-        return data.results.map((item)=>item.username);
+      switchMap(data => this.getNames(data)),
+      map((data: {results: {username: string, full_name: string}[]}) => {
+        return data.results.map((item) => item.username);
       })
-    )
+    );
   }
 
   saveRow() {

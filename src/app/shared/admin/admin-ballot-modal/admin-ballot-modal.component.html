@@ -32,7 +32,7 @@
         <!-- write ins -->
         <div formArrayName="writeins">
           <div *ngFor="let writeins of position.get('writeins').controls; let w = index" [formGroupName]="w" class="input-group mb-3">
-            <input type="search" formControlName="writein" placeholder="Write-in candidate" class="form-control">
+            <input type="search" formControlName="writein" placeholder="Write-in candidate" [ngbTypeahead]="search" class="form-control">
           </div>
         </div>
       </div>
