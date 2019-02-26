@@ -55,18 +55,17 @@ export class AdminElectionsCandidateModalComponent implements OnInit {
     removeObservable = this.rs.delete('elections/election/' + this.electionID + '/candidate/' + candidate_id)
 
     // confirmation with user
-    let r = confirm("Warning! This action is permanent.");
-    if(r){
-      removeObservable.subscribe(
-        null,
-        err => alert("Something went wrong 😢")
+    const userConfirm = confirm('Warning! This action is permanent.');
+    if (userConfirm) {
+      removeObservable.subscribe(() => {
+          // get specific index of row that user wants to delete
+          const index = this.candidates.findIndex(candidate => candidate.id === candidate_id );
+          this.candidates.splice(index, 1);
+        }, () => {
+          alert('Something went wrong 😢');
+        }
       );
-    } else {
-      return;
     }
-    // get specific index of row that user wants to delete
-    const index = this.candidates.findIndex(candidate => candidate.id === candidate_id );
-    this.candidates = this.candidates.splice(index, 1);
   }
 }
 
@@ -145,6 +144,6 @@ export class AdminCandidatesRowComponent implements OnInit {
   // Deletes Candidate
   deleteRow() {
     // calls parent class while emitting row id for indexing
-    this.remove.emit(this.rowData.id)
+    this.remove.emit(this.rowData.id);
   }
 }
