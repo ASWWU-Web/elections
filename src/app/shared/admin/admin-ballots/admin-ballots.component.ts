@@ -54,6 +54,26 @@ export class AdminBallotsComponent implements OnInit {
   ngOnInit() {
   }
 
+  onCountVotes(election: number): void {
+    const countUrl = 'elections/election/' + this.electionsData[election].id + '/count';
+    let voteMessage = '';
+    this.rs.get(countUrl).subscribe((data) => {
+      console.log(data);
+      for (const position of data.positions) {
+        const pos = this.positionsData.find(p => p.id === position.position);
+        voteMessage += pos.position + '\n';
+        if (position.votes.length === 0) {
+          voteMessage += '  No votes\n';
+          continue;
+        }
+        for (const candidate of position.votes) {
+          voteMessage += '  ' + this.prettyUsername(candidate.candidate) + ' - ' + candidate.votes + ' votes\n';
+        }
+      }
+      window.alert(voteMessage);
+    });
+  }
+
   onSelectElection(election: number): void {
     // get the candidates for the newly selected election
     const candidateUrl = 'elections/election/' + this.electionsData[election].id + '/candidate';

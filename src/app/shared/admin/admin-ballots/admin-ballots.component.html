@@ -20,6 +20,7 @@
           <td>{{election.start.substring(0, 4)}}</td>
           <td>
             <button (click)="onSelectElection(i)" class="btn btn-primary">Add Ballots</button>
+            <button (click)="onCountVotes(i)" class="btn btn-secondary">Count Votes</button>
           </td>
         </tr>
       </tbody>
