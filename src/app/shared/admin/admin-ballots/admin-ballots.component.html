@@ -1,5 +1,62 @@
 <br>
 
-<div>
-  <button class="btn btn-primary">Add ballot</button>
+<div [ngSwitch]="selectedElection">
+  <!-- elections table -->
+  <div *ngSwitchCase="null">
+    <h1 class="mb-3">Choose an election</h1>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Election Type</th>
+          <th scope="col">Year</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody *ngIf="electionsData.length > 0">
+        <tr *ngFor="let election of electionsData; let i = index">
+          <td>{{election.name}}</td>
+          <td>{{prettyElectionType(election.election_type)}}</td>
+          <td>{{election.start.substring(0, 4)}}</td>
+          <td>
+            <button (click)="onSelectElection(i)" class="btn btn-primary">Add Ballots</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ballot list -->
+  <div *ngSwitchDefault>
+    <h1 class="mb-3">{{selectedElection.name}} Ballots</h1>
+    <div class="btn-group mb-3">
+      <button (click)="selectedElection = null" class="btn btn-secondary">Back</button>
+      <button (click)="ballotModal.open()" class="btn btn-primary">Add Ballots</button>
+    </div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Student ID</th>
+          <th scope="col">Candidate</th>
+          <th scope="col">Position</th>
+          <th scope="col">Entered By</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ballot of ballots; let i = index">
+          <td>{{ballot.student_id}}</td>
+          <td class="text-capitalize">{{prettyUsername(ballot.vote)}}</td>
+          <td>{{idToPosition(ballot.position)}}</td>
+          <td class="text-capitalize">{{prettyUsername(ballot.manual_entry)}}</td>
+          <td>
+            <button *ngIf="deleteState != i" (click)="deleteConfirmation(i)" class="btn btn-primary">Delete</button>
+            <button *ngIf="deleteState == i" (click)="deleteBallot(i)" class="btn btn-danger">Confirm</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
+
+<app-admin-ballot-modal #ballotModal [selectedElection]="selectedElection" [positionsData]="availablePositions" [candidateData]="candidatesData" (saveBallot)="onSaveBallot($event)"></app-admin-ballot-modal>
