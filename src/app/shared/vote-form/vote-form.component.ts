@@ -7,23 +7,8 @@ import { CURRENT_YEAR, MEDIA_SM, DEFAULT_PHOTO } from 'src/shared-ng/config';
 import { Observable, of, forkJoin } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, map } from 'rxjs/operators';
 
-import { Election, Position, PageTransitions } from 'src/app/routes/vote/vote.component';
-
-interface Candidate {
-  id: string;
-  election: string;
-  position: string;
-  username: string;
-  display_name: string;
-}
-interface Vote {
-  id: string;
-  election: string;
-  position: string;
-  vote: string;
-  username: string;
-}
-
+import { PageTransitions } from 'src/app/routes/vote/vote.component';
+import { Election, Position, Candidate, Vote, VotePOST } from 'src/shared-ng/interfaces/elections';
 
 @Component({
   selector: 'vote-form',
@@ -269,7 +254,7 @@ export class VoteFormComponent implements OnInit {
           requestArray.push(this.rs.delete('elections/vote/' + updatableVotes[i].vote.id));
         } else if (i < newVotes.length) {
           // toPost.push(newVotes[i]);
-          const voteToPost = {
+          const voteToPost: VotePOST = {
             election: this.election.id,
             position: this.position.id,
             vote: newVotes[i].vote

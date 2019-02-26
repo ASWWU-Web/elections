@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-
-import { Position } from 'src/app/routes/vote/vote.component';
+import { Position } from 'src/shared-ng/interfaces/elections';
 
 
 @Component({

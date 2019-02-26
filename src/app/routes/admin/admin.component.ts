@@ -2,22 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RequestService } from 'src/shared-ng/services/services';
 import { forkJoin } from 'rxjs';
 import { CURRENT_YEAR } from 'src/shared-ng/config';
-
-interface Election {
-  id: string;
-  election_type: string;
-  start: string;
-  end: string;
-  show_results: string;
-}
-
-interface Position {
-  id: string;
-  position: string;
-  election_type: string;
-  active: boolean;
-  order: number;
-}
+import { Election, Position } from 'src/shared-ng/interfaces/elections';
 
 @Component({
   selector: 'app-admin',

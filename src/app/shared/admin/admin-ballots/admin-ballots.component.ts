@@ -1,39 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { RequestService } from 'src/shared-ng/services/services';
-import { Candidate } from 'src/app/shared/admin/admin-candidates/admin-elections-candidate-modal.component';
-
-interface Election {
-  id: string;
-  election_type: string;
-  start: string;
-  end: string;
-  show_results: string;
-  name: string;
-}
-
-interface Position {
-  id: string;
-  position: string;
-  election_type: string;
-  active: boolean;
-  order: number;
-}
-
-interface BallotPOST {
-  election: string;
-  position: string;
-  student_id: string;
-  vote: string;
-}
-
-interface Ballot {
-  id: string;
-  election: string;
-  position: string;
-  vote: string;
-  student_id: string;
-  manual_entry: string;
-}
+import { Candidate, Election, Position, BallotPOST, Ballot } from 'src/shared-ng/interfaces/elections';
 
 @Component({
   selector: 'app-admin-ballots',

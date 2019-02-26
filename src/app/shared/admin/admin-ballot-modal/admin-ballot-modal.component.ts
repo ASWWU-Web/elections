@@ -2,35 +2,11 @@ import { Component, OnInit, Output, Input } from '@angular/core';
 import { NgbModal, NgbModalRef, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
-import { Candidate } from 'src/app/shared/admin/admin-candidates/admin-elections-candidate-modal.component';
 import { Observable } from 'rxjs/internal/Observable';
 import { debounceTime, distinctUntilChanged, map, switchMap} from 'rxjs/operators';
 import { of } from 'rxjs';
 import { RequestService } from 'src/shared-ng/services/services';
-
-interface Election {
-  id: string;
-  election_type: string;
-  start: string;
-  end: string;
-  show_results: string;
-  max_votes: number;
-}
-
-interface Position {
-  id: string;
-  position: string;
-  election_type: string;
-  active: boolean;
-  order: number;
-}
-
-export interface BallotPOST {
-  election: string;
-  position: string;
-  student_id: string;
-  vote: string;
-}
+import { Candidate, Election, Position, BallotPOST } from 'src/shared-ng/interfaces/elections';
 
 @Component({
   selector: 'app-ballot-modal-content',
