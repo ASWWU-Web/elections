@@ -5,23 +5,8 @@ import { Observable } from 'rxjs/internal/Observable';
 import { RequestService } from 'src/shared-ng/services/services';
 import { debounceTime, distinctUntilChanged, map, switchMap} from 'rxjs/operators';
 import { of } from 'rxjs';
+import { Candidate, Position } from 'src/shared-ng/interfaces/elections';
 
-
-export interface Candidate {
-  id: string;
-  election: string;
-  position: string;
-  username: string;
-  display_name: string;
-}
-
-interface Position {
-  id: string;
-  position: string;
-  election_type: string;
-  active: boolean;
-  order: number;
-}
 
 @Component({
   selector: 'app-admin-elections-candidate-modal',

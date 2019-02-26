@@ -5,31 +5,7 @@ import { AbstractControl } from '@angular/forms';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/internal/Observable';
 import { AdminElectionsCandidateModalComponent } from '../admin';
-
-interface Election {
-  id: string;
-  election_type: string;
-  name: string;
-  max_votes: number;
-  start: string;
-  end: string;
-  show_results: string;
-}
-interface Candidate {
-  id: string;
-  election: string;
-  position: string;
-  username: string;
-  display_name: string;
-}
-interface Position {
-  id: string;
-  position: string;
-  election_type: string;
-  active: boolean;
-  order: number;
-}
-
+import { Election, Candidate, Position } from 'src/shared-ng/interfaces/elections';
 
 @Component({
   selector: '[elections-row]',
