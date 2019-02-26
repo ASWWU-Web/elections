@@ -1,4 +1,4 @@
-import { Component, OnInit, Input} from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/internal/Observable';
@@ -7,7 +7,7 @@ import { debounceTime, distinctUntilChanged, map, switchMap} from 'rxjs/operator
 import { of } from 'rxjs';
 
 
-interface Candidate {
+export interface Candidate {
   id: string;
   election: string;
   position: string;
@@ -34,7 +34,7 @@ export class AdminElectionsCandidateModalComponent implements OnInit {
   @Input() candidates: Candidate[];
   @Input() positions: Position[];
 
-  constructor(public activeModal: NgbActiveModal) {}
+  constructor(public activeModal: NgbActiveModal, private rs: RequestService) {}
 
   ngOnInit() {}
 
@@ -48,6 +48,25 @@ export class AdminElectionsCandidateModalComponent implements OnInit {
       };
       this.candidates.push(empty_candidate);
   }
+
+  // deletes candidate from database and removes row in modal
+  removeCandidate(candidate_id: string) {
+    let removeObservable: Observable<any>;
+    removeObservable = this.rs.delete('elections/election/' + this.electionID + '/candidate/' + candidate_id)
+
+    // confirmation with user
+    const userConfirm = confirm('Warning! This action is permanent.');
+    if (userConfirm) {
+      removeObservable.subscribe(() => {
+          // get specific index of row that user wants to delete
+          const index = this.candidates.findIndex(candidate => candidate.id === candidate_id );
+          this.candidates.splice(index, 1);
+        }, () => {
+          alert('Something went wrong 😢');
+        }
+      );
+    }
+  }
 }
 
 @Component({
@@ -60,6 +79,7 @@ export class AdminCandidatesRowComponent implements OnInit {
   @Input() electionID: string;
   @Input() election_type: string;
   @Input() positions: Position[];
+  @Output() remove: EventEmitter<string> = new EventEmitter();
   rowFormGroup: FormGroup;
 
   constructor(public activeModal: NgbActiveModal, private rs: RequestService) {
@@ -100,7 +120,7 @@ export class AdminCandidatesRowComponent implements OnInit {
 
   saveRow() {
       // Note: formData is in the same shape as what the server expects for a POST request (essentially an elections object without the id member)
-      // this is not type safe, but we are doing it becuase the server will complain if an id is included in a post request
+      // this is not type safe, but we are doing it because the server will complain if an id is included in a post request
       let formData = Object.assign({}, this.rowFormGroup.value);
       const newCandidate: boolean = this.rowData.id.length === 0;
       let saveObservable: Observable<any>;
@@ -118,5 +138,12 @@ export class AdminCandidatesRowComponent implements OnInit {
           this.rowFormGroup.markAsPristine();
           }, (err) => {
       });
+
+  }
+
+  // Deletes Candidate
+  deleteRow() {
+    // calls parent class while emitting row id for indexing
+    this.remove.emit(this.rowData.id);
   }
 }

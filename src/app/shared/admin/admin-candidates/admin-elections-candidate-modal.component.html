@@ -16,8 +16,8 @@
           <th scope="col"></th>
         </tr>
       </thead>
-      <tbody *ngIf="candidates">
-        <tr admin-candidates-row *ngFor="let row of candidates" [rowData]="row" [positions]="positions" [electionID]="electionID"  [election_type]="election_type" style="overflow: scroll"></tr>
+      <tbody *ngIf="candidates" >
+        <tr admin-candidates-row *ngFor="let row of candidates" [rowData]="row" [positions]="positions" [electionID]="electionID"  [election_type]="election_type" (remove)="removeCandidate($event)" style="overflow: scroll"></tr>
       </tbody>
     </table>
     <button class="btn btn-primary" (click)="addCandidate()">Add New Candidate</button>

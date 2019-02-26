@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import * as momentTz from 'moment-timezone';
 
 @Component({
   selector: 'countdown',
@@ -6,15 +7,15 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./countdown.component.css']
 })
 export class CountdownComponent implements OnInit {
-  @Input() date: Date;
+  @Input() date: momentTz;
+  @Input() now: momentTz;
   @Input() status: string;
 
   constructor() { }
 
   ngOnInit() {
-
     var display = document.querySelector('#time');
-    var difference = Math.abs(Date.now() - this.date.getTime());
+    var difference = Math.abs(this.date - this.now);
 
     this.startTimer(difference, display);
   }
@@ -51,6 +52,5 @@ export class CountdownComponent implements OnInit {
             window.location.reload(true);
         }
     }, 1000);
-}
-
+  }
 }

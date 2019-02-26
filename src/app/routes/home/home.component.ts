@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { RequestService } from '../../../shared-ng/services/request.service';
 import { Router } from '@angular/router';
+import * as momentTz from 'moment-timezone';
+import * as moment from 'moment';
+
 
 @Component({
   selector: 'app-home',
@@ -16,9 +19,7 @@ export class HomeComponent implements OnInit {
   response = null;
   isLoggedIn: boolean = false;
   router: any;
-  now = Date.now();
   dates = null;
-  startTime = null;
 
   constructor(private rs: RequestService, private _router: Router) {
     this.router = _router;
@@ -42,21 +43,25 @@ export class HomeComponent implements OnInit {
     this.rs.get('elections/current').subscribe((data) => {
       this.response = data;
 
-      // Converts date string into an array of numbers, as different browsers support different formats for dates
-      var arrStart = this.response['start'].split(/[- :]/).map(Number), arrEnd = this.response['end'].split(/[- :]/).map(Number);
+      const serverTimeZone = 'America/Los_Angeles';
+      const dateFormat = 'YYYY-MM-DD HH:mm:ss.SSSS';
+      const localTimeZone = momentTz.tz.guess();
 
-      var dateStart = new Date(arrStart[0], arrStart[1]-1, arrStart[2], arrStart[3], arrStart[4], arrStart[5]);
-      var dateEnd = new Date(arrEnd[0], arrEnd[1]-1, arrEnd[2], arrEnd[3], arrEnd[4], arrEnd[5]);
+      var startDate = momentTz.tz(this.response['start'], serverTimeZone);
+      startDate.tz(localTimeZone);
+      var endDate = momentTz.tz(this.response['end'], serverTimeZone);
+      endDate.tz(localTimeZone);
+
+      var localNow = momentTz(momentTz(moment(), dateFormat).tz(localTimeZone).format(dateFormat), dateFormat, localTimeZone);
 
       this.dates = {};
 
-      this.dates["start"] = dateStart;
-      this.dates["end"] = dateEnd;
+      this.dates["start"] = startDate;
+      this.dates["end"] = endDate;
+      this.dates["now"] = localNow;
 
-      this.startTime = this.dates['start'].getTime();
 
-
-      if (this.startTime > Date.now()) {
+      if (startDate > this.dates["now"]) {
         this.status = "upcoming";
       } else {
         this.status = "now";
@@ -64,7 +69,7 @@ export class HomeComponent implements OnInit {
     }, (error)=> {
       this.status = "none";
     });
-  }
+  } 
 
   getDateTime(datetime) {
     let date = new Date(datetime);
