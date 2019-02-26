@@ -7,8 +7,7 @@ import { debounceTime, distinctUntilChanged, map, switchMap} from 'rxjs/operator
 import { of } from 'rxjs';
 
 
-
-interface Candidate {
+export interface Candidate {
   id: string;
   election: string;
   position: string;
@@ -65,7 +64,7 @@ export class AdminElectionsCandidateModalComponent implements OnInit {
     } else {
       return;
     }
-    // get specific index of row that user wants to delete 
+    // get specific index of row that user wants to delete
     const index = this.candidates.findIndex(candidate => candidate.id === candidate_id );
     this.candidates = this.candidates.splice(index, 1);
   }
@@ -143,9 +142,9 @@ export class AdminCandidatesRowComponent implements OnInit {
 
   }
 
-  // Deletes Candidate 
+  // Deletes Candidate
   deleteRow() {
-    // calls parent class while emitting row id for indexing 
+    // calls parent class while emitting row id for indexing
     this.remove.emit(this.rowData.id)
   }
 }

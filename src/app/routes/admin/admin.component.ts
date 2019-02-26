@@ -15,8 +15,8 @@ interface Position {
   id: string;
   position: string;
   election_type: string;
-  active: boolean; // this may need to be a string
-  order: number; // this may need to be a string
+  active: boolean;
+  order: number;
 }
 
 @Component({

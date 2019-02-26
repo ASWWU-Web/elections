@@ -40,10 +40,13 @@ import {
   AdminElectionsRowComponent,
   AdminPositionsComponent,
   AdminPositionsRowComponent,
+  AdminBallotsComponent,
   VoteFormComponent,
   MultiPositionHandlerComponent,
   DistrictSelectionComponent,
-  NavigatorComponent
+  NavigatorComponent,
+  AdminBallotModalComponent,
+  AdminBallotModalContentComponent
 } from './shared/shared';
 
 
@@ -68,7 +71,10 @@ import {
     VoteFormComponent,
     MultiPositionHandlerComponent,
     DistrictSelectionComponent,
-    NavigatorComponent
+    NavigatorComponent,
+    AdminBallotsComponent,
+    AdminBallotModalComponent,
+    AdminBallotModalContentComponent
   ],
   imports: [
     NgbModule,
@@ -88,6 +94,7 @@ import {
     AdminElectionsCandidateModalComponent,
     AdminElectionsRowComponent,
     AdminPositionsRowComponent,
+    AdminBallotModalContentComponent
   ]
 })
 export class AppModule { }
