@@ -34,5 +34,6 @@
 <td>
   <form [formGroup]="rowFormGroup" (ngSubmit)="saveRow()">
     <button type="submit" class="btn btn-success" [disabled]="rowFormGroup.invalid" [ngClass]="{'btn-danger': rowFormGroup.dirty}">Save</button>
+    <button type="button" class="btn btn-danger" (click)="deleteRow()">Remove</button>
   </form>
 </td>
