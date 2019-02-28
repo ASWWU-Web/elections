@@ -1,24 +1,24 @@
 import { Component, OnInit } from '@angular/core';
-import { RequestService } from '../../../shared-ng/services/request.service';
+import { ElectionsRequestService } from '../../../shared-ng/services/services';
 
 
 // election interface
 export interface Election {
-  id: string,
-  election_type: string,
-  name: string,
-  max_votes: number,
-  start: string,
-  end: string,
-  show_results: string
-};
+  id: string;
+  election_type: string;
+  name: string;
+  max_votes: number;
+  start: string;
+  end: string;
+  show_results: string;
+}
 // position interface
 export interface Position {
-  id: string,
-  position: string,
-  election_type: string,
-  active: boolean,
-  order: number
+  id: string;
+  position: string;
+  election_type: string;
+  active: boolean;
+  order: number;
 }
 // switch states
 enum Switches {
@@ -51,7 +51,7 @@ export class VoteComponent implements OnInit {
   positions: Position[] = [];  // the positions based on the election type
   visiblePositions: Position[] = [];  // the positions based on the election type
 
-  constructor(private rs: RequestService) { }
+  constructor(private rs: ElectionsRequestService) { }
 
   ngOnInit() {
     // get the current election
@@ -69,24 +69,24 @@ export class VoteComponent implements OnInit {
   // function called when the user presses start
   pageTransition(transition: number = PageTransitions.NextPage) {
     // normal page transition
-    if (transition == PageTransitions.NextPage) {
+    if (transition === PageTransitions.NextPage) {
       // switch to district selection state
-      if (this.switchState == Switches.Start && this.election.election_type == 'senate') {
+      if (this.switchState === Switches.Start && this.election.election_type === 'senate') {
         this.switchState = Switches.District;
       // switch to voting state
-      } else if (this.switchState == Switches.Start && this.election.election_type != 'senate') {
+      } else if (this.switchState === Switches.Start && this.election.election_type !== 'senate') {
         this.switchState = Switches.Vote;
       // start over if the function is called and the vote process is complete
-      } else if (this.switchState == Switches.Complete) {
+      } else if (this.switchState === Switches.Complete) {
         this.startOver();
       // switch to the next state
       } else {
         this.switchState++;
       }
     // start over
-    } else if (transition == PageTransitions.StartOver) {
+    } else if (transition === PageTransitions.StartOver) {
       this.startOver();
-    } else if (transition == PageTransitions.ASWWU) {
+    } else if (transition === PageTransitions.ASWWU) {
       window.location.href = 'https://aswwu.com';
     }
   }
