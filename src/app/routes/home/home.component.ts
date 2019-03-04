@@ -37,14 +37,11 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  // TODO: Ask stephen about what to do here
   // Makes get request to elections/current to set up information for homepage
   getCurrentElectionOptions() {
     const electionsObservable = this.ers.readElectionCurrent();
-      electionsObservable.subscribe((data) => {
-        // this is undefined
+    electionsObservable.subscribe((data) => {
       this.response = data;
-      console.log(this.response);
       // Converts date string into an array of numbers, as different browsers support different formats for dates
       const arrStart = this.response['start'].split(/[- :]/).map(Number), arrEnd = this.response['end'].split(/[- :]/).map(Number);
 

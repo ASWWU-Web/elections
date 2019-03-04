@@ -51,14 +51,15 @@ export class VoteComponent implements OnInit {
   positions: Position[] = [];  // the positions based on the election type
   visiblePositions: Position[] = [];  // the positions based on the election type
 
-  constructor(private rs: ElectionsRequestService) { }
+  constructor(private ers: ElectionsRequestService) { }
 
   ngOnInit() {
     // get the current election
-    this.rs.get('elections/current').subscribe((electionData) => {
+    const electionObservable = this.ers.readElectionCurrent();
+    electionObservable.subscribe((electionData) => {
       this.election = electionData;
       // get positions for the election type
-      this.rs.get('elections/position', { election_type: this.election.election_type }).subscribe((positionData) => {
+      this.ers.get('elections/position', { election_type: this.election.election_type }).subscribe((positionData) => {
         this.positions = positionData.positions;
         this.visiblePositions = positionData.positions;
         this.switchState = Switches.Start;
