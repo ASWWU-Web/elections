@@ -2,7 +2,7 @@ import { Component, OnInit, Input} from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/internal/Observable';
-import { RequestService } from 'src/shared-ng/services/services';
+import { ElectionsRequestService } from 'src/shared-ng/services/services';
 import { debounceTime, distinctUntilChanged, map, switchMap} from 'rxjs/operators';
 import { of } from 'rxjs';
 
@@ -62,13 +62,13 @@ export class AdminCandidatesRowComponent implements OnInit {
   @Input() positions: Position[];
   rowFormGroup: FormGroup;
 
-  constructor(public activeModal: NgbActiveModal, private rs: RequestService) {
+  constructor(public activeModal: NgbActiveModal, private ers: ElectionsRequestService) {
   }
 
   ngOnInit() {
-    let arr: Position[] = [];
-    for (let position of this.positions) {
-      if (position.election_type == this.election_type) {
+    const arr: Position[] = [];
+    for (const position of this.positions) {
+      if (position.election_type === this.election_type) {
         arr.push(position);
       }
     }
@@ -81,36 +81,36 @@ export class AdminCandidatesRowComponent implements OnInit {
   }
 
   getNames(query: string) {
-    if (query == '') {
+    if (query === '') {
       return of({results: []});
     }
-    return this.rs.get("search/names", {'full_name': query});
+    return this.ers.get('search/names', {'full_name': query});
   }
 
   search = (text$: Observable<string>) => {
     return text$.pipe(
       debounceTime(300),
       distinctUntilChanged(),
-      switchMap((data)=>{return this.getNames(data)}),
-      map((data: {results: {username: string, full_name: string}[]})=>{
-        return data.results.map((item)=>item.username);
+      switchMap((data) => this.getNames(data)),
+      map((data: {results: {username: string, full_name: string}[]}) => {
+        return data.results.map((item) => item.username);
       })
-    )
+    );
   }
 
   saveRow() {
       // Note: formData is in the same shape as what the server expects for a POST request (essentially an elections object without the id member)
       // this is not type safe, but we are doing it becuase the server will complain if an id is included in a post request
-      let formData = Object.assign({}, this.rowFormGroup.value);
+      const formData = Object.assign({}, this.rowFormGroup.value);
       const newCandidate: boolean = this.rowData.id.length === 0;
       let saveObservable: Observable<any>;
 
       if (newCandidate) {
-          saveObservable = this.rs.post('elections/election/' + this.electionID + '/candidate', formData);
+          saveObservable = this.ers.post('elections/election/' + this.electionID + '/candidate', formData);
       } else {
         formData['election'] = this.electionID;
         formData['id'] = this.rowData.id;
-        saveObservable = this.rs.put('elections/election/' + this.electionID + '/candidate/' + this.rowData.id, formData)
+        saveObservable = this.ers.put('elections/election/' + this.electionID + '/candidate/' + this.rowData.id, formData);
       }
       saveObservable.subscribe(
           (data) => {
