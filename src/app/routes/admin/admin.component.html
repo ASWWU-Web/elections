@@ -1,5 +1,4 @@
 <div>
-  <header title="Elections"></header>
   <div class="container">
     <ngb-tabset>
       <ngb-tab title="Elections">
@@ -14,7 +13,7 @@
       </ngb-tab>
       <ngb-tab title="Ballots">
         <ng-template ngbTabContent>
-          <app-admin-ballots></app-admin-ballots>
+          <app-admin-ballots [electionsData]="electionsData" [positionsData]="positionsData"></app-admin-ballots>
         </ng-template>
       </ngb-tab>
     </ngb-tabset>

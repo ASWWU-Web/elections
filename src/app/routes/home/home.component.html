@@ -1,22 +1,21 @@
 <div>
-  <header title="Elections" [admin]="admin"></header>
   <div class="container">
     <div *ngIf="!response">
       <h2 class="text-center">No Elections</h2>
     </div>
     <div *ngIf="response">
-      <div *ngIf="startTime > now">
+      <div *ngIf="dates['start'] > dates['now']">
         <h1 class="text-center">{{response.name}}</h1>
         <p class="text-center">Starts: {{getDateTime(dates['start'])}}<br/>Ends: {{getDateTime(dates['end'])}}</p>
-        <countdown [status]="status" [date]="dates['start']"></countdown>
+        <countdown [status]="status" [date]="dates['start']" [now]="dates['now']"></countdown>
       </div>
     </div>
     <div *ngIf="response">
-      <div *ngIf="startTime < now">
+      <div *ngIf="dates['start'] < dates['now']">
         <h1 class="text-center">{{response.name}}</h1>
         <a *ngIf="isLoggedIn" href="vote" class="btn btn-primary btn-block btn-lg" role="button">Vote Now!</a>
         <a *ngIf="!isLoggedIn" class="btn btn-primary btn-block btn-lg" [href]="'https://saml.aswwu.com/?redirectURI=/elections'+ router.url">Log in</a>
-        <countdown [status]="status" [date]="dates['end']"></countdown>
+        <countdown [status]="status" [date]="dates['end']" [now]="dates['now']"></countdown>
       </div>
     </div>
   </div>

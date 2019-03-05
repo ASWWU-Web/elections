@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ElectionsRequestService } from '../../../shared-ng/services/services';
 import { Router } from '@angular/router';
+import * as momentTz from 'moment-timezone';
+import * as moment from 'moment';
+
 
 @Component({
   selector: 'app-home',
@@ -16,9 +19,7 @@ export class HomeComponent implements OnInit {
   response = null;
   isLoggedIn = false;
   router: any;
-  now = Date.now();
   dates = null;
-  startTime = null;
 
   constructor(private ers: ElectionsRequestService, private _router: Router) {
     this.router = _router;
@@ -42,21 +43,26 @@ export class HomeComponent implements OnInit {
     const electionsObservable = this.ers.readElectionCurrent();
     electionsObservable.subscribe((data) => {
       this.response = data;
-      // Converts date string into an array of numbers, as different browsers support different formats for dates
-      const arrStart = this.response['start'].split(/[- :]/).map(Number), arrEnd = this.response['end'].split(/[- :]/).map(Number);
 
-      const dateStart = new Date(arrStart[0], arrStart[1] - 1, arrStart[2], arrStart[3], arrStart[4], arrStart[5]);
-      const dateEnd = new Date(arrEnd[0], arrEnd[1] - 1, arrEnd[2], arrEnd[3], arrEnd[4], arrEnd[5]);
+      const serverTimeZone = 'America/Los_Angeles';
+      const dateFormat = 'YYYY-MM-DD HH:mm:ss.SSSS';
+      const localTimeZone = momentTz.tz.guess();
+
+      const startDate = momentTz.tz(this.response['start'], serverTimeZone);
+      startDate.tz(localTimeZone);
+      const endDate = momentTz.tz(this.response['end'], serverTimeZone);
+      endDate.tz(localTimeZone);
+
+      const localNow = momentTz(momentTz(moment(), dateFormat).tz(localTimeZone).format(dateFormat), dateFormat, localTimeZone);
 
       this.dates = {};
 
-      this.dates['start'] = dateStart;
-      this.dates['end'] = dateEnd;
+      this.dates['start'] = startDate;
+      this.dates['end'] = endDate;
+      this.dates['now'] = localNow;
 
-      this.startTime = this.dates['start'].getTime();
 
-
-      if (this.startTime > Date.now()) {
+      if (startDate > this.dates['now']) {
         this.status = 'upcoming';
       } else {
         this.status = 'now';

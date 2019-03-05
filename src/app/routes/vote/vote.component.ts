@@ -1,25 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ElectionsRequestService } from '../../../shared-ng/services/services';
+import { ElectionsRequestService } from 'src/shared-ng/services/elections.request.service';
+import { Election, Position } from 'src/shared-ng/interfaces/elections';
 
-
-// election interface
-export interface Election {
-  id: string;
-  election_type: string;
-  name: string;
-  max_votes: number;
-  start: string;
-  end: string;
-  show_results: string;
-}
-// position interface
-export interface Position {
-  id: string;
-  position: string;
-  election_type: string;
-  active: boolean;
-  order: number;
-}
 // switch states
 enum Switches {
   Loading = 0,
@@ -33,7 +15,6 @@ export enum PageTransitions {
   StartOver = 1,
   ASWWU = 2
 }
-
 
 @Component({
   selector: 'app-vote',

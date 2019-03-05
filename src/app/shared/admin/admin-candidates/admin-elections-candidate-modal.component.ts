@@ -1,27 +1,12 @@
-import { Component, OnInit, Input} from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/internal/Observable';
 import { ElectionsRequestService } from 'src/shared-ng/services/services';
 import { debounceTime, distinctUntilChanged, map, switchMap} from 'rxjs/operators';
 import { of } from 'rxjs';
+import { Candidate, Position } from 'src/shared-ng/interfaces/elections';
 
-
-interface Candidate {
-  id: string;
-  election: string;
-  position: string;
-  username: string;
-  display_name: string;
-}
-
-interface Position {
-  id: string;
-  position: string;
-  election_type: string;
-  active: boolean;
-  order: number;
-}
 
 @Component({
   selector: 'app-admin-elections-candidate-modal',
@@ -34,7 +19,7 @@ export class AdminElectionsCandidateModalComponent implements OnInit {
   @Input() candidates: Candidate[];
   @Input() positions: Position[];
 
-  constructor(public activeModal: NgbActiveModal) {}
+  constructor(public activeModal: NgbActiveModal, private ers: ElectionsRequestService) {}
 
   ngOnInit() {}
 
@@ -48,6 +33,25 @@ export class AdminElectionsCandidateModalComponent implements OnInit {
       };
       this.candidates.push(empty_candidate);
   }
+
+  // deletes candidate from database and removes row in modal
+  removeCandidate(candidate_id: string) {
+    let removeObservable: Observable<any>;
+    removeObservable = this.ers.delete('elections/election/' + this.electionID + '/candidate/' + candidate_id);
+
+    // confirmation with user
+    const userConfirm = confirm('Warning! This action is permanent.');
+    if (userConfirm) {
+      removeObservable.subscribe(() => {
+          // get specific index of row that user wants to delete
+          const index = this.candidates.findIndex(candidate => candidate.id === candidate_id );
+          this.candidates.splice(index, 1);
+        }, () => {
+          alert('Something went wrong 😢');
+        }
+      );
+    }
+  }
 }
 
 @Component({
@@ -60,6 +64,7 @@ export class AdminCandidatesRowComponent implements OnInit {
   @Input() electionID: string;
   @Input() election_type: string;
   @Input() positions: Position[];
+  @Output() remove: EventEmitter<string> = new EventEmitter();
   rowFormGroup: FormGroup;
 
   constructor(public activeModal: NgbActiveModal, private ers: ElectionsRequestService) {
@@ -91,7 +96,7 @@ export class AdminCandidatesRowComponent implements OnInit {
     return text$.pipe(
       debounceTime(300),
       distinctUntilChanged(),
-      switchMap((data) => this.getNames(data)),
+      switchMap(data => this.getNames(data)),
       map((data: {results: {username: string, full_name: string}[]}) => {
         return data.results.map((item) => item.username);
       })
@@ -118,5 +123,12 @@ export class AdminCandidatesRowComponent implements OnInit {
           this.rowFormGroup.markAsPristine();
           }, (err) => {
       });
+
+  }
+
+  // Deletes Candidate
+  deleteRow() {
+    // calls parent class while emitting row id for indexing
+    this.remove.emit(this.rowData.id);
   }
 }

@@ -1,0 +1,50 @@
+<!-- modal header -->
+<div class="modal-header">
+  <h1 class="modal-title" id="modal-basic-title">New Ballot Entry</h1>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()"><i class="fas fa-times"></i></button>
+</div>
+
+<!-- modal body -->
+<div class="modal-body">
+  <!-- info text -->
+  <div>
+    <p *ngIf="selectedElection.max_votes <= 1">Add up to {{selectedElection.max_votes}} vote for each position.</p>
+    <p *ngIf="selectedElection.max_votes > 1">Add up to {{selectedElection.max_votes}} votes for each position.</p>
+    <p>
+      All ballot information entered will be validated against the online elections data. If a user is attempting to vote more than is allowed, an alert will appear giving information.
+    </p>
+  </div>
+  <form [formGroup]="ballotForm">
+    <h2>Student ID</h2>
+    <div class="mb-3 input-group">
+      <input type="search" pattern="[0-9]{7}" placeholder="Student ID" formControlName="studentID" class="form-control" required>
+    </div>
+    <div formArrayName="positions">
+      <div *ngFor="let position of ballotForm.get('positions')['controls']; let p = index" [formGroupName]="p">
+        <h2>{{positionsData[p].position}}</h2>
+        <!-- candidates -->
+        <div formArrayName="candidates" class="mb-3">
+          <div *ngFor="let candidate of position.get('candidates').controls; let c = index" [formGroupName]="c">
+            <input type="checkbox" formControlName="candidate">
+            {{getCandidates(positionsData[p])[c].display_name}}
+          </div>
+        </div>
+        <!-- write ins -->
+        <div formArrayName="writeins">
+          <div *ngFor="let writeins of position.get('writeins').controls; let w = index" [formGroupName]="w" class="input-group mb-3">
+            <input type="search" formControlName="writein" placeholder="Write-in candidate" [ngbTypeahead]="search" class="form-control">
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- footer -->
+<div class="modal-footer">
+  <!-- save and close button -->
+  <form [formGroup]="ballotForm" (ngSubmit)="onSaveBallot()">
+    <button type="submit" [disabled]="!ballotForm.valid" class="btn btn-secondary">Save and add</button>
+    <button type="submit" [disabled]="!ballotForm.valid" (click)="onCloseModal()" class="btn btn-primary">Save and close</button>
+  </form>
+</div>
