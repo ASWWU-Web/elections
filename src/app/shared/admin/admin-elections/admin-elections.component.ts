@@ -97,13 +97,12 @@ export class AdminElectionsRowComponent implements OnInit {
 
     if (newElection) {
       formData['show_results'] = null;
-      // saveObservable = this.ers.post('elections/election', formData);
-      saveObservable = this.ers.createElections(formData);
+      saveObservable = this.ers.createElection(formData);
 
     } else {
       formData['id'] = this.rowData.id;
       formData['show_results'] = null;
-      saveObservable = this.ers.put('elections/election/' + this.rowData.id, formData);
+      saveObservable = this.ers.updateElection(formData, this.rowData.id);
     }
     saveObservable.subscribe(
       (data) => {
