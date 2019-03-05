@@ -14,8 +14,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // shared-ng components
 import {
   AppComponent
-} from '../shared-ng/components/app/app.component';
+// } from '../shared-ng/components/app/app.component';
+} from './app.component';
+
 import {
+  SharedNgContainerComponent,
   FooterComponent,
   NavBarComponent,
   MobileNavComponent,
@@ -23,7 +26,8 @@ import {
   HeaderComponent
 } from '../shared-ng/components/components';
 import {
-  RequestService
+  RequestService,
+  HermesService
 } from '../shared-ng/services/services';
 
 // project components
@@ -57,6 +61,7 @@ import {
     UserBubbleComponent,
     MobileNavComponent,
     FooterComponent,
+    SharedNgContainerComponent,
     HomeComponent,
     HeaderComponent,
     CountdownComponent,
@@ -87,7 +92,8 @@ import {
     AppRoutingModule,
   ],
   providers: [
-    RequestService
+    RequestService,
+    HermesService
   ],
   bootstrap: [AppComponent],
   entryComponents: [
