@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { RequestService } from 'src/shared-ng/services/services';
+import { ElectionsRequestService } from 'src/shared-ng/services/services';
 import { Candidate, Election, Position, BallotPOST, Ballot } from 'src/shared-ng/interfaces/elections';
 
 @Component({
@@ -16,16 +16,15 @@ export class AdminBallotsComponent implements OnInit {
   ballots: Ballot[] = [];
   deleteState: number = null;
 
-  constructor(private rs: RequestService) { }
+  constructor(private ers: ElectionsRequestService) { }
 
   ngOnInit() {
   }
 
   onCountVotes(election: number): void {
-    const countUrl = 'elections/election/' + this.electionsData[election].id + '/count';
+    const countUrl = this.ers.readElectionCount(this.electionsData[election].id);
     let voteMessage = '';
-    this.rs.get(countUrl).subscribe((data) => {
-      console.log(data);
+    countUrl.subscribe((data) => {
       for (const position of data.positions) {
         const pos = this.positionsData.find(p => p.id === position.position);
         voteMessage += pos.position + '\n';
@@ -44,7 +43,7 @@ export class AdminBallotsComponent implements OnInit {
   onSelectElection(election: number): void {
     // get the candidates for the newly selected election
     const candidateUrl = 'elections/election/' + this.electionsData[election].id + '/candidate';
-    this.rs.get(candidateUrl).subscribe((data) => {
+    this.ers.get(candidateUrl).subscribe((data) => {
       // update candidates array
       this.candidatesData = data.candidates;
     }, (error) => {
@@ -57,7 +56,7 @@ export class AdminBallotsComponent implements OnInit {
     this.selectedElection = this.electionsData[election];
     // get all existing ballots
     const ballotUrl = 'elections/election/' + this.selectedElection.id + '/ballot';
-    this.rs.get(ballotUrl).subscribe((data) => {
+    this.ers.get(ballotUrl).subscribe((data) => {
       this.ballots = data.ballots;
     }, (error) => {
       console.error(error);
@@ -68,7 +67,7 @@ export class AdminBallotsComponent implements OnInit {
 
   onSaveBallot(ballot: BallotPOST) {
     const postUrl = 'elections/election/' + ballot.election + '/ballot';
-    this.rs.post(postUrl, ballot).subscribe((data) => {
+    this.ers.post(postUrl, ballot).subscribe((data) => {
       // add response data to ballots array
       this.ballots.unshift(data);
     }, (error) => {
@@ -117,7 +116,7 @@ export class AdminBallotsComponent implements OnInit {
     this.deleteState = null;
     // delete ballot from the server
     const deleteUrl = 'elections/election/' + this.selectedElection.id + '/ballot/' + this.ballots[index].id;
-    this.rs.delete(deleteUrl).subscribe(null, (error) => {
+    this.ers.delete(deleteUrl).subscribe(null, (error) => {
       console.error(error);
     });
     // delete ballot from local array
