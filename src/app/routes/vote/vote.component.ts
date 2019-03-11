@@ -40,9 +40,10 @@ export class VoteComponent implements OnInit {
     electionObservable.subscribe((electionData) => {
       this.election = electionData;
       // get positions for the election type
-      this.ers.get('elections/position', { election_type: this.election.election_type }).subscribe((positionData) => {
-        this.positions = positionData.positions;
-        this.visiblePositions = positionData.positions;
+      const positionObservable = this.ers.readPosition(this.election.election_type);
+        positionObservable.subscribe((positionData) => {
+        this.positions = positionData;
+        this.visiblePositions = positionData;
         this.switchState = Switches.Start;
       }, null);
     }, null);
