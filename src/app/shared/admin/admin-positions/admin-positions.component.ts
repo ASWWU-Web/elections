@@ -41,7 +41,7 @@ export class AdminPositionsRowComponent implements OnInit {
       saveObservable = this.ers.createPosition(formData);
     } else {
       formData['id'] = this.rowData.id;
-      saveObservable = this.ers.put('elections/position/' + this.rowData.id, formData);
+      saveObservable = this.ers.updatePosition(formData, this.rowData.id);
     }
     saveObservable.subscribe(
       (data) => {
