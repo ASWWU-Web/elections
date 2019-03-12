@@ -61,30 +61,29 @@ export class VoteFormComponent implements OnInit {
       );
     }
 
-    const getUri = 'elections/election/' + this.election.id + '/candidate';
-    const getCandidatesObservable = this.ers.get(getUri, {position: this.position.id});
-    // const candidateObservable = this.ers.listCandidates(this.election.id, this.position.id);
-    getCandidatesObservable.subscribe(
+    // const getUri = 'elections/election/' + this.election.id + '/candidate';
+    // const getCandidatesObservable = this.ers.get(getUri, {position: this.position.id});
+    const candidateObservable = this.ers.listCandidates(this.election.id, {position: this.position.id});
+    candidateObservable.subscribe(
       (data) => {
-        let candidates = data.candidate;
-        candidates = candidates.map((item: Candidate) => ({info: item, photoUri: ''}));
+        const candidates = data.map((item: Candidate) => ({info: item, photoUri: ''}));
         this.candidates = candidates;
         this.candidates.forEach((candidate, index) => {
           setCandidatePhoto(candidate.info.username, index, this.ers, this.candidates);
         });
       }, (err) => {
-        // TODO (stephen)
+        // TODO
       }, () => {
-        // TODO (stephen)
+        // TODO
       }
     );
   }
 
   stageExistingVotes() {
-    const votesObservable = this.ers.get('elections/vote', { position: this.position.id });
+    const votesObservable = this.ers.listVote({ position: this.position.id });
     votesObservable.subscribe(
-      (data: {votes: Vote[]}) => {
-        const existingVotes = data.votes;
+      (data) => {
+        const existingVotes = data;
         for (const vote of existingVotes) {
           this.stageVote(vote);
         }
@@ -248,11 +247,11 @@ export class VoteFormComponent implements OnInit {
       if (i < updatableVotes.length && i < newVotes.length) {
         const updatableVote: Vote = updatableVotes[i].vote;
         updatableVote.vote = newVotes[i].vote;
-        requestArray.push(this.ers.put('elections/vote/' + updatableVote.id, updatableVote));
+        requestArray.push(this.ers.updateVote(updatableVote, updatableVote.id));
       } else {
         if (i < updatableVotes.length) {
           // toDelete.push(updatableVotes[i].vote);
-          requestArray.push(this.ers.delete('elections/vote/' + updatableVotes[i].vote.id));
+          requestArray.push(this.ers.removeVote(updatableVotes[i].vote.id));
         } else if (i < newVotes.length) {
           // toPost.push(newVotes[i]);
           const voteToPost: VotePOST = {
@@ -260,7 +259,7 @@ export class VoteFormComponent implements OnInit {
             position: this.position.id,
             vote: newVotes[i].vote
           };
-          requestArray.push(this.ers.post('elections/vote', voteToPost));
+          requestArray.push(this.ers.createVote(voteToPost));
         } else {
           console.error('buildRequestArrayObservable second sort, this error should never happen.');
         }
