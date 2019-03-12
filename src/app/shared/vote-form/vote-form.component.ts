@@ -2,7 +2,7 @@
 
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
-import { RequestService } from 'src/shared-ng/services/services';
+import { ElectionsRequestService } from 'src/shared-ng/services/services';
 import { CURRENT_YEAR, MEDIA_SM, DEFAULT_PHOTO } from 'src/shared-ng/config';
 import { Observable, of, forkJoin } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, map } from 'rxjs/operators';
@@ -30,7 +30,7 @@ export class VoteFormComponent implements OnInit {
   disableVoteStaging: boolean;
   serverErrorText: string;
 
-  constructor(private fb: FormBuilder, private rs: RequestService) {
+  constructor(private fb: FormBuilder, private ers: ElectionsRequestService) {
     this.defaultPhoto = MEDIA_SM + '/' + DEFAULT_PHOTO;
     this.formGroup = new FormGroup({writeIn: new FormControl('')});
     this.stagedVotes = [];
@@ -62,14 +62,15 @@ export class VoteFormComponent implements OnInit {
     }
 
     const getUri = 'elections/election/' + this.election.id + '/candidate';
-    const getCandidatesObservable = this.rs.get(getUri, {position: this.position.id});
+    const getCandidatesObservable = this.ers.get(getUri, {position: this.position.id});
+    // const candidateObservable = this.ers.listCandidates(this.election.id, this.position.id);
     getCandidatesObservable.subscribe(
       (data) => {
-        let candidates = data.candidates;
+        let candidates = data.candidate;
         candidates = candidates.map((item: Candidate) => ({info: item, photoUri: ''}));
         this.candidates = candidates;
         this.candidates.forEach((candidate, index) => {
-          setCandidatePhoto(candidate.info.username, index, this.rs, this.candidates);
+          setCandidatePhoto(candidate.info.username, index, this.ers, this.candidates);
         });
       }, (err) => {
         // TODO (stephen)
@@ -80,7 +81,7 @@ export class VoteFormComponent implements OnInit {
   }
 
   stageExistingVotes() {
-    const votesObservable = this.rs.get('elections/vote', { position: this.position.id });
+    const votesObservable = this.ers.get('elections/vote', { position: this.position.id });
     votesObservable.subscribe(
       (data: {votes: Vote[]}) => {
         const existingVotes = data.votes;
@@ -183,7 +184,7 @@ export class VoteFormComponent implements OnInit {
     if (query === '') {
       return of({results: []});
     }
-    return this.rs.get('search/names', {'full_name': query});
+    return this.ers.get('search/names', {'full_name': query});
   }
 
   search = (text$: Observable<string>) => {
@@ -247,11 +248,11 @@ export class VoteFormComponent implements OnInit {
       if (i < updatableVotes.length && i < newVotes.length) {
         const updatableVote: Vote = updatableVotes[i].vote;
         updatableVote.vote = newVotes[i].vote;
-        requestArray.push(this.rs.put('elections/vote/' + updatableVote.id, updatableVote));
+        requestArray.push(this.ers.put('elections/vote/' + updatableVote.id, updatableVote));
       } else {
         if (i < updatableVotes.length) {
           // toDelete.push(updatableVotes[i].vote);
-          requestArray.push(this.rs.delete('elections/vote/' + updatableVotes[i].vote.id));
+          requestArray.push(this.ers.delete('elections/vote/' + updatableVotes[i].vote.id));
         } else if (i < newVotes.length) {
           // toPost.push(newVotes[i]);
           const voteToPost: VotePOST = {
@@ -259,7 +260,7 @@ export class VoteFormComponent implements OnInit {
             position: this.position.id,
             vote: newVotes[i].vote
           };
-          requestArray.push(this.rs.post('elections/vote', voteToPost));
+          requestArray.push(this.ers.post('elections/vote', voteToPost));
         } else {
           console.error('buildRequestArrayObservable second sort, this error should never happen.');
         }

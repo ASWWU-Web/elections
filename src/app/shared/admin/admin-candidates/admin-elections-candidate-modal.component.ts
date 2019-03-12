@@ -36,13 +36,12 @@ export class AdminElectionsCandidateModalComponent implements OnInit {
 
   // deletes candidate from database and removes row in modal
   removeCandidate(candidate_id: string) {
-    let removeObservable: Observable<any>;
-    removeObservable = this.ers.delete('elections/election/' + this.electionID + '/candidate/' + candidate_id);
+    const candidateObservable = this.ers.removeCandidate(this.electionID, candidate_id);
 
     // confirmation with user
     const userConfirm = confirm('Warning! This action is permanent.');
     if (userConfirm) {
-      removeObservable.subscribe(() => {
+      candidateObservable.subscribe(() => {
           // get specific index of row that user wants to delete
           const index = this.candidates.findIndex(candidate => candidate.id === candidate_id );
           this.candidates.splice(index, 1);
@@ -111,11 +110,11 @@ export class AdminCandidatesRowComponent implements OnInit {
       let saveObservable: Observable<any>;
 
       if (newCandidate) {
-          saveObservable = this.ers.post('elections/election/' + this.electionID + '/candidate', formData);
+          saveObservable = this.ers.createCandidate(this.electionID, formData);
       } else {
         formData['election'] = this.electionID;
         formData['id'] = this.rowData.id;
-        saveObservable = this.ers.put('elections/election/' + this.electionID + '/candidate/' + this.rowData.id, formData);
+        saveObservable = this.ers.updateCandidate(formData, this.electionID, this.rowData.id);
       }
       saveObservable.subscribe(
           (data) => {

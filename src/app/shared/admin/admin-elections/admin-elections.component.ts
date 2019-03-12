@@ -33,10 +33,10 @@ export class AdminElectionsRowComponent implements OnInit {
     });
     // get candidates for this row
     if (this.rowData.id !== '') {
-      const candidatesObservable = this.ers.get('elections/election/' + this.rowData.id + '/candidate');
+      const candidatesObservable = this.ers.listCandidates(this.rowData.id);
       candidatesObservable.subscribe(
-        (data: {candidates: Candidate[]}) => {
-          this.candidates = data.candidates;
+        (data) => {
+          this.candidates = data;
         },
         (err) => {
           window.alert('Unable to get candidates\n' + err.error.status);

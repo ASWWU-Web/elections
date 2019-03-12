@@ -42,10 +42,10 @@ export class AdminBallotsComponent implements OnInit {
 
   onSelectElection(election: number): void {
     // get the candidates for the newly selected election
-    const candidateUrl = 'elections/election/' + this.electionsData[election].id + '/candidate';
-    this.ers.get(candidateUrl).subscribe((data) => {
+    const candidateObservable = this.ers.listCandidates(this.electionsData[election].id);
+    candidateObservable.subscribe((data) => {
       // update candidates array
-      this.candidatesData = data.candidates;
+      this.candidatesData = data;
     }, (error) => {
       console.error('could not get candidates for selected election');
     });
