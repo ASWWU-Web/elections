@@ -25,6 +25,7 @@ export class AdminBallotsComponent implements OnInit {
     const countUrl = this.ers.readElectionCount(this.electionsData[election].id);
     let voteMessage = '';
     countUrl.subscribe((data) => {
+      console.log(data);
       for (const position of data.positions) {
         const pos = this.positionsData.find(p => p.id === position.position);
         voteMessage += pos.position + '\n';
@@ -55,9 +56,9 @@ export class AdminBallotsComponent implements OnInit {
     // set the selected election
     this.selectedElection = this.electionsData[election];
     // get all existing ballots
-    const ballotUrl = 'elections/election/' + this.selectedElection.id + '/ballot';
-    this.ers.get(ballotUrl).subscribe((data) => {
-      this.ballots = data.ballots;
+    const ballotObservable = this.ers.listBallot(this.selectedElection.id);
+    ballotObservable.subscribe((data) => {
+      this.ballots = data;
     }, (error) => {
       console.error(error);
     });
@@ -66,8 +67,8 @@ export class AdminBallotsComponent implements OnInit {
   }
 
   onSaveBallot(ballot: BallotPOST) {
-    const postUrl = 'elections/election/' + ballot.election + '/ballot';
-    this.ers.post(postUrl, ballot).subscribe((data) => {
+    const ballotObservable = this.ers.createBallot(ballot, ballot.election);
+    ballotObservable.subscribe((data) => {
       // add response data to ballots array
       this.ballots.unshift(data);
     }, (error) => {
@@ -115,8 +116,8 @@ export class AdminBallotsComponent implements OnInit {
     // reset delete state
     this.deleteState = null;
     // delete ballot from the server
-    const deleteUrl = 'elections/election/' + this.selectedElection.id + '/ballot/' + this.ballots[index].id;
-    this.ers.delete(deleteUrl).subscribe(null, (error) => {
+    const ballotObservable = this.ers.removeBallot(this.selectedElection.id, this.ballots[index].id);
+    ballotObservable.subscribe(null, (error) => {
       console.error(error);
     });
     // delete ballot from local array
