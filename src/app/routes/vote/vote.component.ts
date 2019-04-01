@@ -29,8 +29,8 @@ export class VoteComponent implements OnInit {
   PageTransitions = PageTransitions;
   // request data
   election: Election = null;  // the current election
-  positions: Position[] = [];  // the positions based on the election type
-  visiblePositions: Position[] = [];  // the positions based on the election type
+  positions: Position;  // the positions based on the election type
+  visiblePositions: Position;  // the positions based on the election type
 
   constructor(private ers: ElectionsRequestService) { }
 
