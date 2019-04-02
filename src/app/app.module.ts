@@ -15,6 +15,7 @@ import {
   AppComponent
 } from './app.component';
 import {
+  SharedNgContainerComponent,
   FooterComponent,
   NavBarComponent,
   MobileNavComponent,
@@ -74,7 +75,8 @@ import {
     NavigatorComponent,
     AdminBallotsComponent,
     AdminBallotModalComponent,
-    AdminBallotModalContentComponent
+    AdminBallotModalContentComponent,
+    SharedNgContainerComponent
   ],
   imports: [
     NgbModule,
