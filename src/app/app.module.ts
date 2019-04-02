@@ -7,14 +7,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 // shared-ng components
 import {
   AppComponent
-} from '../shared-ng/components/app/app.component';
+} from './app.component';
 import {
   FooterComponent,
   NavBarComponent,
