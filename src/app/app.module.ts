@@ -23,7 +23,8 @@ import {
   HeaderComponent
 } from '../shared-ng/components/components';
 import {
-  RequestService
+  RequestService,
+  ElectionsRequestService
 } from '../shared-ng/services/services';
 
 // project components
@@ -87,7 +88,8 @@ import {
     AppRoutingModule,
   ],
   providers: [
-    RequestService
+    RequestService,
+    ElectionsRequestService
   ],
   bootstrap: [AppComponent],
   entryComponents: [
