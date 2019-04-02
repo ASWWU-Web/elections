@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RequestService } from '../../../shared-ng/services/request.service';
+import { ElectionsRequestService } from 'src/shared-ng/services/elections.request.service';
 import { Election, Position } from 'src/shared-ng/interfaces/elections';
 
 // switch states
@@ -32,16 +32,18 @@ export class VoteComponent implements OnInit {
   positions: Position[] = [];  // the positions based on the election type
   visiblePositions: Position[] = [];  // the positions based on the election type
 
-  constructor(private rs: RequestService) { }
+  constructor(private ers: ElectionsRequestService) { }
 
   ngOnInit() {
     // get the current election
-    this.rs.get('elections/current').subscribe((electionData) => {
+    const electionObservable = this.ers.readElectionCurrent();
+    electionObservable.subscribe((electionData) => {
       this.election = electionData;
       // get positions for the election type
-      this.rs.get('elections/position', { election_type: this.election.election_type }).subscribe((positionData) => {
-        this.positions = positionData.positions;
-        this.visiblePositions = positionData.positions;
+      const positionObservable = this.ers.readPosition(this.election.election_type);
+        positionObservable.subscribe((positionData) => {
+        this.positions = positionData;
+        this.visiblePositions = positionData;
         this.switchState = Switches.Start;
       }, null);
     }, null);
@@ -50,24 +52,24 @@ export class VoteComponent implements OnInit {
   // function called when the user presses start
   pageTransition(transition: number = PageTransitions.NextPage) {
     // normal page transition
-    if (transition == PageTransitions.NextPage) {
+    if (transition === PageTransitions.NextPage) {
       // switch to district selection state
-      if (this.switchState == Switches.Start && this.election.election_type == 'senate') {
+      if (this.switchState === Switches.Start && this.election.election_type === 'senate') {
         this.switchState = Switches.District;
       // switch to voting state
-      } else if (this.switchState == Switches.Start && this.election.election_type != 'senate') {
+      } else if (this.switchState === Switches.Start && this.election.election_type !== 'senate') {
         this.switchState = Switches.Vote;
       // start over if the function is called and the vote process is complete
-      } else if (this.switchState == Switches.Complete) {
+      } else if (this.switchState === Switches.Complete) {
         this.startOver();
       // switch to the next state
       } else {
         this.switchState++;
       }
     // start over
-    } else if (transition == PageTransitions.StartOver) {
+    } else if (transition === PageTransitions.StartOver) {
       this.startOver();
-    } else if (transition == PageTransitions.ASWWU) {
+    } else if (transition === PageTransitions.ASWWU) {
       window.location.href = 'https://aswwu.com';
     }
   }

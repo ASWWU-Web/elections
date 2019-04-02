@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { RequestService } from 'src/shared-ng/services/services';
+import { ElectionsRequestService } from 'src/shared-ng/services/services';
 import { AbstractControl } from '@angular/forms';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/internal/Observable';
@@ -18,7 +18,7 @@ export class AdminElectionsRowComponent implements OnInit {
   rowFormGroup: FormGroup;
   candidates: Candidate[];
 
-  constructor(private modalService: NgbModal, private rs: RequestService) { }
+  constructor(private modalService: NgbModal, private ers: ElectionsRequestService) { }
 
   ngOnInit() {
     // initialize class members
@@ -33,10 +33,10 @@ export class AdminElectionsRowComponent implements OnInit {
     });
     // get candidates for this row
     if (this.rowData.id !== '') {
-      const candidatesObservable = this.rs.get('elections/election/' + this.rowData.id + '/candidate');
+      const candidatesObservable = this.ers.listCandidates(this.rowData.id);
       candidatesObservable.subscribe(
-        (data: {candidates: Candidate[]}) => {
-          this.candidates = data.candidates;
+        (data) => {
+          this.candidates = data;
         },
         (err) => {
           window.alert('Unable to get candidates\n' + err.error.status);
@@ -48,7 +48,7 @@ export class AdminElectionsRowComponent implements OnInit {
     const validRegex = /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})\.(\d{1,6})$/;
     // const validRegex = /^.?$/;
     const groups: RegExpExecArray = validRegex.exec(control.value);
-    let groupsArray: string[] = [];
+    const groupsArray: string[] = [];
     for (const key in groups) {
       if (groups.hasOwnProperty(key)) {
         const element = groups[key];
@@ -73,11 +73,12 @@ export class AdminElectionsRowComponent implements OnInit {
 
     if (newElection) {
       formData['show_results'] = null;
-      saveObservable = this.rs.post('elections/election', formData);
+      saveObservable = this.ers.createElection(formData);
+
     } else {
       formData['id'] = this.rowData.id;
       formData['show_results'] = null;
-      saveObservable = this.rs.put('elections/election/' + this.rowData.id, formData);
+      saveObservable = this.ers.updateElection(formData, this.rowData.id);
     }
     saveObservable.subscribe(
       (data) => {
@@ -93,7 +94,7 @@ export class AdminElectionsRowComponent implements OnInit {
     const election_type = this.rowData.election_type;
     const candidateData = this.candidates;
     const positionData = this.positions;
-    const modalRef = this.modalService.open(AdminElectionsCandidateModalComponent, {size:'lg'});
+    const modalRef = this.modalService.open(AdminElectionsCandidateModalComponent, {size: 'lg'});
     modalRef.componentInstance.electionID = electionID;
     modalRef.componentInstance.election_type = election_type;
     modalRef.componentInstance.candidates = candidateData;
@@ -112,7 +113,7 @@ export class AdminElectionsComponent implements OnInit {
   @Input() data: Election[];
   @Input() positions: Position[];
 
-  constructor(private rs: RequestService, private modalService: NgbModal) { }
+  constructor(private ers: ElectionsRequestService, private modalService: NgbModal) { }
 
   ngOnInit() {
   }

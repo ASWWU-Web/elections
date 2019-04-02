@@ -7,7 +7,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
@@ -15,7 +14,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   AppComponent
 } from './app.component';
-
 import {
   SharedNgContainerComponent,
   FooterComponent,
@@ -26,7 +24,8 @@ import {
 } from '../shared-ng/components/components';
 import {
   RequestService,
-  HermesService
+  HermesService,
+  ElectionsRequestService
 } from '../shared-ng/services/services';
 
 // project components
@@ -78,7 +77,8 @@ import {
     NavigatorComponent,
     AdminBallotsComponent,
     AdminBallotModalComponent,
-    AdminBallotModalContentComponent
+    AdminBallotModalContentComponent,
+    SharedNgContainerComponent
   ],
   imports: [
     NgbModule,
@@ -92,7 +92,8 @@ import {
   ],
   providers: [
     RequestService,
-    HermesService
+    HermesService,
+    ElectionsRequestService
   ],
   bootstrap: [AppComponent],
   entryComponents: [
