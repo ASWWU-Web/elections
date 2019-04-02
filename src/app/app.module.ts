@@ -14,7 +14,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // shared-ng components
 import {
   AppComponent
-// } from '../shared-ng/components/app/app.component';
 } from './app.component';
 
 import {
