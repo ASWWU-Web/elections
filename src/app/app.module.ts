@@ -24,6 +24,7 @@ import {
 } from '../shared-ng/components/components';
 import {
   RequestService,
+  HermesService,
   ElectionsRequestService
 } from '../shared-ng/services/services';
 
@@ -58,6 +59,7 @@ import {
     UserBubbleComponent,
     MobileNavComponent,
     FooterComponent,
+    SharedNgContainerComponent,
     HomeComponent,
     HeaderComponent,
     CountdownComponent,
@@ -90,6 +92,7 @@ import {
   ],
   providers: [
     RequestService,
+    HermesService,
     ElectionsRequestService
   ],
   bootstrap: [AppComponent],
