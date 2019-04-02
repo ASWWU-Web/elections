@@ -2,26 +2,11 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/internal/Observable';
-import { RequestService } from 'src/shared-ng/services/services';
+import { ElectionsRequestService } from 'src/shared-ng/services/services';
 import { debounceTime, distinctUntilChanged, map, switchMap} from 'rxjs/operators';
 import { of } from 'rxjs';
+import { Candidate, Position } from 'src/shared-ng/interfaces/elections';
 
-
-export interface Candidate {
-  id: string;
-  election: string;
-  position: string;
-  username: string;
-  display_name: string;
-}
-
-interface Position {
-  id: string;
-  position: string;
-  election_type: string;
-  active: boolean;
-  order: number;
-}
 
 @Component({
   selector: 'app-admin-elections-candidate-modal',
@@ -34,7 +19,7 @@ export class AdminElectionsCandidateModalComponent implements OnInit {
   @Input() candidates: Candidate[];
   @Input() positions: Position[];
 
-  constructor(public activeModal: NgbActiveModal, private rs: RequestService) {}
+  constructor(public activeModal: NgbActiveModal, private ers: ElectionsRequestService) {}
 
   ngOnInit() {}
 
@@ -51,13 +36,12 @@ export class AdminElectionsCandidateModalComponent implements OnInit {
 
   // deletes candidate from database and removes row in modal
   removeCandidate(candidate_id: string) {
-    let removeObservable: Observable<any>;
-    removeObservable = this.rs.delete('elections/election/' + this.electionID + '/candidate/' + candidate_id)
+    const candidateObservable = this.ers.removeCandidate(this.electionID, candidate_id);
 
     // confirmation with user
     const userConfirm = confirm('Warning! This action is permanent.');
     if (userConfirm) {
-      removeObservable.subscribe(() => {
+      candidateObservable.subscribe(() => {
           // get specific index of row that user wants to delete
           const index = this.candidates.findIndex(candidate => candidate.id === candidate_id );
           this.candidates.splice(index, 1);
@@ -82,13 +66,13 @@ export class AdminCandidatesRowComponent implements OnInit {
   @Output() remove: EventEmitter<string> = new EventEmitter();
   rowFormGroup: FormGroup;
 
-  constructor(public activeModal: NgbActiveModal, private rs: RequestService) {
+  constructor(public activeModal: NgbActiveModal, private ers: ElectionsRequestService) {
   }
 
   ngOnInit() {
-    let arr: Position[] = [];
-    for (let position of this.positions) {
-      if (position.election_type == this.election_type) {
+    const arr: Position[] = [];
+    for (const position of this.positions) {
+      if (position.election_type === this.election_type) {
         arr.push(position);
       }
     }
@@ -101,10 +85,10 @@ export class AdminCandidatesRowComponent implements OnInit {
   }
 
   getNames(query: string) {
-    if (query == '') {
+    if (query === '') {
       return of({results: []});
     }
-    return this.rs.get("search/names", {'full_name': query});
+    return this.ers.get('search/names', {'full_name': query});
   }
 
   search = (text$: Observable<string>) => {
@@ -120,17 +104,17 @@ export class AdminCandidatesRowComponent implements OnInit {
 
   saveRow() {
       // Note: formData is in the same shape as what the server expects for a POST request (essentially an elections object without the id member)
-      // this is not type safe, but we are doing it because the server will complain if an id is included in a post request
-      let formData = Object.assign({}, this.rowFormGroup.value);
+      // this is not type safe, but we are doing it becuase the server will complain if an id is included in a post request
+      const formData = Object.assign({}, this.rowFormGroup.value);
       const newCandidate: boolean = this.rowData.id.length === 0;
       let saveObservable: Observable<any>;
 
       if (newCandidate) {
-          saveObservable = this.rs.post('elections/election/' + this.electionID + '/candidate', formData);
+          saveObservable = this.ers.createCandidate(this.electionID, formData);
       } else {
         formData['election'] = this.electionID;
         formData['id'] = this.rowData.id;
-        saveObservable = this.rs.put('elections/election/' + this.electionID + '/candidate/' + this.rowData.id, formData)
+        saveObservable = this.ers.updateCandidate(formData, this.electionID, this.rowData.id);
       }
       saveObservable.subscribe(
           (data) => {

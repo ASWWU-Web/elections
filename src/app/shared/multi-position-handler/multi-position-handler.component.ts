@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-
-import { Election, Position, PageTransitions } from 'src/app/routes/vote/vote.component';
-
+import { PageTransitions } from 'src/app/routes/vote/vote.component';
+import { Election, Position } from 'src/shared-ng/interfaces/elections';
 
 @Component({
   selector: 'multi-position-handler',

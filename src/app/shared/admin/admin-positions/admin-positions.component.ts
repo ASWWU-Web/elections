@@ -1,17 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { RequestService } from 'src/shared-ng/services/services';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { ElectionsRequestService } from 'src/shared-ng/services/services';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/internal/Observable';
-
-
-interface Position {
-  id: string;
-  position: string;
-  election_type: string;
-  active: boolean;
-  order: number;
-}
+import { Position } from 'src/shared-ng/interfaces/elections';
 
 @Component({
   selector: '[positions-row]',
@@ -24,7 +16,7 @@ export class AdminPositionsRowComponent implements OnInit {
   rowFormGroup: FormGroup;
   positions: Position[];
 
-  constructor(private modalService: NgbModal, private rs: RequestService) { }
+  constructor(private modalService: NgbModal, private ers: ElectionsRequestService) { }
 
   ngOnInit() {
     // initialize class members
@@ -46,10 +38,10 @@ export class AdminPositionsRowComponent implements OnInit {
     let saveObservable: Observable<any>;
 
     if (newPosition) {
-      saveObservable = this.rs.post('elections/position', formData);
+      saveObservable = this.ers.createPosition(formData);
     } else {
       formData['id'] = this.rowData.id;
-      saveObservable = this.rs.put('elections/position/' + this.rowData.id, formData);
+      saveObservable = this.ers.updatePosition(formData, this.rowData.id);
     }
     saveObservable.subscribe(
       (data) => {
@@ -69,7 +61,7 @@ export class AdminPositionsRowComponent implements OnInit {
 export class AdminPositionsComponent implements OnInit {
   @Input() data: Position[];
 
-  constructor(private rs: RequestService) { }
+  constructor(private ers: ElectionsRequestService) { }
 
   ngOnInit() { }
 

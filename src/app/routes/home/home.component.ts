@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RequestService } from '../../../shared-ng/services/request.service';
+import { ElectionsRequestService } from '../../../shared-ng/services/services';
 import { Router } from '@angular/router';
 import * as momentTz from 'moment-timezone';
 import * as moment from 'moment';
@@ -15,20 +15,20 @@ export class HomeComponent implements OnInit {
   admin: Boolean;
 
   // User roles
-  roles = [""];
+  roles = [''];
   response = null;
-  isLoggedIn: boolean = false;
+  isLoggedIn = false;
   router: any;
   dates = null;
 
-  constructor(private rs: RequestService, private _router: Router) {
+  constructor(private ers: ElectionsRequestService, private _router: Router) {
     this.router = _router;
   }
 
   ngOnInit() {
     // verify the user is logged in
-    this.rs.verify((data) => {
-      this.isLoggedIn = this.rs.isLoggedOn();
+    this.ers.verify((data) => {
+      this.isLoggedIn = this.ers.isLoggedOn();
     });
     // setup election options on landing page
     this.getCurrentElectionOptions();
@@ -40,40 +40,41 @@ export class HomeComponent implements OnInit {
 
   // Makes get request to elections/current to set up information for homepage
   getCurrentElectionOptions() {
-    this.rs.get('elections/current').subscribe((data) => {
+    const electionsObservable = this.ers.readElectionCurrent();
+    electionsObservable.subscribe((data) => {
       this.response = data;
 
       const serverTimeZone = 'America/Los_Angeles';
       const dateFormat = 'YYYY-MM-DD HH:mm:ss.SSSS';
       const localTimeZone = momentTz.tz.guess();
 
-      var startDate = momentTz.tz(this.response['start'], serverTimeZone);
+      const startDate = momentTz.tz(this.response['start'], serverTimeZone);
       startDate.tz(localTimeZone);
-      var endDate = momentTz.tz(this.response['end'], serverTimeZone);
+      const endDate = momentTz.tz(this.response['end'], serverTimeZone);
       endDate.tz(localTimeZone);
 
-      var localNow = momentTz(momentTz(moment(), dateFormat).tz(localTimeZone).format(dateFormat), dateFormat, localTimeZone);
+      const localNow = momentTz(momentTz(moment(), dateFormat).tz(localTimeZone).format(dateFormat), dateFormat, localTimeZone);
 
       this.dates = {};
 
-      this.dates["start"] = startDate;
-      this.dates["end"] = endDate;
-      this.dates["now"] = localNow;
+      this.dates['start'] = startDate;
+      this.dates['end'] = endDate;
+      this.dates['now'] = localNow;
 
 
-      if (startDate > this.dates["now"]) {
-        this.status = "upcoming";
+      if (startDate > this.dates['now']) {
+        this.status = 'upcoming';
       } else {
-        this.status = "now";
+        this.status = 'now';
       }
-    }, (error)=> {
-      this.status = "none";
+    }, (error) => {
+      this.status = 'none';
     });
-  } 
+  }
 
   getDateTime(datetime) {
-    let date = new Date(datetime);
-    let options = { 'month': 'long', 'day': 'numeric', 'year': 'numeric', 'hour': 'numeric', 'minute': 'numeric' };
+    const date = new Date(datetime);
+    const options = { 'month': 'long', 'day': 'numeric', 'year': 'numeric', 'hour': 'numeric', 'minute': 'numeric' };
     return date.toLocaleString('en-US', options);
   }
 
