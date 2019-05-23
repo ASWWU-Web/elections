@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ElectionsRequestService } from '../../../shared-ng/services/services';
+import { ElectionsRequestService, AuthService } from '../../../shared-ng/services/services';
 import { Router } from '@angular/router';
 import * as momentTz from 'moment-timezone';
 import * as moment from 'moment';
+import { User } from 'src/shared-ng/interfaces/interfaces';
 
 
 @Component({
@@ -21,15 +22,19 @@ export class HomeComponent implements OnInit {
   router: any;
   dates = null;
 
-  constructor(private ers: ElectionsRequestService, private _router: Router) {
+  constructor(private ers: ElectionsRequestService, private as: AuthService,
+              private _router: Router) {
     this.router = _router;
   }
 
   ngOnInit() {
     // verify the user is logged in
-    this.ers.verify((data) => {
-      this.isLoggedIn = this.ers.isLoggedOn();
-    });
+    this.as.getUserInfo().subscribe(
+      (data: User) => {
+        this.isLoggedIn = (data) ? true : false;
+      }
+    );
+    this.isLoggedIn = this.as.isLoggedIn();
     // setup election options on landing page
     this.getCurrentElectionOptions();
     // check if the user is an admin
