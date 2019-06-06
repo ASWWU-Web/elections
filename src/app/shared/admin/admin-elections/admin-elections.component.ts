@@ -4,7 +4,7 @@ import { ElectionsRequestService } from 'src/shared-ng/services/services';
 import { AbstractControl } from '@angular/forms';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/internal/Observable';
-import { AdminElectionsCandidateModalComponent } from '../admin';
+import { AdminElectionsCandidateModalComponent } from '../admin-candidates/admin-elections-candidate-modal.component';
 import { Election, Candidate, Position } from 'src/shared-ng/interfaces/elections';
 
 @Component({
