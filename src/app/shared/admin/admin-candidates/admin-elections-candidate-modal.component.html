@@ -17,9 +17,9 @@
         </tr>
       </thead>
       <tbody *ngIf="candidates" >
-        <tr admin-candidates-row *ngFor="let row of candidates" [rowData]="row" [positions]="positions" [electionID]="electionID"  [election_type]="election_type" (remove)="removeCandidate($event)" style="overflow: scroll"></tr>
+        <tr admin-candidates-row *ngFor="let row of candidates" [rowData]="row" [positions]="positions" [electionID]="electionID"  [election_type]="election_type" (remove)="removeCandidate($event)" (notSaved)="enableNewCandidate($event)" style="overflow: scroll"></tr>
       </tbody>
     </table>
-    <button class="btn btn-primary" (click)="addCandidate()">Add New Candidate</button>
+    <button class="btn btn-primary" (click)="addCandidate()" [disabled]="notSaved">Add New Candidate</button>
 
 </div>

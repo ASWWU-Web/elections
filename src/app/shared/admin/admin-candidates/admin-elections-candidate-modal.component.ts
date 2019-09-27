@@ -1,3 +1,5 @@
+// tslint:disable:component-selector
+// tslint:disable:max-line-length
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -18,6 +20,7 @@ export class AdminElectionsCandidateModalComponent implements OnInit {
   @Input() election_type: string;
   @Input() candidates: Candidate[];
   @Input() positions: Position[];
+  notSaved: boolean;
 
   constructor(public activeModal: NgbActiveModal, private ers: ElectionsRequestService) {}
 
@@ -32,24 +35,42 @@ export class AdminElectionsCandidateModalComponent implements OnInit {
           display_name: ''
       };
       this.candidates.push(empty_candidate);
+
+      // disable new candidate button until row is saved or removed
+      this.notSaved = true;
   }
 
   // deletes candidate from database and removes row in modal
   removeCandidate(candidate_id: string) {
+    console.log(this.candidates);
     const candidateObservable = this.ers.removeCandidate(this.electionID, candidate_id);
-
-    // confirmation with user
-    const userConfirm = confirm('Warning! This action is permanent.');
-    if (userConfirm) {
-      candidateObservable.subscribe(() => {
-          // get specific index of row that user wants to delete
-          const index = this.candidates.findIndex(candidate => candidate.id === candidate_id );
-          this.candidates.splice(index, 1);
-        }, () => {
-          alert('Something went wrong 😢');
-        }
-      );
+    // check to see if candidate_id is empty
+    if (candidate_id === '') {
+      let index = this.candidates.findIndex(candidate => candidate.id === '');
+      if (this.candidates.length > index) {
+        index ++;
+      }
+      this.candidates.splice(index, 1);
+      this.notSaved = false;
+    } else {
+      // confirmation with user
+      const userConfirm = confirm('Warning! This action is permanent.');
+      if (userConfirm) {
+        candidateObservable.subscribe(() => {
+            // get specific index of row that user wants to delete
+            const index = this.candidates.findIndex(candidate => candidate.id === candidate_id );
+            this.candidates.splice(index, 1);
+          }, () => {
+            alert('Something went wrong 😢');
+          }
+        );
+      }
     }
+  }
+
+  // enables new candidate button once new row is saved
+  enableNewCandidate() {
+    this.notSaved = false;
   }
 }
 
@@ -63,6 +84,7 @@ export class AdminCandidatesRowComponent implements OnInit {
   @Input() electionID: string;
   @Input() election_type: string;
   @Input() positions: Position[];
+  @Output() notSaved: EventEmitter<boolean> = new EventEmitter();
   @Output() remove: EventEmitter<string> = new EventEmitter();
   rowFormGroup: FormGroup;
 
@@ -102,6 +124,7 @@ export class AdminCandidatesRowComponent implements OnInit {
     );
   }
 
+  // TODO: have child component send updated candidate array back to parent once new candidate is saved
   saveRow() {
       // Note: formData is in the same shape as what the server expects for a POST request (essentially an elections object without the id member)
       // this is not type safe, but we are doing it becuase the server will complain if an id is included in a post request
@@ -120,6 +143,8 @@ export class AdminCandidatesRowComponent implements OnInit {
           (data) => {
           this.rowData = Object.assign({}, data);
           this.rowFormGroup.markAsPristine();
+          this.notSaved.emit(false);
+          console.log(this.rowData);
           }, (err) => {
       });
 
