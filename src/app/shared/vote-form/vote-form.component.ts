@@ -29,6 +29,7 @@ export class VoteFormComponent implements OnInit {
   numVotesToKeep: number;
   disableVoteStaging: boolean;
   serverErrorText: string;
+  alertUser: boolean;
 
   constructor(private fb: FormBuilder, private ers: ElectionsRequestService) {
     this.defaultPhoto = MEDIA_SM + '/' + DEFAULT_PHOTO;
@@ -89,6 +90,12 @@ export class VoteFormComponent implements OnInit {
         }
       }, (err) => {
       }, () => {
+        // disable cast votes button if stagedVotes array length is 0
+        if (this.stagedVotes.length === 0) {
+          this.alertUser = true;
+        } else {
+          this.alertUser = false;
+        }
       }
     );
   }
@@ -152,6 +159,12 @@ export class VoteFormComponent implements OnInit {
     } else {
       this.stagedVotes[stagedVoteIndex].toDelete = false;
     }
+     // disable cast votes button if stagedVotes array length is 0
+     if (this.stagedVotes.length === 0) {
+      this.alertUser = true;
+    } else {
+      this.alertUser = false;
+    }
     this.updateNumVotesToKeep();
   }
 
@@ -176,6 +189,11 @@ export class VoteFormComponent implements OnInit {
       } else {
         this.stageVoteRemoval(index);
       }
+    }
+    if (this.stagedVotes.length === 0) {
+      this.alertUser = true;
+    } else {
+      this.alertUser = false;
     }
   }
 
@@ -219,12 +237,23 @@ export class VoteFormComponent implements OnInit {
       position: this.position.id,
       username: null,
       vote: candidateUsername
-    }
+    };
     this.stageVote(voteToStage);
   }
 
   pageTransition(transition: number) {
-    this.valueChange.emit(transition);
+    let i;
+    if (this.alertUser) {
+      i = confirm('There are no votes in the queue. Click + next to write-in to add write-in' +
+              ' or select a candidate. Select ok to exit voting.');
+    }
+
+    if (i === undefined || i === true) {
+      this.valueChange.emit(transition);
+    } else {
+      // do nothing and keep user on current screen
+    }
+
   }
 
   buildRequestArrayObservable() {
