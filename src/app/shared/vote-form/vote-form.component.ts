@@ -21,7 +21,7 @@ export class VoteFormComponent implements OnInit {
   @Input() position: Position;  // the list of district positions
   // completion emitter
   @Output() valueChange: EventEmitter<number> = new EventEmitter<number>();
-
+  
   candidates: {info: Candidate, photoUri: string}[] = [];
   stagedVotes: {vote: Vote, toDelete: boolean}[]; // only ever set toDelete to true if it also exists on the server (vote.id != null)
   formGroup: FormGroup;
@@ -30,6 +30,7 @@ export class VoteFormComponent implements OnInit {
   disableVoteStaging: boolean;
   serverErrorText: string;
   alertUser: boolean;
+
 
   constructor(private fb: FormBuilder, private ers: ElectionsRequestService) {
     this.defaultPhoto = MEDIA_SM + '/' + DEFAULT_PHOTO;
@@ -99,6 +100,7 @@ export class VoteFormComponent implements OnInit {
       }
     );
   }
+
 
   indexOfObj(array, propertyPath: string[], value) {
     function getDeepPropertyValue(object, localPropertyPath: string[]) {
