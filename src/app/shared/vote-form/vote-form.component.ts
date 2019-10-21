@@ -1,5 +1,5 @@
 // https://alligator.io/angular/reactive-forms-formarray-dynamic-fields/
-
+// tslint:disable:component-selector
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
 import { ElectionsRequestService } from 'src/shared-ng/services/services';
@@ -126,7 +126,7 @@ export class VoteFormComponent implements OnInit {
 
   updateNumVotesToKeep() {
     let newNumVotesToKeep = 0;
-    for (let vote of this.stagedVotes) {
+    for (const vote of this.stagedVotes) {
       if (!vote.toDelete) {
         newNumVotesToKeep += 1;
       }
@@ -239,7 +239,7 @@ export class VoteFormComponent implements OnInit {
       position: this.position.id,
       username: null,
       vote: candidateUsername
-    }
+    };
     this.stageVote(voteToStage);
   }
 
@@ -258,11 +258,11 @@ export class VoteFormComponent implements OnInit {
   }
 
   buildRequestArrayObservable() {
-    let updatableVotes: {vote: Vote, toDelete: boolean}[] = [];
-    let newVotes: Vote[] = [];
+    const updatableVotes: {vote: Vote, toDelete: boolean}[] = [];
+    const newVotes: Vote[] = [];
 
     // sort votes into new votes and votes that can be updated or deleted
-    for (let vote of this.stagedVotes) {
+    for (const vote of this.stagedVotes) {
       if (vote.vote.id && vote.toDelete) {
         updatableVotes.push(vote);
       } else if ( !vote.vote.id ) {
@@ -272,7 +272,7 @@ export class VoteFormComponent implements OnInit {
       }
     }
 
-    let requestArray = [];
+    const requestArray = [];
     for (let i = 0; i < updatableVotes.length || i < newVotes.length; i++) {
       if (i < updatableVotes.length && i < newVotes.length) {
         const updatableVote: Vote = updatableVotes[i].vote;
@@ -299,7 +299,7 @@ export class VoteFormComponent implements OnInit {
   }
 
   onSubmit() {
-    let requestArrayObservable = this.buildRequestArrayObservable();
+    const requestArrayObservable = this.buildRequestArrayObservable();
     requestArrayObservable.subscribe(
       (data) => {
         this.serverErrorText = '';
