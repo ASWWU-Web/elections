@@ -1,5 +1,5 @@
 <div [ngSwitch]="currentPosition">
   <div *ngFor="let p of positions; let i = index">
-    <vote-form *ngSwitchCase="i" [position]="p" [election]="election" (valueChange)="formChange($event)"></vote-form>
+    <vote-form *ngSwitchCase="i" [votes]="votes" [position]="p" [election]="election" (valueChange)="formChange($event)"></vote-form>
   </div>
 </div>

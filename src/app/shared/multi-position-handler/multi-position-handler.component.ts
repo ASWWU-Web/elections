@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PageTransitions } from 'src/app/routes/vote/vote.component';
-import { Election, Position } from 'src/shared-ng/interfaces/elections';
+import { Election, Position, Vote } from 'src/shared-ng/interfaces/elections';
 
 @Component({
   selector: 'multi-position-handler',
@@ -11,6 +11,7 @@ export class MultiPositionHandlerComponent implements OnInit {
   // request data
   @Input() election: Election = null;  // the current election
   @Input() positions: Position[] = [];  // the list of district positions
+  @Input() votes: Vote[] = [];
   // completion emitter
   @Output() onComplete: EventEmitter<number> = new EventEmitter<number>();
 

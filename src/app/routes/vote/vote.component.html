@@ -15,9 +15,9 @@
       <navigator [primaryName]="'Start'" (onButtonClick)="pageTransition($event)"></navigator>
     </div>
     <!-- district selection state -->
-    <district-selection *ngSwitchCase="Switches.District" [positions]="positions" (onDistrictSelect)="districtSelect($event)" (onComplete)="pageTransition($event)"></district-selection>
+    <district-selection *ngSwitchCase="Switches.District" [votes]="votes" [positions]="positions" [election]="election" (onDistrictSelect)="districtSelect($event)" (onComplete)="pageTransition($event)"></district-selection>
     <!-- voting state -->
-    <multi-position-handler *ngSwitchCase="Switches.Vote" [positions]="visiblePositions" [election]="election" (onComplete)="pageTransition($event)"></multi-position-handler>
+    <multi-position-handler *ngSwitchCase="Switches.Vote" [votes]="votes" [positions]="visiblePositions" [election]="election" (onComplete)="pageTransition($event)"></multi-position-handler>
     <!-- complete -->
     <div *ngSwitchCase="Switches.Complete">
       <h1>You have voted! 🤗</h1>

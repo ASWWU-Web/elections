@@ -19,6 +19,7 @@ export class VoteFormComponent implements OnInit {
   // request data
   @Input() election: Election;  // the current election
   @Input() position: Position;  // the list of district positions
+  @Input() votes: Vote[] = [];
   // completion emitter
   @Output() valueChange: EventEmitter<number> = new EventEmitter<number>();
 
@@ -81,23 +82,21 @@ export class VoteFormComponent implements OnInit {
   }
 
   stageExistingVotes() {
-    const votesObservable = this.ers.listVote({ position: this.position.id });
-    votesObservable.subscribe(
-      (data) => {
-        const existingVotes = data;
-        for (const vote of existingVotes) {
-          this.stageVote(vote);
-        }
-      }, (err) => {
-      }, () => {
-        // disable cast votes button if stagedVotes array length is 0
-        if (this.stagedVotes.length === 0) {
-          this.alertUser = true;
-        } else {
-          this.alertUser = false;
-        }
+    // for (const vote of this.votes) {
+    //   this.stageVote(vote);
+    // }
+    for (const vote of this.votes) {
+      if (this.position.id === vote.position) {
+        this.stageVote(vote);
       }
-    );
+    }
+
+    // disable cast votes button if stagedVotes array length is 0
+    if (this.stagedVotes.length === 0) {
+      this.alertUser = true;
+    } else {
+      this.alertUser = false;
+    }
   }
 
   indexOfObj(array, propertyPath: string[], value) {
@@ -257,11 +256,11 @@ export class VoteFormComponent implements OnInit {
   }
 
   buildRequestArrayObservable() {
-    let updatableVotes: {vote: Vote, toDelete: boolean}[] = [];
-    let newVotes: Vote[] = [];
+    const updatableVotes: {vote: Vote, toDelete: boolean}[] = [];
+    const newVotes: Vote[] = [];
 
     // sort votes into new votes and votes that can be updated or deleted
-    for (let vote of this.stagedVotes) {
+    for (const vote of this.stagedVotes) {
       if (vote.vote.id && vote.toDelete) {
         updatableVotes.push(vote);
       } else if ( !vote.vote.id ) {

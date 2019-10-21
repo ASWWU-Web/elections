@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ElectionsRequestService } from 'src/shared-ng/services/elections.request.service';
-import { Election, Position } from 'src/shared-ng/interfaces/elections';
+import { Election, Position, Vote } from 'src/shared-ng/interfaces/elections';
 
 // switch states
 enum Switches {
@@ -30,6 +30,7 @@ export class VoteComponent implements OnInit {
   // request data
   election: Election = null;  // the current election
   positions: Position[] = [];  // the positions based on the election type
+  votes: Vote[] = [];
   visiblePositions: Position[] = [];  // the positions based on the election type
 
   constructor(private ers: ElectionsRequestService) { }
@@ -46,6 +47,14 @@ export class VoteComponent implements OnInit {
         this.visiblePositions = positionData;
         this.switchState = Switches.Start;
       }, null);
+      const votesObservable = this.ers.listVote({ election_id: this.election.id });
+      votesObservable.subscribe(
+        (data) => {
+          this.votes = data;
+        }, (err) => {
+        }, () => {
+        }
+      );
     }, null);
   }
 

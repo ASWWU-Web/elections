@@ -1,4 +1,18 @@
 <div>
+  <h3>Current votes:</h3>
+  <div class="mb-3">
+    <ul class="list-group">
+      <li *ngIf="stagedVotes.length == 0" class="list-group-item list py-2 px-3">None</li>
+      <li *ngFor="let vote of stagedVotes; let i = index" class="list-group-item list py-2 px-3" [ngClass]="{'list-group-item-danger': vote.toDelete}">
+        <div class="row">
+          <p class="col mb-0">{{vote.vote.vote}}</p>
+          <p class="mb-0 pr-3 text-muted float-right">{{getPositionName(vote.vote.position)}}</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <hr class="mb-3 mt-4">
+  <h3>Select a district to change your vote:</h3>
   <form [formGroup]="districtFormGroup">
     <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" formControlName="district">
       <label *ngFor="let p of positions; let i = index;" ngbButtonLabel class="btn-outline-primary">
