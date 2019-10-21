@@ -80,25 +80,25 @@ export class VoteFormComponent implements OnInit {
     );
   }
 
-  stageExistingVotes() {
-    const votesObservable = this.ers.listVote({ position: this.position.id });
-    votesObservable.subscribe(
-      (data) => {
-        const existingVotes = data;
-        for (const vote of existingVotes) {
-          this.stageVote(vote);
-        }
-      }, (err) => {
-      }, () => {
-        // disable cast votes button if stagedVotes array length is 0
-        if (this.stagedVotes.length === 0) {
-          this.alertUser = true;
-        } else {
-          this.alertUser = false;
-        }
-      }
-    );
-  }
+  stageExistingVotes() {
+    const votesObservable = this.ers.listVote({ position: this.position.id });
+    votesObservable.subscribe(
+      (data) => {
+        const existingVotes = data;
+        for (const vote of existingVotes) {
+          this.stageVote(vote);
+        }
+      }, (err) => {
+      }, () => {
+        // disable cast votes button if stagedVotes array length is 0
+        if (this.stagedVotes.length === 0) {
+          this.alertUser = true;
+        } else {
+          this.alertUser = false;
+        }
+      }
+    );
+  }
 
   indexOfObj(array, propertyPath: string[], value) {
     function getDeepPropertyValue(object, localPropertyPath: string[]) {
@@ -139,34 +139,34 @@ export class VoteFormComponent implements OnInit {
     }
   }
 
-  stageVote(vote: Vote) {
-    // early exit, cancel if staging the vote would exceed max_votes
-    if (this.numVotesToKeep + 1 > this.election.max_votes) {
-      return;
-    }
-    // look for a vote in staged votes with the same username as the passed in vote
-    // if no vote is staged by that name, stage the vote, otherwise,
-    // just make sure the vote isn't set to be deleted.
-    const candidateUsername = vote.vote;
-    const stagedVoteIndex = this.indexOfObj(this.stagedVotes, ['vote', 'vote'], candidateUsername);
-    if (stagedVoteIndex === -1) {
-      const voteToStage = {
-        vote: vote,
-        toDelete: false
-      };
-      this.stagedVotes.push(voteToStage);
-      // this.numVotesToKeep = this.numVotesToKeep + 1;
-    } else {
-      this.stagedVotes[stagedVoteIndex].toDelete = false;
-    }
-     // disable cast votes button if stagedVotes array length is 0
-     if (this.stagedVotes.length === 0) {
-      this.alertUser = true;
-    } else {
-      this.alertUser = false;
-    }
-    this.updateNumVotesToKeep();
-  }
+  stageVote(vote: Vote) {
+    // early exit, cancel if staging the vote would exceed max_votes
+    if (this.numVotesToKeep + 1 > this.election.max_votes) {
+      return;
+    }
+    // look for a vote in staged votes with the same username as the passed in vote
+    // if no vote is staged by that name, stage the vote, otherwise,
+    // just make sure the vote isn't set to be deleted.
+    const candidateUsername = vote.vote;
+    const stagedVoteIndex = this.indexOfObj(this.stagedVotes, ['vote', 'vote'], candidateUsername);
+    if (stagedVoteIndex === -1) {
+      const voteToStage = {
+        vote: vote,
+        toDelete: false
+      };
+      this.stagedVotes.push(voteToStage);
+      // this.numVotesToKeep = this.numVotesToKeep + 1;
+    } else {
+      this.stagedVotes[stagedVoteIndex].toDelete = false;
+    }
+     // disable cast votes button if stagedVotes array length is 0
+     if (this.stagedVotes.length === 0) {
+      this.alertUser = true;
+    } else {
+      this.alertUser = false;
+    }
+    this.updateNumVotesToKeep();
+  }
 
   stageVoteRemoval(stagedVoteIndex) {
     // stages a vote removal or removes a vote from stagedVotes if it doesn't exist on the server
@@ -181,21 +181,21 @@ export class VoteFormComponent implements OnInit {
     this.updateNumVotesToKeep();
   }
 
-  onDeleteVoteButton(stagedVoteIndex) {
-    const index = stagedVoteIndex;
-    if (index < this.stagedVotes.length && index >= 0) {
-      if (this.stagedVotes[index].toDelete) {
-        this.stageVote(this.stagedVotes[index].vote);
-      } else {
-        this.stageVoteRemoval(index);
-      }
-    }
-    if (this.stagedVotes.length === 0) {
-      this.alertUser = true;
-    } else {
-      this.alertUser = false;
-    }
-  }
+  onDeleteVoteButton(stagedVoteIndex) {
+    const index = stagedVoteIndex;
+    if (index < this.stagedVotes.length && index >= 0) {
+      if (this.stagedVotes[index].toDelete) {
+        this.stageVote(this.stagedVotes[index].vote);
+      } else {
+        this.stageVoteRemoval(index);
+      }
+    }
+    if (this.stagedVotes.length === 0) {
+      this.alertUser = true;
+    } else {
+      this.alertUser = false;
+    }
+  }
 
   getNames(query: string) {
     if (query === '') {
@@ -241,76 +241,75 @@ export class VoteFormComponent implements OnInit {
     this.stageVote(voteToStage);
   }
 
-  pageTransition(transition: number) {
-    let i;
-    if (this.alertUser) {
-      i = confirm('There are no votes in the queue. Click + next to write-in to add write-in' +
-              ' or select a candidate. Select ok to exit voting.');
-    }
+  pageTransition(transition: number) {
+    let i;
+    if (this.alertUser) {
+      i = confirm('There are no votes in the queue. Click + next to write-in to add write-in' +
+              ' or select a candidate. Select ok to exit voting.');
+    }
 
-    if (i === undefined || i === true) {
-      this.valueChange.emit(transition);
-    } else {
-      // do nothing and keep user on current screen
-    }
+    if (i === undefined || i === true) {
+      this.valueChange.emit(transition);
+    } else {
+      // do nothing and keep user on current screen
+    }
 
-  }
+  }
 
-  buildRequestArrayObservable() {
-    let updatableVotes: {vote: Vote, toDelete: boolean}[] = [];
-    let newVotes: Vote[] = [];
+  buildRequestArrayObservable() {
+    let updatableVotes: {vote: Vote, toDelete: boolean}[] = [];
+    let newVotes: Vote[] = [];
 
-    // sort votes into new votes and votes that can be updated or deleted
-    for (let vote of this.stagedVotes) {
-      if (vote.vote.id && vote.toDelete) {
-        updatableVotes.push(vote);
-      } else if ( !vote.vote.id ) {
-        newVotes.push(vote.vote);
-      } else {
-        // do nothing, this means the current vote exists on the server, but will not be deleted or overwritten
-      }
-    }
+    // sort votes into new votes and votes that can be updated or deleted
+    for (let vote of this.stagedVotes) {
+      if (vote.vote.id && vote.toDelete) {
+        updatableVotes.push(vote);
+      } else if ( !vote.vote.id ) {
+        newVotes.push(vote.vote);
+      } else {
+        // do nothing, this means the current vote exists on the server, but will not be deleted or overwritten
+      }
+    }
 
-    let requestArray = [];
-    for (let i = 0; i < updatableVotes.length || i < newVotes.length; i++) {
-      if (i < updatableVotes.length && i < newVotes.length) {
-        const updatableVote: Vote = updatableVotes[i].vote;
-        updatableVote.vote = newVotes[i].vote;
-        requestArray.push(this.ers.updateVote(updatableVote, updatableVote.id));
-      } else {
-        if (i < updatableVotes.length) {
-          // toDelete.push(updatableVotes[i].vote);
-          requestArray.push(this.ers.removeVote(updatableVotes[i].vote.id));
-        } else if (i < newVotes.length) {
-          // toPost.push(newVotes[i]);
-          const voteToPost: VotePOST = {
-            election: this.election.id,
-            position: this.position.id,
-            vote: newVotes[i].vote
-          };
-          requestArray.push(this.ers.createVote(voteToPost));
-        } else {
-          console.error('buildRequestArrayObservable second sort, this error should never happen.');
-        }
-      }
-    }
-    return forkJoin(requestArray);
-  }
+    let requestArray = [];
+    for (let i = 0; i < updatableVotes.length || i < newVotes.length; i++) {
+      if (i < updatableVotes.length && i < newVotes.length) {
+        const updatableVote: Vote = updatableVotes[i].vote;
+        updatableVote.vote = newVotes[i].vote;
+        requestArray.push(this.ers.updateVote(updatableVote, updatableVote.id));
+      } else {
+        if (i < updatableVotes.length) {
+          // toDelete.push(updatableVotes[i].vote);
+          requestArray.push(this.ers.removeVote(updatableVotes[i].vote.id));
+        } else if (i < newVotes.length) {
+          // toPost.push(newVotes[i]);
+          const voteToPost: VotePOST = {
+            election: this.election.id,
+            position: this.position.id,
+            vote: newVotes[i].vote
+          };
+          requestArray.push(this.ers.createVote(voteToPost));
+        } else {
+          console.error('buildRequestArrayObservable second sort, this error should never happen.');
+        }
+      }
+    }
+    return forkJoin(requestArray);
+  }
 
-  onSubmit() {
-    let requestArrayObservable = this.buildRequestArrayObservable();
-    requestArrayObservable.subscribe(
-      (data) => {
-        this.serverErrorText = '';
-      }, (err) => {
-        // show user error text from the server
-        console.log(err);
-        this.serverErrorText = 'Something went wrong, make sure all entered usernames are valid.';
-        this.pageTransition(PageTransitions.NextPage);
-      }, () => {
-        this.pageTransition(PageTransitions.NextPage);
-      }
-    );
-  }
+  onSubmit() {
+    let requestArrayObservable = this.buildRequestArrayObservable();
+    requestArrayObservable.subscribe(
+      (data) => {
+        this.serverErrorText = '';
+      }, (err) => {
+        // show user error text from the server
+        console.log(err);
+        this.serverErrorText = 'Something went wrong, make sure all entered usernames are valid.';
+        this.pageTransition(PageTransitions.NextPage);
+      }, () => {
+        this.pageTransition(PageTransitions.NextPage);
+      }
+    );
+  }
 }
-
