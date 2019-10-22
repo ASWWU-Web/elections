@@ -1,5 +1,5 @@
 // https://alligator.io/angular/reactive-forms-formarray-dynamic-fields/
-
+// tslint:disable:component-selector
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
 import { ElectionsRequestService } from 'src/shared-ng/services/services';
@@ -29,6 +29,7 @@ export class VoteFormComponent implements OnInit {
   numVotesToKeep: number;
   disableVoteStaging: boolean;
   serverErrorText: string;
+  alertUser: boolean;
 
   constructor(private fb: FormBuilder, private ers: ElectionsRequestService) {
     this.defaultPhoto = MEDIA_SM + '/' + DEFAULT_PHOTO;
@@ -89,6 +90,12 @@ export class VoteFormComponent implements OnInit {
         }
       }, (err) => {
       }, () => {
+        // disable cast votes button if stagedVotes array length is 0
+        if (this.stagedVotes.length === 0) {
+          this.alertUser = true;
+        } else {
+          this.alertUser = false;
+        }
       }
     );
   }
@@ -119,7 +126,7 @@ export class VoteFormComponent implements OnInit {
 
   updateNumVotesToKeep() {
     let newNumVotesToKeep = 0;
-    for (let vote of this.stagedVotes) {
+    for (const vote of this.stagedVotes) {
       if (!vote.toDelete) {
         newNumVotesToKeep += 1;
       }
@@ -152,6 +159,14 @@ export class VoteFormComponent implements OnInit {
     } else {
       this.stagedVotes[stagedVoteIndex].toDelete = false;
     }
+
+    // disable cast votes button if stagedVotes array length is 0
+    if (this.stagedVotes.length === 0) {
+      this.alertUser = true;
+    } else {
+      this.alertUser = false;
+    }
+
     this.updateNumVotesToKeep();
   }
 
@@ -176,6 +191,11 @@ export class VoteFormComponent implements OnInit {
       } else {
         this.stageVoteRemoval(index);
       }
+    }
+    if (this.stagedVotes.length === 0) {
+      this.alertUser = true;
+    } else {
+      this.alertUser = false;
     }
   }
 
@@ -219,20 +239,30 @@ export class VoteFormComponent implements OnInit {
       position: this.position.id,
       username: null,
       vote: candidateUsername
-    }
+    };
     this.stageVote(voteToStage);
   }
 
   pageTransition(transition: number) {
-    this.valueChange.emit(transition);
+    let i;
+    if (this.alertUser) {
+      i = confirm('There are no votes in the queue. Click + ' +
+                  'next to write-in to add write-in ' +
+                  'or select a candidate. Select ok to exit voting.');
+    }
+    if (i === undefined || i === true) {
+      this.valueChange.emit(transition);
+    } else {
+      // do nothing and keep user on current screen
+    }
   }
 
   buildRequestArrayObservable() {
-    let updatableVotes: {vote: Vote, toDelete: boolean}[] = [];
-    let newVotes: Vote[] = [];
+    const updatableVotes: {vote: Vote, toDelete: boolean}[] = [];
+    const newVotes: Vote[] = [];
 
     // sort votes into new votes and votes that can be updated or deleted
-    for (let vote of this.stagedVotes) {
+    for (const vote of this.stagedVotes) {
       if (vote.vote.id && vote.toDelete) {
         updatableVotes.push(vote);
       } else if ( !vote.vote.id ) {
@@ -242,7 +272,7 @@ export class VoteFormComponent implements OnInit {
       }
     }
 
-    let requestArray = [];
+    const requestArray = [];
     for (let i = 0; i < updatableVotes.length || i < newVotes.length; i++) {
       if (i < updatableVotes.length && i < newVotes.length) {
         const updatableVote: Vote = updatableVotes[i].vote;
@@ -269,7 +299,7 @@ export class VoteFormComponent implements OnInit {
   }
 
   onSubmit() {
-    let requestArrayObservable = this.buildRequestArrayObservable();
+    const requestArrayObservable = this.buildRequestArrayObservable();
     requestArrayObservable.subscribe(
       (data) => {
         this.serverErrorText = '';
