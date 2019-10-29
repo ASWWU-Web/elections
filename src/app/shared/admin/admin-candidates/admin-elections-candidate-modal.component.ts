@@ -22,7 +22,9 @@ export class AdminElectionsCandidateModalComponent implements OnInit {
   @Input() positions: Position[];
   notSaved: boolean;
 
-  constructor(public activeModal: NgbActiveModal, private ers: ElectionsRequestService) {}
+  constructor(public activeModal: NgbActiveModal, private ers: ElectionsRequestService) {
+    this.notSaved = false;
+  }
 
   ngOnInit() {}
 
@@ -40,9 +42,12 @@ export class AdminElectionsCandidateModalComponent implements OnInit {
       this.notSaved = true;
   }
 
-  // deletes candidate from database and removes row in modal
+  /**
+   * deletes candidate from database and removes row in modal
+   * @param candidate_id unique id assigned to candidate that is used to
+   * distinguish which row has now data in it.
+   */
   removeCandidate(candidate_id: string) {
-    console.log(this.candidates);
     const candidateObservable = this.ers.removeCandidate(this.electionID, candidate_id);
     // check to see if candidate_id is empty
     if (candidate_id === '') {
@@ -144,7 +149,6 @@ export class AdminCandidatesRowComponent implements OnInit {
           this.rowData = Object.assign({}, data);
           this.rowFormGroup.markAsPristine();
           this.notSaved.emit(false);
-          console.log(this.rowData);
           }, (err) => {
       });
 
