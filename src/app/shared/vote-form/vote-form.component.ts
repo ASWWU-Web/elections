@@ -19,6 +19,7 @@ export class VoteFormComponent implements OnInit {
   // request data
   @Input() election: Election;  // the current election
   @Input() position: Position;  // the list of district positions
+  @Input() votes: Vote[] = [];
   // completion emitter
   @Output() valueChange: EventEmitter<number> = new EventEmitter<number>();
 
@@ -86,7 +87,9 @@ export class VoteFormComponent implements OnInit {
       (data) => {
         const existingVotes = data;
         for (const vote of existingVotes) {
-          this.stageVote(vote);
+          if (this.position.id === vote.position) {
+            this.stageVote(vote);
+          }
         }
       }, (err) => {
       }, () => {
@@ -96,8 +99,7 @@ export class VoteFormComponent implements OnInit {
         } else {
           this.alertUser = false;
         }
-      }
-    );
+    });
   }
 
   indexOfObj(array, propertyPath: string[], value) {
